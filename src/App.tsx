@@ -19,8 +19,9 @@ const aiMessage2 = 'Based on general knowledge, here are the countries with the 
 function App() {
   return (
     <main>
-      <div className="header">
-        <div className="icons">
+      <div className="background"></div>
+      <div data-tauri-drag-region className="header">
+        <div data-tauri-drag-region className="icons">
           <div className="clickable"><Settings size={20}/></div>
           <div className="clickable"><MessageCirclePlus size={20}/></div>
         </div>

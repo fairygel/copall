@@ -11,6 +11,18 @@
   gap: 24px;
 }
 
+.background {
+  position: fixed;
+  border-radius: 24px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+
+  z-index: -1;
+}
+
 .message {
   padding: 12px 16px 12px 16px;
   text-align: left;
@@ -77,6 +89,7 @@ textarea::-webkit-scrollbar {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
+  border-radius: 24px 24px 0 0;
 }
 
 .chatName {
