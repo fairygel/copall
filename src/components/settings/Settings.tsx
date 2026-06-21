@@ -1,14 +1,23 @@
+import { useState } from 'react';
 import './Settings.css';
 import { X } from "lucide-react";
 
 function Settings({ onClose }: { onClose: () => void }) {
+    let [mistralApiKey, setMistralApiKey] = useState(() =>
+        localStorage.getItem('mistralApiKey') || ''
+    );
+
+    const saveSettings = () => {
+        localStorage.setItem('mistralApiKey', mistralApiKey);
+        onClose();
+    };
 
     return (
         <div className="modalBackdrop" onClick={() => onClose()}>
             <div className="modalContent" onClick={(e) => e.stopPropagation()}>
                 <div className="modalHeader">
                     <h3>Settings</h3>
-                    <button className="clickable" onClick={() => onClose()}>
+                    <button className="clickable" onClick={() => saveSettings()}>
                         <X size={14} />
                     </button>
                 </div>
@@ -20,7 +29,12 @@ function Settings({ onClose }: { onClose: () => void }) {
                                 <img src="/mistral.svg" alt="icon" width={18} height={18} />
                                 <span>Mistral</span>
                             </div>
-                            <input type="password" placeholder="Enter Mistral API Key" />
+                            <input 
+                                type="password" 
+                                placeholder="Enter Mistral API Key" 
+                                value={mistralApiKey}
+                                onChange={(e) => setMistralApiKey(e.target.value)}
+                            />
                         </div>
                     </div>
                 </div>
