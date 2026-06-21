@@ -2,7 +2,7 @@ import { MessageCirclePlus, Settings, X } from "lucide-react";
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import './Header.css';
 
-function Header({ onSettingsClick }: { onSettingsClick: () => void }) {
+function Header({ onSettingsClick, onNewChatClick }: { onSettingsClick: () => void; onNewChatClick: () => void }) {
 
     const handleClose = async () => {
         const window = getCurrentWindow();
@@ -16,7 +16,9 @@ function Header({ onSettingsClick }: { onSettingsClick: () => void }) {
           <button className="clickable" onClick={onSettingsClick}>
             <Settings size={20} />
           </button>
-          <button className="clickable"><MessageCirclePlus size={20}/></button>
+          <button className="clickable" onClick={onNewChatClick}>
+            <MessageCirclePlus size={20} />
+          </button>
         </div>
         <div className="chatName">Chat Name a little longer</div>
         <div className="windowIcons">
