@@ -1,26 +1,33 @@
-.chatContainer {
-  width: auto;
-  height: 100%;
-  overflow-y: auto;
-  margin: 18px;
-  margin-bottom: 154px;
-  margin-top: 54px;
+* {
+  box-sizing: border-box;
+}
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: white;
+  border-radius: 24px;
+  border: 1px solid #70707030;
+  overflow: hidden;
+}
+
+.chatContainer {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0 18px;
   display: flex;
   flex-direction: column;
   gap: 24px;
-}
-
-.background {
-  position: fixed;
-  border-radius: 24px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: white;
-
-  z-index: -1;
+  padding-top: 24px;
+  padding-bottom: 140px;
 }
 
 .message {
@@ -78,12 +85,8 @@ textarea::-webkit-scrollbar {
 }
 
 .header {
-  position: fixed;
   background-color: white;
-  height: 24px;
-  left: 0;
-  right: 0;
-  top:0;
+  height: 48px;
   z-index: 2;
   padding: 12px 24px 8px 24px;
   display: grid;
@@ -104,8 +107,8 @@ textarea::-webkit-scrollbar {
   cursor: pointer;
   border-radius: 50%;
   padding: 4px;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   align-items: center;
   display: flex;
   justify-content: center;

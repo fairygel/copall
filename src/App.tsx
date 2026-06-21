@@ -19,7 +19,6 @@ const aiMessage2 = 'Based on general knowledge, here are the countries with the 
 function App() {
   return (
     <main>
-      <div className="background"></div>
       <div data-tauri-drag-region className="header">
         <div data-tauri-drag-region className="icons">
           <div className="clickable"><Settings size={20}/></div>
@@ -30,6 +29,7 @@ function App() {
           <div className="clickable"><X size={14} /></div>
         </div>
       </div>
+      
       <div className="chatContainer">
         <div className="message userMessage">hello!</div>
         <div className="message aiMessage">
