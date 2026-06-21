@@ -2,6 +2,8 @@ import { ArrowUp } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import "./App.css";
 import Header from "./components/header/Header";
+import Settings from "./components/settings/Settings";
+import { useState } from "react";
 
 const aiMessage1 = 'Hello! How can I help you today?';
 const aiMessage2 = 'Based on general knowledge, here are the countries with the highest populations in the world:' +
@@ -18,9 +20,12 @@ const aiMessage2 = 'Based on general knowledge, here are the countries with the 
   '\nIndia overtook China as the world\'s most populous country around mid-2023, according to UN estimates. These figures are approximate and fluctuate with births, deaths, and migration.';
 
 function App() {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
   return (
     <main>
-      <Header />
+      {isSettingsOpen && <Settings onClose={() => setIsSettingsOpen(false)} />}
+      <Header onSettingsClick={() => setIsSettingsOpen(true)} />
 
       <div className="chatContainer">
         <div className="message userMessage">hello!</div>

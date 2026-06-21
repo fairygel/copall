@@ -66,6 +66,7 @@ main {
 }
 
 textarea::placeholder {
+  font-family: 'Andika', sans-serif;
   color: #707070;
 }
 
