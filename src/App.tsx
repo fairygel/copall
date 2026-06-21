@@ -1,6 +1,7 @@
-import { ArrowUp, MessageCirclePlus, Settings, X } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import "./App.css";
+import Header from "./components/header/Header";
 
 const aiMessage1 = 'Hello! How can I help you today?';
 const aiMessage2 = 'Based on general knowledge, here are the countries with the highest populations in the world:' +
@@ -19,17 +20,8 @@ const aiMessage2 = 'Based on general knowledge, here are the countries with the 
 function App() {
   return (
     <main>
-      <div data-tauri-drag-region className="header">
-        <div data-tauri-drag-region className="icons">
-          <div className="clickable"><Settings size={20}/></div>
-          <div className="clickable"><MessageCirclePlus size={20}/></div>
-        </div>
-        <div className="chatName">Chat Name a little longer</div>
-        <div className="windowIcons">
-          <div className="clickable"><X size={14} /></div>
-        </div>
-      </div>
-      
+      <Header />
+
       <div className="chatContainer">
         <div className="message userMessage">hello!</div>
         <div className="message aiMessage">

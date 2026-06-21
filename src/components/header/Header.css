@@ -1,0 +1,41 @@
+.header {
+  background-color: white;
+  height: 48px;
+  z-index: 2;
+  padding: 12px 24px 8px 24px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  border-radius: 24px 24px 0 0;
+}
+
+.chatName {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.windowIcons {
+  justify-self: end;
+}
+
+.clickable {
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 4px;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+}
+
+.clickable:hover {
+  background-color: rgba(77, 77, 77, 0.1);
+}
+
+.icons {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+}
