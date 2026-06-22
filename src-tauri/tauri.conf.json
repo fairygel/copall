@@ -12,12 +12,15 @@
   "app": {
     "windows": [
       {
+        "label": "main",
         "title": "copall",
         "width": 800,
         "height": 600,
         "decorations": false,
         "transparent": true,
-        "resizable": false
+        "shadow": false,
+        "resizable": false,
+        "visible": true
       }
     ],
     "security": {

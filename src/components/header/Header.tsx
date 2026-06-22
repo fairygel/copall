@@ -1,12 +1,11 @@
 import { MessageCirclePlus, Settings, X } from "lucide-react";
-import { getCurrentWindow } from '@tauri-apps/api/window';
 import './Header.css';
+import { invoke } from "@tauri-apps/api/core";
 
 function Header({ onSettingsClick, onNewChatClick }: { onSettingsClick: () => void; onNewChatClick: () => void }) {
 
     const handleClose = async () => {
-        const window = getCurrentWindow();
-        await window.close();
+        await invoke('close_window');
     };
 
     return (
