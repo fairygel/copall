@@ -56,7 +56,7 @@ main {
   right: 0;
   background-color: white;
   border: 1px solid #70707070;
-  margin: 18px;
+  margin: 18px auto;
   padding: 12px;
   border-radius: 24px;
   min-height: 24px;
@@ -64,6 +64,7 @@ main {
   flex-direction: column;
   display: flex;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 600px;
 }
 
 textarea::placeholder {

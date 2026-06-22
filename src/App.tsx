@@ -13,7 +13,7 @@ function App() {
   const [isSendMessageDisabled, setSendMessageDisabled] = useState(false);
 
   const [messages, setMessages] = useState<Message[]>([]);
-  
+
   const handleSendMessage = (content: string) => {
     setSendMessageDisabled(true);
 
@@ -23,7 +23,7 @@ function App() {
       sender: 'user',
     };
     setInputValue('');
-    
+
     const updatedMessages = [...messages, newMessage];
     setMessages(updatedMessages);
 
@@ -60,15 +60,24 @@ function App() {
       </div>
 
       <div className="messageContainer">
-        <textarea 
-          className="inputArea" 
-          placeholder="Your move, Ask!" 
+        <textarea
+          className="inputArea"
+          placeholder="Your move, Ask!"
           value={inputValue}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              if (!isSendMessageDisabled && inputValue.trim() !== '') {
+                handleSendMessage(inputValue);
+              }
+            }
+
+          }}
           onChange={(e) => setInputValue(e.target.value)}
         />
         <div className="tooltip">
-          <button 
-            className="sendMessage" 
+          <button
+            className="sendMessage"
             disabled={isSendMessageDisabled || inputValue.trim() === ''}
             onClick={() => handleSendMessage(inputValue)}>
             <ArrowUp size={24} color="white" />
