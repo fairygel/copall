@@ -62,6 +62,7 @@ function App() {
       <div className="messageContainer">
         <textarea
           className="inputArea"
+          autoFocus
           placeholder="Your move, Ask!"
           value={inputValue}
           onKeyDown={(e) => {
