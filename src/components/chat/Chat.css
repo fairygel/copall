@@ -1,0 +1,30 @@
+.chatContainer {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 24px;
+  padding-bottom: 140px;
+}
+
+.message {
+  padding: 0 16px;
+  margin: 0 4px;
+  text-align: left;
+}
+
+.userMessage {
+  margin-left: auto;
+  max-width: 75%;
+  background-color: #e4e4e470;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+}
+
+.aiMessage {
+  margin-right: auto;
+  max-width: 90%;
+}
+

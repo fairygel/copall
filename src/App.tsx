@@ -1,4 +1,3 @@
-import { ArrowUp } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import "./App.css";
 import Header from "./components/header/Header";
@@ -6,10 +5,11 @@ import Settings from "./components/settings/Settings";
 import { useState } from "react";
 import Message from "./models/message";
 import fetchMistralResponse from "./service/MistralService";
+import MessageBox from "./components/messageBox/MessageBox";
+import Chat from './components/chat/Chat';
 
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [inputValue, setInputValue] = useState('');
   const [isSendMessageDisabled, setSendMessageDisabled] = useState(false);
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -22,7 +22,6 @@ function App() {
       content,
       sender: 'user',
     };
-    setInputValue('');
 
     const updatedMessages = [...messages, newMessage];
     setMessages(updatedMessages);
@@ -51,40 +50,9 @@ function App() {
       {isSettingsOpen && <Settings onClose={() => setIsSettingsOpen(false)} />}
       <Header onSettingsClick={() => setIsSettingsOpen(true)} onNewChatClick={() => setMessages([])} />
 
-      <div className="chatContainer">
-        {messages.map((message) => (
-          <div key={message.id} className={`message ${message.sender === 'user' ? 'userMessage' : 'aiMessage'}`}>
-            <ReactMarkdown>{message.content}</ReactMarkdown>
-          </div>
-        ))}
-      </div>
+      <Chat messages={messages} />
 
-      <div className="messageContainer">
-        <textarea
-          className="inputArea"
-          autoFocus
-          placeholder="Your move, Ask!"
-          value={inputValue}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              if (!isSendMessageDisabled && inputValue.trim() !== '') {
-                handleSendMessage(inputValue);
-              }
-            }
-
-          }}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-        <div className="tooltip">
-          <button
-            className="sendMessage"
-            disabled={isSendMessageDisabled || inputValue.trim() === ''}
-            onClick={() => handleSendMessage(inputValue)}>
-            <ArrowUp size={24} color="white" />
-          </button>
-        </div>
-      </div>
+      <MessageBox onMessageSent={handleSendMessage} disabled={isSendMessageDisabled} />
     </main>
   )
 }
