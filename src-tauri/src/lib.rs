@@ -1,7 +1,7 @@
 use tauri::{
-    menu::{Menu, MenuItem},
+    Manager, WindowEvent, include_image, 
+    menu::{Menu, MenuItem}, 
     tray::{MouseButton, TrayIconBuilder, TrayIconEvent},
-    Manager, WindowEvent,
 };
 
 #[tauri::command]
@@ -18,8 +18,10 @@ pub fn run() {
             let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
             let menu = Menu::with_items(app, &[&open_chat_i, &quit_i])?;
 
+            let tray_icon = include_image!("icons/tray-icon.png");
+
             let _tray = TrayIconBuilder::new()
-                .icon(app.default_window_icon().unwrap().clone())
+                .icon(tray_icon)
                 .menu(&menu)
                 .show_menu_on_left_click(false)
                 .on_tray_icon_event(|tray, event| {
