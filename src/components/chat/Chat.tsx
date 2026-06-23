@@ -15,6 +15,7 @@ function Chat({ messages }: { messages: Message[] }) {
     return (
         messages.length === 0 ? (
             <div className="emptyContainer">
+                <img src="/copall_nobg.svg" alt="Me .-." className="logo" />
                 <p>Copall.</p>
             </div>
         ) : (
