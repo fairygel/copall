@@ -1,4 +1,3 @@
-import ReactMarkdown from 'react-markdown';
 import "./App.css";
 import Header from "./components/header/Header";
 import Settings from "./components/settings/Settings";
@@ -14,7 +13,19 @@ function App() {
 
   const [messages, setMessages] = useState<Message[]>([]);
 
-  const handleSendMessage = (content: string) => {
+  const appendToMessage = (id: string, chunk: string) => {
+    setMessages(prev => prev.map(
+      msg => msg.id === id ? { ...msg, content: msg.content + chunk } : msg
+    ));
+  };
+
+  const setMessageContent = (id: string, content: string) => {
+    setMessages(prev => prev.map(
+      msg => msg.id === id ? { ...msg, content } : msg
+    ));
+  };
+
+  const handleSendMessage = async (content: string) => {
     setSendMessageDisabled(true);
 
     const newMessage: Message = {
@@ -26,23 +37,24 @@ function App() {
     const updatedMessages = [...messages, newMessage];
     setMessages(updatedMessages);
 
-    fetchMistralResponse(updatedMessages).then((response) => {
-      const newAIMessage: Message = {
-        id: crypto.randomUUID(),
-        content: response,
-        sender: 'assistant',
-      };
-      setMessages((prevMessages) => [...prevMessages, newAIMessage]);
-    }).catch((error) => {
-      const newAIMessage: Message = {
-        id: crypto.randomUUID(),
-        content: error.message,
-        sender: 'assistant',
-      };
-      setMessages((prevMessages) => [...prevMessages, newAIMessage]);
-    }).finally(() => {
+    const assistantMessageId = crypto.randomUUID();
+    const assistantMessage: Message = {
+      id: assistantMessageId,
+      content: 'working...',
+      sender: 'assistant',
+    };
+
+    setMessages(prev => [...prev, assistantMessage]);
+
+    try {
+      for await (const chunk of fetchMistralResponse(updatedMessages)) {
+        appendToMessage(assistantMessageId, chunk);
+      }
+    } catch (error) {
+      setMessageContent(assistantMessageId, (error as Error).message);
+    } finally {
       setSendMessageDisabled(false);
-    })
+    }
   }
 
   return (
