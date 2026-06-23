@@ -1,17 +1,15 @@
 import "./App.css";
+
 import Header from "./components/header/Header";
 import Settings from "./components/settings/Settings";
-import { useState } from "react";
-import Message from "./models/message";
-import { fetchMistralStream, fetchMistralResponse } from "./service/MistralService";
 import MessageBox from "./components/messageBox/MessageBox";
 import Chat from './components/chat/Chat';
 
-const GENERATE_CHAT_NAME_SYSTEM_PROMPT = 
-    'Generate a concise chat title (max 40 chars) based on the user\'s message. ' +
-    'The title must be in the SAME LANGUAGE as the user\'s text. ' +
-    'Be specific and descriptive. No quotes or formatting. Output title only.\n\n' +
-    'User: [message]\nTitle:';
+import Message from "./models/message";
+
+import { generateAssistantResponse, generateChatTitle } from "./service/ChatService";
+
+import { useState } from "react";
 
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -21,39 +19,13 @@ function App() {
 
   const [messages, setMessages] = useState<Message[]>([]);
 
-  const setMessageContent = (id: string, content: string) => {
-    setMessages(prev => prev.map(
-      msg => msg.id === id ? { ...msg, content } : msg
-    ));
-  };
-
   const generateTitle = async (message: string) => {
     if (!message) return;
     
-    const prompt = GENERATE_CHAT_NAME_SYSTEM_PROMPT.replace('[message]', message);
-
-    const systemMessage: Message = {
-      id: crypto.randomUUID(),
-      content: prompt,
-      sender: 'system',
-    };
-
-    try {
-      let title = await fetchMistralResponse([systemMessage]);
-      const cleanTitle = title.trim().replace(/^["']|["']$/g, '');
-
-      setChatName(cleanTitle);
-    } catch (error) {
-      console.error('Error generating chat title:', error);
-    }
-
+    setChatName(await generateChatTitle(message));
   };
 
-  const handleSendMessage = async (content: string) => {
-    setSendMessageDisabled(true);
-    
-    const isFirstMessage = messages.length === 0;
-
+  const displayUserMessage = (content: string) => {
     const newMessage: Message = {
       id: crypto.randomUUID(),
       content,
@@ -61,33 +33,23 @@ function App() {
     };
 
     const updatedMessages = [...messages, newMessage];
+
     setMessages(updatedMessages);
+    return updatedMessages;
+  }
 
-    const assistantMessageId = crypto.randomUUID();
-    const assistantMessage: Message = {
-      id: assistantMessageId,
-      content: 'working...',
-      sender: 'assistant',
-    };
+  const handleSendMessage = async (content: string) => {
+    setSendMessageDisabled(true);
+    
+    const isFirstMessage = messages.length === 0;
+    const updatedMessages = displayUserMessage(content);
 
-    setMessages(prev => [...prev, assistantMessage]);
+    const response = await generateAssistantResponse(updatedMessages, setMessages);
 
-    try {
-      let messageContent = '';
+    setSendMessageDisabled(false);
 
-      for await (const chunk of fetchMistralStream(updatedMessages)) {
-        messageContent += chunk;
-
-        setMessageContent(assistantMessageId, messageContent);
-      }
-      
-      if (isFirstMessage) {
-        await generateTitle(messageContent);
-      }
-    } catch (error) {
-      setMessageContent(assistantMessageId, (error as Error).message);
-    } finally {
-      setSendMessageDisabled(false);
+    if (isFirstMessage && response) {
+        await generateTitle(response);
     }
   }
 
@@ -97,7 +59,7 @@ function App() {
       <Header
         chatName={chatName}
         onSettingsClick={() => setIsSettingsOpen(true)}
-        onNewChatClick={() => {setMessages([]); setChatName('');}}
+        onNewChatClick={() => {setMessages([]); setChatName(''); setSendMessageDisabled(false);}}
       />
 
       <Chat messages={messages} />
