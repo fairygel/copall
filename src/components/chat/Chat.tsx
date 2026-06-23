@@ -11,16 +11,22 @@ function Chat({ messages }: { messages: Message[] }) {
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
-    
+
     return (
-      <div className="chatContainer">
-        {messages.map((message) => (
-          <div key={message.id} className={`message ${message.sender === 'user' ? 'userMessage' : 'aiMessage'}`}>
-            <ReactMarkdown>{message.content}</ReactMarkdown>
-          </div>
-        ))}
-        <div ref={bottomRef}></div>
-      </div>
+        messages.length === 0 ? (
+            <div className="emptyContainer">
+                <p>Copall.</p>
+            </div>
+        ) : (
+        <div className="chatContainer">
+            {messages.map((message) => (
+                <div key={message.id} className={`message ${message.sender === 'user' ? 'userMessage' : 'aiMessage'}`}>
+                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                </div>
+            ))}
+            <div ref={bottomRef}></div>
+        </div>
+        )
     );
 }
 
