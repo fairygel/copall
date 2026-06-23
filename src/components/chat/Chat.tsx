@@ -1,10 +1,17 @@
 import ReactMarkdown from "react-markdown";
 import Message from "../../models/message";
 import './Chat.css';
+import { useEffect } from "react";
+import React from "react";
 
 
 function Chat({ messages }: { messages: Message[] }) {
+    const bottomRef = React.useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
+    
     return (
       <div className="chatContainer">
         {messages.map((message) => (
@@ -12,6 +19,7 @@ function Chat({ messages }: { messages: Message[] }) {
             <ReactMarkdown>{message.content}</ReactMarkdown>
           </div>
         ))}
+        <div ref={bottomRef}></div>
       </div>
     );
 }

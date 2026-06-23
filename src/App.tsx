@@ -44,11 +44,18 @@ function App() {
       sender: 'assistant',
     };
 
+    let firstChunk = true;
+
     setMessages(prev => [...prev, assistantMessage]);
 
     try {
       for await (const chunk of fetchMistralResponse(updatedMessages)) {
-        appendToMessage(assistantMessageId, chunk);
+        if (firstChunk) {
+          setMessageContent(assistantMessageId, chunk);
+          firstChunk = false;
+        } else {
+          appendToMessage(assistantMessageId, chunk);
+        }
       }
     } catch (error) {
       setMessageContent(assistantMessageId, (error as Error).message);
