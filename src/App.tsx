@@ -21,20 +21,16 @@ function App() {
 
   const [messages, setMessages] = useState<Message[]>([]);
 
-  const appendToMessage = (id: string, chunk: string) => {
-    setMessages(prev => prev.map(
-      msg => msg.id === id ? { ...msg, content: msg.content + chunk } : msg
-    ));
-  };
-
   const setMessageContent = (id: string, content: string) => {
     setMessages(prev => prev.map(
       msg => msg.id === id ? { ...msg, content } : msg
     ));
   };
 
-  const generateTitle = async (message: Message) => {
-    const prompt = GENERATE_CHAT_NAME_SYSTEM_PROMPT.replace('[message]', message.content);
+  const generateTitle = async (message: string) => {
+    if (!message) return;
+    
+    const prompt = GENERATE_CHAT_NAME_SYSTEM_PROMPT.replace('[message]', message);
 
     const systemMessage: Message = {
       id: crypto.randomUUID(),
@@ -43,7 +39,7 @@ function App() {
     };
 
     try {
-      let title = await fetchMistralResponse([systemMessage, message]);
+      let title = await fetchMistralResponse([systemMessage]);
       const cleanTitle = title.trim().replace(/^["']|["']$/g, '');
 
       setChatName(cleanTitle);
@@ -74,22 +70,19 @@ function App() {
       sender: 'assistant',
     };
 
-    let firstChunk = true;
-
     setMessages(prev => [...prev, assistantMessage]);
 
     try {
+      let messageContent = '';
+
       for await (const chunk of fetchMistralStream(updatedMessages)) {
-        if (firstChunk) {
-          setMessageContent(assistantMessageId, chunk);
-          firstChunk = false;
-        } else {
-          appendToMessage(assistantMessageId, chunk);
-        }
+        messageContent += chunk;
+
+        setMessageContent(assistantMessageId, messageContent);
       }
-      console.log(messages.length);
+      
       if (isFirstMessage) {
-        await generateTitle(newMessage);
+        await generateTitle(messageContent);
       }
     } catch (error) {
       setMessageContent(assistantMessageId, (error as Error).message);

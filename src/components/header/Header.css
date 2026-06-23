@@ -1,5 +1,5 @@
 .header {
-  background-color: white;
+  background-color: var(--background-color);
   height: 48px;
   z-index: 2;
   padding: 12px 24px 8px 24px;
@@ -10,6 +10,7 @@
 }
 
 .chatName {
+  color: var(--font-color);
   font-family: 'Andika', sans-serif;
 }
 
@@ -28,10 +29,11 @@
   justify-content: center;
   border: none;
   background-color: transparent;
+  color: var(--font-color);
 }
 
 .clickable:hover {
-  background-color: rgba(77, 77, 77, 0.1);
+  background-color: var(--border-color);
 }
 
 .icons {

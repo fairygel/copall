@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import './Settings.css';
-import { X } from "lucide-react";
+import { SunMoon, X } from "lucide-react";
 
 function Settings({ onClose }: { onClose: () => void }) {
-    let [mistralApiKey, setMistralApiKey] = useState(() =>
+    const [mistralApiKey, setMistralApiKey] = useState(() =>
         localStorage.getItem('mistralApiKey') || ''
+    );
+
+    const [theme, setTheme] = useState<'light' | 'dark'>(
+        localStorage.getItem('theme') === 'light' ? 'light' : 'dark'
     );
 
     const saveSettings = () => {
@@ -12,8 +16,19 @@ function Settings({ onClose }: { onClose: () => void }) {
         onClose();
     };
 
+    const setAppTheme = (theme: 'light' | 'dark') => {
+        localStorage.setItem('theme', theme);
+        setTheme(theme);
+
+        if (theme === 'dark') {
+            document.documentElement.removeAttribute('data-theme');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+    };
+
     return (
-        <div className="modalBackdrop" onClick={() => onClose()}>
+        <div className="modalBackdrop" onClick={() => saveSettings()}>
             <div className="modalContent" onClick={(e) => e.stopPropagation()}>
                 <div className="modalHeader">
                     <h3>Settings</h3>
@@ -22,6 +37,24 @@ function Settings({ onClose }: { onClose: () => void }) {
                     </button>
                 </div>
                 <div className="modalBody">
+                    <h4>General</h4>
+                    <div className="settingsSection">
+                        <div className="settingItem">
+                            <div className="settingLabel">
+                                <SunMoon size={18} />
+                                <span>Theme</span>
+                            </div>
+                            <div className="textSwitch">
+                                <button
+                                    className={`switchOption ${theme === 'light' ? 'active' : ''}`}
+                                    onClick={() => setAppTheme('light')}>Light</button>
+                                <span>/</span>
+                                <button
+                                    className={`switchOption ${theme === 'dark' ? 'active' : ''}`}
+                                    onClick={() => setAppTheme('dark')}>Dark</button>
+                            </div>
+                        </div>
+                    </div>
                     <h4>Api Keys</h4>
                     <div className="settingsSection">
                         <div className="settingItem">
@@ -29,9 +62,9 @@ function Settings({ onClose }: { onClose: () => void }) {
                                 <img src="/mistral.svg" alt="icon" width={18} height={18} />
                                 <span>Mistral</span>
                             </div>
-                            <input 
-                                type="password" 
-                                placeholder="Enter Mistral API Key" 
+                            <input
+                                type="password"
+                                placeholder="Enter Mistral API Key"
                                 value={mistralApiKey}
                                 onChange={(e) => setMistralApiKey(e.target.value)}
                             />

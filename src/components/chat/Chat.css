@@ -15,13 +15,14 @@
   margin: 0 4px;
   text-align: left;
   font-family: 'Geist', sans-serif;
+  color: var(--font-color)
 }
 
 .userMessage {
   margin-left: auto;
   max-width: 75%;
-  background-color: #e4e4e470;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: var(--container-color);
+  box-shadow: 0 2px 4px var(--shadow-color);
   border-radius: 20px;
 }
 
@@ -31,25 +32,24 @@
 }
 
 .logo {
-    width: 48px;
-    height: 48px;
-    filter: grayscale(100%) brightness(0.8) contrast(2);
+  width: 36px;
+  height: 36px;
 }
 
-.emptyContainer > p {
-    margin: 0;
-    padding: 8px 0;
-    font-size: 20px;
-    color: #555555;
+.emptyContainer>p {
+  margin: 0;
+  padding: 8px 0;
+  font-size: 20px;
+  color: var(--inactive-font-color);
 }
 
 .emptyContainer {
-    gap: 24px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding-bottom: 140px;
-    font-family: 'Andika', sans-serif;
+  gap: 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding-bottom: 140px;
+  font-family: 'Andika', sans-serif;
 }

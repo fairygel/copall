@@ -3,8 +3,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: white;
-  border: 1px solid #70707070;
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
   margin: 18px auto;
   padding: 12px;
   border-radius: 24px;
@@ -12,16 +12,17 @@
   max-height: 182px;
   flex-direction: column;
   display: flex;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px var(--shadow-color);
   max-width: 600px;
 }
 
 textarea::placeholder {
   font-family: 'Andika', sans-serif;
-  color: #707070;
+  color: var(--inactive-font-color);
 }
 
 textarea {
+  color: var(--font-color);
   resize: none;
   field-sizing: content;
   min-height: 40px;
@@ -56,6 +57,7 @@ textarea::-webkit-scrollbar {
   border-radius: 12px;
   border-color: transparent;
   outline: none;
-  background-color: black;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  color: var(--background-color);
+  background-color: var(--font-color);
+  box-shadow: 0 2px 4px var(--inactive-font-color);
 }

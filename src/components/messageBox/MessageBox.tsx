@@ -39,7 +39,7 @@ function MessageBox({ onMessageSent, disabled }: { onMessageSent: (msg: string) 
                     className="sendMessage"
                     disabled={isDisabled}
                     onClick={handleSendClick}>
-                    <ArrowUp size={24} color="white" />
+                    <ArrowUp size={24} />
                 </button>
             </div>
         </div>
