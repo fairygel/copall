@@ -30,6 +30,7 @@ textarea {
   outline: none;
   border-color: transparent;
   background-color: transparent;
+  font-family: 'Geist', sans-serif;
 }
 
 textarea::-webkit-scrollbar {

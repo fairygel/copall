@@ -9,10 +9,12 @@
   padding-bottom: 140px;
 }
 
+
 .message {
   padding: 0 16px;
   margin: 0 4px;
   text-align: left;
+  font-family: 'Geist', sans-serif;
 }
 
 .userMessage {
