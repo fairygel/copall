@@ -1,6 +1,34 @@
 import Message from "../models/message";
 
-async function* fetchMistralResponse(messages: Message[]): AsyncGenerator<string> {
+export async function fetchMistralResponse(messages: Message[]): Promise<string> {
+    const apiKey = localStorage.getItem('mistralApiKey');
+    if (!apiKey) {
+        throw new Error('API key not found');
+    }
+
+    const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+            model: 'mistral-medium-3-5',
+            messages: toMistralFormat(messages),
+        })
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+
+        throw new Error(`Mistral API ${response.status}: ${errorText}`);
+    }
+
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content || '';
+}
+
+export async function* fetchMistralStream(messages: Message[]): AsyncGenerator<string> {
     const apiKey = localStorage.getItem('mistralApiKey');
     if (!apiKey) {
         throw new Error('API key not found');
@@ -54,8 +82,6 @@ async function* fetchMistralResponse(messages: Message[]): AsyncGenerator<string
         }
     }
 }
-
-export default fetchMistralResponse;
 
 function toMistralFormat(messages: Message[]) {
     return messages.map((msg) => ({

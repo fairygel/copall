@@ -2,7 +2,7 @@ import { MessageCirclePlus, Settings, X } from "lucide-react";
 import './Header.css';
 import { invoke } from "@tauri-apps/api/core";
 
-function Header({ onSettingsClick, onNewChatClick }: { onSettingsClick: () => void; onNewChatClick: () => void }) {
+function Header({ onSettingsClick, onNewChatClick, chatName }: { onSettingsClick: () => void; onNewChatClick: () => void; chatName: string }) {
 
     const handleClose = async () => {
         await invoke('close_window');
@@ -19,7 +19,7 @@ function Header({ onSettingsClick, onNewChatClick }: { onSettingsClick: () => vo
             <MessageCirclePlus size={20} />
           </button>
         </div>
-        <div className="chatName">Chat Name a little longer</div>
+        <div className="chatName">{chatName || 'New Chat'}</div>
         <div className="windowIcons">
           <button onClick={() => {handleClose()}} className="clickable"><X size={14} /></button>
         </div>

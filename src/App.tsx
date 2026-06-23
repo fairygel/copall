@@ -3,13 +3,21 @@ import Header from "./components/header/Header";
 import Settings from "./components/settings/Settings";
 import { useState } from "react";
 import Message from "./models/message";
-import fetchMistralResponse from "./service/MistralService";
+import { fetchMistralStream, fetchMistralResponse } from "./service/MistralService";
 import MessageBox from "./components/messageBox/MessageBox";
 import Chat from './components/chat/Chat';
+
+const GENERATE_CHAT_NAME_SYSTEM_PROMPT = 
+    'Generate a concise chat title (max 40 chars) based on the user\'s message. ' +
+    'The title must be in the SAME LANGUAGE as the user\'s text. ' +
+    'Be specific and descriptive. No quotes or formatting. Output title only.\n\n' +
+    'User: [message]\nTitle:';
 
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isSendMessageDisabled, setSendMessageDisabled] = useState(false);
+
+  const [chatName, setChatName] = useState('');
 
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -25,8 +33,30 @@ function App() {
     ));
   };
 
+  const generateTitle = async (message: Message) => {
+    const prompt = GENERATE_CHAT_NAME_SYSTEM_PROMPT.replace('[message]', message.content);
+
+    const systemMessage: Message = {
+      id: crypto.randomUUID(),
+      content: prompt,
+      sender: 'system',
+    };
+
+    try {
+      let title = await fetchMistralResponse([systemMessage, message]);
+      const cleanTitle = title.trim().replace(/^["']|["']$/g, '');
+
+      setChatName(cleanTitle);
+    } catch (error) {
+      console.error('Error generating chat title:', error);
+    }
+
+  };
+
   const handleSendMessage = async (content: string) => {
     setSendMessageDisabled(true);
+    
+    const isFirstMessage = messages.length === 0;
 
     const newMessage: Message = {
       id: crypto.randomUUID(),
@@ -49,13 +79,17 @@ function App() {
     setMessages(prev => [...prev, assistantMessage]);
 
     try {
-      for await (const chunk of fetchMistralResponse(updatedMessages)) {
+      for await (const chunk of fetchMistralStream(updatedMessages)) {
         if (firstChunk) {
           setMessageContent(assistantMessageId, chunk);
           firstChunk = false;
         } else {
           appendToMessage(assistantMessageId, chunk);
         }
+      }
+      console.log(messages.length);
+      if (isFirstMessage) {
+        await generateTitle(newMessage);
       }
     } catch (error) {
       setMessageContent(assistantMessageId, (error as Error).message);
@@ -67,7 +101,11 @@ function App() {
   return (
     <main>
       {isSettingsOpen && <Settings onClose={() => setIsSettingsOpen(false)} />}
-      <Header onSettingsClick={() => setIsSettingsOpen(true)} onNewChatClick={() => setMessages([])} />
+      <Header
+        chatName={chatName}
+        onSettingsClick={() => setIsSettingsOpen(true)}
+        onNewChatClick={() => {setMessages([]); setChatName('');}}
+      />
 
       <Chat messages={messages} />
 
@@ -77,3 +115,4 @@ function App() {
 }
 
 export default App;
+

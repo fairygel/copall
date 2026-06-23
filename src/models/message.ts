@@ -1,4 +1,4 @@
-type Role = 'user' | 'assistant';
+type Role = 'user' | 'assistant' | 'system';
 
 interface Message {
     id: string;
