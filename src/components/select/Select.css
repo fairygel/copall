@@ -1,0 +1,40 @@
+.selectContainer {
+    color: var(--font-color);
+    background-color: var(--background-color);
+    border: none;
+    font-family: 'Geist', sans-serif;
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    gap: 4px;
+    align-items: center;
+    position: relative;
+}
+
+.selectDropdown {
+    position: absolute;
+    bottom: 100%;
+    margin-bottom: 4px;
+    left: 0;
+    background-color: var(--container-color);
+    backdrop-filter: blur(2px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column-reverse;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    padding: 8px;
+    gap: 8px;
+    align-items: start;
+    min-width: max-content;
+    z-index: 100;
+}
+
+.selectItem {
+    border: none;
+    background-color: transparent;
+    color: var(--font-color);
+    font-family: 'Geist', sans-serif;
+    cursor: pointer;
+}

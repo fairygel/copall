@@ -3,6 +3,8 @@ use tauri::{
     menu::{Menu, MenuItem}, 
     tray::{MouseButton, TrayIconBuilder, TrayIconEvent},
 };
+use log::LevelFilter;
+use tauri_plugin_log::{Target, TargetKind, TimezoneStrategy};
 
 #[tauri::command]
 fn close_window(window: tauri::WebviewWindow) {
@@ -13,6 +15,15 @@ fn close_window(window: tauri::WebviewWindow) {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(
+            tauri_plugin_log::Builder::new()
+                .targets([
+                    Target::new(TargetKind::Stdout),
+                ])
+                .timezone_strategy(TimezoneStrategy::UseLocal)
+                .level(log::LevelFilter::Debug)
+                .build(),
+        )
         .setup(|app| {
             let open_chat_i = MenuItem::with_id(app, "open_chat", "Open Chat", true, None::<&str>)?;
             let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;

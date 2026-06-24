@@ -3,10 +3,10 @@ import Message from "../models/message";
 
 const MISTRAL_API_URL = 'https://api.mistral.ai/v1';
 
-export async function fetchModelInfo(): Promise<AiModel> {
+export async function fetchModelInfo(model: string): Promise<AiModel> {
     const apiKey = getApiKey();
 
-    const response = await fetch(MISTRAL_API_URL + '/models/mistral-medium-3-5', {
+    const response = await fetch(MISTRAL_API_URL + `/models/${model}`, {
         headers: {
             'Authorization': `Bearer ${apiKey}`
         }
@@ -18,8 +18,8 @@ export async function fetchModelInfo(): Promise<AiModel> {
     return { id: data.id, name: data.name, context: data.max_context_length };
 }
 
-export async function fetchMistralResponse(messages: Message[]): Promise<string> {
-    const response = await fetchChatRequest(messages, false);
+export async function fetchMistralResponse(messages: Message[], model: string): Promise<string> {
+    const response = await fetchChatRequest(messages, model, false);
 
     await checkErrorResponse(response);
 
@@ -27,8 +27,8 @@ export async function fetchMistralResponse(messages: Message[]): Promise<string>
     return data.choices?.[0]?.message?.content || '';
 }
 
-export async function* fetchMistralStream(messages: Message[]): AsyncGenerator<string> {
-    const response = await fetchChatRequest(messages, true);
+export async function* fetchMistralStream(messages: Message[], model: string): AsyncGenerator<string> {
+    const response = await fetchChatRequest(messages, model, true);
 
     await checkErrorResponse(response);
 
@@ -61,7 +61,7 @@ export async function* fetchMistralStream(messages: Message[]): AsyncGenerator<s
     }
 }
 
-async function fetchChatRequest(messages: Message[], streaming: boolean): Promise<Response> {
+async function fetchChatRequest(messages: Message[], model: string, streaming: boolean): Promise<Response> {
     let apiKey = getApiKey();
 
     const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
@@ -71,7 +71,7 @@ async function fetchChatRequest(messages: Message[], streaming: boolean): Promis
             'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-            model: 'mistral-medium-3-5',
+            model: model,
             messages: toMistralFormat(messages),
             stream: streaming,
         })

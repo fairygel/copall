@@ -15,6 +15,10 @@ function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isSendMessageDisabled, setSendMessageDisabled] = useState(false);
 
+  const [model, setModel] = useState(() => {
+    return localStorage.getItem('selectedModel') || '';
+  });
+
   const [chatName, setChatName] = useState('');
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -22,7 +26,7 @@ function App() {
   const generateTitle = async (message: string) => {
     if (!message) return;
     
-    setChatName(await generateChatTitle(message));
+    setChatName(await generateChatTitle(message, model));
   };
 
   const displayUserMessage = (content: string) => {
@@ -44,7 +48,7 @@ function App() {
     const isFirstMessage = messages.length === 0;
     const updatedMessages = displayUserMessage(content);
 
-    const response = await generateAssistantResponse(updatedMessages, setMessages);
+    const response = await generateAssistantResponse(updatedMessages, model, setMessages);
 
     setSendMessageDisabled(false);
 
@@ -64,7 +68,11 @@ function App() {
 
       <Chat messages={messages} />
 
-      <MessageBox onMessageSent={handleSendMessage} disabled={isSendMessageDisabled} />
+      <MessageBox 
+        onMessageSent={handleSendMessage} 
+        disabled={isSendMessageDisabled} 
+        onModelChange={setModel} 
+      />
     </main>
   )
 }
