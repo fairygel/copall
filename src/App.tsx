@@ -25,7 +25,7 @@ function App() {
 
   const generateTitle = async (message: string) => {
     if (!message) return;
-    
+
     setChatName(await generateChatTitle(message, model));
   };
 
@@ -44,17 +44,22 @@ function App() {
 
   const handleSendMessage = async (content: string) => {
     setSendMessageDisabled(true);
-    
+
     const isFirstMessage = messages.length === 0;
     const updatedMessages = displayUserMessage(content);
 
-    const response = await generateAssistantResponse(updatedMessages, model, setMessages);
+    try {
+      const response = await generateAssistantResponse(updatedMessages, model, setMessages);
 
-    setSendMessageDisabled(false);
-
-    if (isFirstMessage && response) {
+      if (isFirstMessage && response) {
         await generateTitle(response);
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setSendMessageDisabled(false);
     }
+
   }
 
   return (
@@ -63,15 +68,15 @@ function App() {
       <Header
         chatName={chatName}
         onSettingsClick={() => setIsSettingsOpen(true)}
-        onNewChatClick={() => {setMessages([]); setChatName(''); setSendMessageDisabled(false);}}
+        onNewChatClick={() => { setMessages([]); setChatName(''); setSendMessageDisabled(false); }}
       />
 
       <Chat messages={messages} />
 
-      <MessageBox 
-        onMessageSent={handleSendMessage} 
-        disabled={isSendMessageDisabled} 
-        onModelChange={setModel} 
+      <MessageBox
+        onMessageSent={handleSendMessage}
+        disabled={isSendMessageDisabled}
+        onModelChange={setModel}
       />
     </main>
   )

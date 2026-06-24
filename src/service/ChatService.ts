@@ -105,7 +105,7 @@ export async function generateAssistantResponse(
     } catch (error) {
         const errorMsg = (error as Error).message;
         setMessages(prev => prev.map(
-            msg => msg.id === assistantMessageId ? { ...msg, content: errorMsg } : msg
+            msg => msg.id === assistantMessageId ? { ...msg, content: messageContent + '\n' + errorMsg } : msg
         ));
         throw error;
     }

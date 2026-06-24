@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import './Select.css';
 import { ChevronDown } from "lucide-react";
 
-function Select({ list, onSelect, defaultItem, disabled }: { 
-    list: string[]; 
-    onSelect: (item: string) => void; 
+function Select({ list, onSelect, defaultItem, disabled }: {
+    list: string[];
+    onSelect: (item: string) => void;
     defaultItem?: string;
     disabled?: boolean;
 }) {
     const [isOpened, setIsOpened] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const [defaultSelect, setDefaultSelect] = useState(() => {
         return defaultItem || (list.length > 0 ? list[0] : '');
@@ -20,24 +21,49 @@ function Select({ list, onSelect, defaultItem, disabled }: {
         onSelect(item);
     }
 
+    useEffect(() => {
+        if (!isOpened) return;
+
+        const handleClickOutside = (event: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setIsOpened(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpened]);
+
     return (
-        <button 
-            onClick={() => setIsOpened(!isOpened)} 
-            className="selectContainer"
-            disabled={disabled}
+        <div
+            ref={containerRef}
+            className={`selectWrapper ${disabled ? 'disabled' : ''}`}
+            style={{ position: 'relative', display: 'inline-block' }}
         >
-            <span>{defaultSelect}</span>
-            <ChevronDown size={14} />
+            <button
+                onClick={() => setIsOpened(!isOpened)}
+                className="selectContainer"
+                disabled={disabled}
+            >
+                <span>{defaultSelect}</span>
+                <ChevronDown size={14} />
+            </button>
             {isOpened && (
                 <div onClick={(e) => e.stopPropagation()} className="selectDropdown">
                     {list.map((item, index) => (
-                        <button onClick={() => handleItemSelect(item)} key={index} className="selectItem">
+                        <button 
+                            onClick={() => handleItemSelect(item)} 
+                            key={index} 
+                            className="selectItem">
                             {item}
                         </button>
                     ))}
                 </div>
             )}
-        </button>
+        </div>
     )
 }
 
