@@ -58,7 +58,8 @@ function MessageBox({ onMessageSent, disabled, onModelChange }: {
                     list={models} 
                     onSelect={handleModelSelect} 
                     defaultItem={defaultModel} 
-                    disabled={models.length === 0}    
+                    disabled={models.length === 0}
+                    shouldGroup={true}
                 />
                 <button
                     className="sendMessage"

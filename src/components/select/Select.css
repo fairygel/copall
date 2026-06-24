@@ -28,7 +28,41 @@
     gap: 8px;
     align-items: start;
     min-width: max-content;
+    max-height: 200px;
+    overflow-y: auto;
     z-index: 100;
+}
+
+.selectGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+}
+
+.selectGroupHeader {
+    border: none;
+    background-color: transparent;
+    color: var(--font-color);
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 0;
+    text-align: left;
+    width: 100%;
+}
+
+.selectGroupItems {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding-left: 12px;
+    gap: 4px;
+    width: 100%;
+}
+
+.selectSubItem {
+    padding: 2px 0;
 }
 
 .selectItem {
