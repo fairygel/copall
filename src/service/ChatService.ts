@@ -1,7 +1,7 @@
 import AiModel from "../models/AiModel";
 import Message from "../models/message";
 
-import { fetchMistralResponse, fetchMistralStream, fetchModelInfo } from "./MistralService";
+import { createClient } from "./ClientProviderFactory";
 
 import { Dispatch, SetStateAction } from "react";
 import { getEncoding } from "js-tiktoken";
@@ -14,6 +14,23 @@ const GENERATE_CHAT_NAME_SYSTEM_PROMPT =
     'Be specific and descriptive. No quotes or formatting. Output title only.\n\n' +
     'User: [message]\nTitle:';
 
+type Provider = 'mistral' | 'google';
+
+function parseModel(model: string): { provider: Provider; modelId: string } {
+    const slashIndex = model.indexOf('/');
+    if (slashIndex === -1) {
+        throw new Error(`Invalid model format: ${model}. Expected provider/model`);
+    }
+    const provider = model.slice(0, slashIndex) as Provider;
+    const modelId = model.slice(slashIndex + 1);
+
+    if (provider !== 'mistral' && provider !== 'google') {
+        throw new Error(`Unknown provider: ${provider}`);
+    }
+
+    return { provider, modelId };
+}
+
 export async function generateChatTitle(message: string, model: string) {
     const prompt = GENERATE_CHAT_NAME_SYSTEM_PROMPT.replace('[message]', message);
 
@@ -23,8 +40,11 @@ export async function generateChatTitle(message: string, model: string) {
         sender: 'system',
     };
 
+    const { modelId } = parseModel(model);
+    const client = createClient(model);
+
     try {
-        let title = await fetchMistralResponse([systemMessage], model);
+        const title = await client.generateResponse([systemMessage], modelId);
         const cleanTitle = title.trim().replace(/^["']|["']$/g, '');
 
         return cleanTitle;
@@ -56,6 +76,7 @@ export async function generateAssistantResponse(
     model: string,
     setMessages: Dispatch<SetStateAction<Message[]>>
 ): Promise<string> {
+    const { modelId } = parseModel(model);
     const contextTrimmedMessages = await trimMessagesToFitContext(messages, model);
 
     const assistantMessageId = crypto.randomUUID();
@@ -67,11 +88,13 @@ export async function generateAssistantResponse(
 
     setMessages(prev => [...prev, assistantMessage]);
 
-
     let messageContent = '';
 
     try {
-        for await (const chunk of fetchMistralStream(contextTrimmedMessages, model)) {
+        const client = createClient(model);
+        const stream = client.generateStream(contextTrimmedMessages, modelId);
+
+        for await (const chunk of stream) {
             messageContent += chunk;
             setMessages(prev => prev.map(
                 msg => msg.id === assistantMessageId ? { ...msg, content: messageContent } : msg
@@ -88,14 +111,16 @@ export async function generateAssistantResponse(
     }
 }
 
-
-
 async function getModelInfo(model: string): Promise<AiModel> {
-    let modelInfo = localStorage.getItem('modelInfo');
+    const { provider, modelId } = parseModel(model);
+    const cacheKey = `modelInfo_${provider}_${modelId}`;
+
+    let modelInfo = localStorage.getItem(cacheKey);
 
     if (!modelInfo) {
-        let fetchedModelInfo = await fetchModelInfo(model);
-        localStorage.setItem('modelInfo', JSON.stringify(fetchedModelInfo));
+        const client = createClient(model);
+        let fetchedModelInfo = await client.getModelInfo(modelId);
+        localStorage.setItem(cacheKey, JSON.stringify(fetchedModelInfo));
         modelInfo = JSON.stringify(fetchedModelInfo);
     }
 

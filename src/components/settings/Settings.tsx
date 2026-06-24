@@ -7,12 +7,17 @@ function Settings({ onClose }: { onClose: () => void }) {
         localStorage.getItem('mistralApiKey') || ''
     );
 
+    const [geminiApiKey, setGeminiApiKey] = useState(() =>
+        localStorage.getItem('geminiApiKey') || ''
+    );
+
     const [theme, setTheme] = useState<'light' | 'dark'>(
         localStorage.getItem('theme') === 'light' ? 'light' : 'dark'
     );
 
     const saveSettings = () => {
         localStorage.setItem('mistralApiKey', mistralApiKey);
+        localStorage.setItem('geminiApiKey', geminiApiKey);
         onClose();
     };
 
@@ -67,6 +72,18 @@ function Settings({ onClose }: { onClose: () => void }) {
                                 placeholder="Enter Mistral API Key"
                                 value={mistralApiKey}
                                 onChange={(e) => setMistralApiKey(e.target.value)}
+                            />
+                        </div>
+                        <div className="settingItem">
+                            <div className="settingLabel">
+                                <img src="/gemini.svg" alt="icon" width={18} height={18} />
+                                <span>Gemini</span>
+                            </div>
+                            <input
+                                type="password"
+                                placeholder="Enter Gemini API Key"
+                                value={geminiApiKey}
+                                onChange={(e) => setGeminiApiKey(e.target.value)}
                             />
                         </div>
                     </div>
