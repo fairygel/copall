@@ -3,7 +3,6 @@ use tauri::{
     menu::{Menu, MenuItem}, 
     tray::{MouseButton, TrayIconBuilder, TrayIconEvent},
 };
-use log::LevelFilter;
 use tauri_plugin_log::{Target, TargetKind, TimezoneStrategy};
 
 #[tauri::command]
