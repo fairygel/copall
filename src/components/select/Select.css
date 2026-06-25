@@ -8,7 +8,6 @@
     flex-direction: row;
     cursor: pointer;
     gap: 4px;
-    align-items: center;
     position: relative;
 }
 
@@ -38,6 +37,7 @@
     flex-direction: column;
     align-items: start;
     width: 100%;
+    min-width: 180px;
 }
 
 .selectGroupHeader {
@@ -49,6 +49,8 @@
     cursor: pointer;
     padding: 4px 0;
     text-align: left;
+    display: flex;
+    flex-direction: row;
     width: 100%;
 }
 
@@ -71,4 +73,24 @@
     color: var(--font-color);
     font-family: 'Geist', sans-serif;
     cursor: pointer;
+}
+
+.selectIcon {
+    display: flex;
+    align-items: center;
+    transition: transform 0.15s ease;
+}
+
+.dropdownOpened {
+    transform: rotate(-180deg);
+}
+
+.groupChevron {
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.groupExpanded {
+    transform: rotate(90deg);
 }

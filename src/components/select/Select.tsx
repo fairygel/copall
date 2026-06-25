@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import './Select.css';
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 function Select({ list, onSelect, defaultItem, disabled, shouldGroup }: {
     list: string[];
@@ -88,7 +88,10 @@ function Select({ list, onSelect, defaultItem, disabled, shouldGroup }: {
                         onClick={() => toggleProvider(provider)} 
                         className="selectGroupHeader"
                     >
-                        {`> ${provider}`}
+                        <span className={`groupChevron ${isExpanded?'groupExpanded':''}`}>
+                            <ChevronRight size={14}></ChevronRight>
+                        </span>
+                        <span>{provider}</span>
                     </button>
                     {isExpanded && (
                         <div className="selectGroupItems">
@@ -124,7 +127,9 @@ function Select({ list, onSelect, defaultItem, disabled, shouldGroup }: {
                 disabled={disabled}
             >
                 <span>{defaultSelect}</span>
-                <ChevronDown size={14} />
+                <span className={`selectIcon ${isOpened?'dropdownOpened':''}`}>
+                    <ChevronDown size={14} />
+                </span>
             </button>
             {isOpened && (
                 <div onClick={(e) => e.stopPropagation()} className="selectDropdown">

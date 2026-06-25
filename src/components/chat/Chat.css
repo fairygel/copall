@@ -53,3 +53,44 @@
   padding-bottom: 140px;
   font-family: 'Andika', sans-serif;
 }
+
+.messageWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.messageWrapper:has(.userMessage) {
+    align-items: flex-end;
+}
+
+.messageWrapper:has(.aiMessage) {
+    align-items: flex-start;
+}
+
+.copyButton {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: var(--inactive-font-color);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+
+    margin: 2px 8px;
+}
+
+.copyButton:hover {
+    background-color: var(--container-color);
+    color: var(--font-color);
+}
+
+.messageWrapper:hover .copyButton {
+    opacity: 1;
+}

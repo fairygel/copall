@@ -3,7 +3,7 @@ import { useState } from "react";
 import './MessageBox.css';
 import Select from "../select/Select";
 
-const models = ["mistral/mistral-medium-3-5", "mistral/mistral-small-2603", "mistral/mistral-large-2512", "google/gemini-3.5-flash", "google/gemini-3-flash-preview", "google/gemini-3.1-flash-lite"];
+const models = ["Mistral/mistral-medium-3-5", "Mistral/mistral-small-2603", "Mistral/mistral-large-2512", "Google/gemini-3.5-flash", "Google/gemini-3-flash-preview", "Google/gemini-3.1-flash-lite"];
 
 function MessageBox({ onMessageSent, disabled, onModelChange }: { 
     onMessageSent: (msg: string) => void; 

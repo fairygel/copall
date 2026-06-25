@@ -1,9 +1,10 @@
 import ReactMarkdown from "react-markdown";
 import Message from "../../models/message";
 import './Chat.css';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import { openUrl } from "@tauri-apps/plugin-opener";
+import { Check, Copy } from "lucide-react";
 
 
 function Chat({ messages }: { messages: Message[] }) {
@@ -13,6 +14,17 @@ function Chat({ messages }: { messages: Message[] }) {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
+    const [copiedId, setCopiedId] = useState<string | null>(null);
+
+    const handleCopy = async (content: string, id: string) => {
+        try {
+            await navigator.clipboard.writeText(content);
+            setCopiedId(id);
+            setTimeout(() => setCopiedId(null), 2000);
+        } catch (err) {
+            console.error("Failed to copy:", err);
+        }
+    };
 
     const components = {
         a: ({ href, children }: { href?: string; children?: React.ReactNode }) => {
@@ -40,17 +52,26 @@ function Chat({ messages }: { messages: Message[] }) {
                 <p>Copall.</p>
             </div>
         ) : (
-        <div className="chatContainer">
-            {messages.map((message) => (
-                <div 
-                    key={message.id} 
-                    className={`message ${message.sender === 'user' ? 'userMessage' : 'aiMessage'}`}
-                >
-                    <ReactMarkdown components={components}>{message.content}</ReactMarkdown>
-                </div>
-            ))}
-            <div ref={bottomRef}></div>
-        </div>
+            <div className="chatContainer">
+                {messages.map((message) => (
+                    <div key={message.id} className="messageWrapper">
+                        <div
+                            className={`message ${message.sender === 'user' ? 'userMessage' : 'aiMessage'}`}
+                        >
+                            <ReactMarkdown components={components}>{message.content}</ReactMarkdown>
+                        </div>
+
+                        <button
+                            className="copyButton"
+                            onClick={() => handleCopy(message.content, message.id)}
+                            title="Copy message"
+                        >
+                            {copiedId === message.id ? <Check size={14} /> : <Copy size={14} />}
+                        </button>
+                    </div>
+                ))}
+                <div ref={bottomRef}></div>
+            </div>
         )
     );
 }
