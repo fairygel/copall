@@ -12,6 +12,12 @@
 .chatName {
   color: var(--font-color);
   font-family: 'Andika', sans-serif;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .windowIcons {

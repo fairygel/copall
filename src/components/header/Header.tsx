@@ -19,7 +19,7 @@ function Header({ onSettingsClick, onNewChatClick, chatName }: { onSettingsClick
             <MessageCirclePlus size={20} />
           </button>
         </div>
-        <div className="chatName">{chatName || 'New Chat'}</div>
+        <div data-tauri-drag-region className="chatName">{chatName || 'New Chat'}</div>
         <div className="windowIcons">
           <button onClick={() => {handleClose()}} className="clickable"><X size={14} /></button>
         </div>
