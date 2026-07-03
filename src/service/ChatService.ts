@@ -1,7 +1,9 @@
 import AiModel from "../models/AiModel";
 import Message from "../models/message";
+import { parseModel } from "./AiUtils";
 
 import { createClient } from "./ClientProviderFactory";
+import { AVAILABLE_PROVIDERS, getApiKey } from "../config/AiProviderConfig";
 
 import { Dispatch, SetStateAction } from "react";
 import { getEncoding } from "js-tiktoken";
@@ -14,23 +16,6 @@ const GENERATE_CHAT_NAME_SYSTEM_PROMPT =
     'Be specific and descriptive. No quotes or formatting. Output title only.\n\n' +
     'User: [message]\nTitle:';
 
-type Provider = 'mistral' | 'google';
-
-function parseModel(model: string): { provider: Provider; modelId: string } {
-    const slashIndex = model.indexOf('/');
-    if (slashIndex === -1) {
-        throw new Error(`Invalid model format: ${model}. Expected provider/model`);
-    }
-    const provider = model.slice(0, slashIndex) as Provider;
-    const modelId = model.slice(slashIndex + 1);
-
-    if (provider !== 'mistral' && provider !== 'google') {
-        throw new Error(`Unknown provider: ${provider}`);
-    }
-
-    return { provider, modelId };
-}
-
 export async function generateChatTitle(message: string, model: string) {
     const prompt = GENERATE_CHAT_NAME_SYSTEM_PROMPT.replace('[message]', message);
 
@@ -40,8 +25,8 @@ export async function generateChatTitle(message: string, model: string) {
         sender: 'system',
     };
 
-    const { modelId } = parseModel(model);
-    const client = createClient(model);
+    const { provider, modelId } = parseModel(model);
+    const client = createClient(provider);
 
     try {
         const title = await client.generateResponse([systemMessage], modelId);
@@ -76,7 +61,7 @@ export async function generateAssistantResponse(
     model: string,
     setMessages: Dispatch<SetStateAction<Message[]>>
 ): Promise<string> {
-    const { modelId } = parseModel(model);
+    const { provider, modelId } = parseModel(model);
     const contextTrimmedMessages = await trimMessagesToFitContext(messages, model);
 
     const assistantMessageId = crypto.randomUUID();
@@ -91,7 +76,7 @@ export async function generateAssistantResponse(
     let messageContent = '';
 
     try {
-        const client = createClient(model);
+        const client = createClient(provider);
         const stream = client.generateStream(contextTrimmedMessages, modelId);
 
         for await (const chunk of stream) {
@@ -111,14 +96,36 @@ export async function generateAssistantResponse(
     }
 }
 
+export async function getAvailableModels(): Promise<AiModel[]> {
+    const providersWithKeys = AVAILABLE_PROVIDERS.filter(provider => !!getApiKey(provider));
+
+    const results = await Promise.allSettled(
+        providersWithKeys.map(async (provider) => {
+            const client = createClient(provider);
+            return await client.getAvailableModels(provider);
+        })
+    );
+
+    const models: AiModel[] = [];
+    for (const result of results) {
+        if (result.status === 'fulfilled') {
+            models.push(...result.value);
+        } else {
+            console.error('Failed to load models for provider:', result.reason);
+        }
+    }
+
+    return models;
+}
+
 async function getModelInfo(model: string): Promise<AiModel> {
     const { provider, modelId } = parseModel(model);
-    const cacheKey = `modelInfo_${provider}_${modelId}`;
+    const cacheKey = `modelInfo_${provider.name}_${modelId}`;
 
     let modelInfo = localStorage.getItem(cacheKey);
 
     if (!modelInfo) {
-        const client = createClient(model);
+        const client = createClient(provider);
         let fetchedModelInfo = await client.getModelInfo(modelId);
         localStorage.setItem(cacheKey, JSON.stringify(fetchedModelInfo));
         modelInfo = JSON.stringify(fetchedModelInfo);

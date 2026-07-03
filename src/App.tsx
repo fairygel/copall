@@ -6,6 +6,7 @@ import MessageBox from "./components/messageBox/MessageBox";
 import Chat from './components/chat/Chat';
 
 import Message from "./models/message";
+import AiModel from "./models/AiModel";
 
 import { generateAssistantResponse, generateChatTitle } from "./service/ChatService";
 
@@ -14,19 +15,18 @@ import { useState } from "react";
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isSendMessageDisabled, setSendMessageDisabled] = useState(false);
+  const [modelsVersion, setModelsVersion] = useState(0);
 
-  const [model, setModel] = useState(() => {
-    return localStorage.getItem('selectedModel') || '';
-  });
+  const [model, setModel] = useState<AiModel | null>(null);
 
   const [chatName, setChatName] = useState('');
 
   const [messages, setMessages] = useState<Message[]>([]);
 
   const generateTitle = async (message: string) => {
-    if (!message) return;
+    if (!message || !model) return;
 
-    setChatName(await generateChatTitle(message, model));
+    setChatName(await generateChatTitle(message, model.id));
   };
 
   const displayUserMessage = (content: string) => {
@@ -43,13 +43,15 @@ function App() {
   }
 
   const handleSendMessage = async (content: string) => {
+    if (!model) return;
+
     setSendMessageDisabled(true);
 
     const isFirstMessage = messages.length === 0;
     const updatedMessages = displayUserMessage(content);
 
     try {
-      const response = await generateAssistantResponse(updatedMessages, model, setMessages);
+      const response = await generateAssistantResponse(updatedMessages, model.id, setMessages);
 
       if (isFirstMessage && response) {
         await generateTitle(response);
@@ -64,7 +66,7 @@ function App() {
 
   return (
     <main>
-      {isSettingsOpen && <Settings onClose={() => setIsSettingsOpen(false)} />}
+      {isSettingsOpen && <Settings onClose={() => { setModelsVersion(v => v + 1); setIsSettingsOpen(false); }} />}
       <Header
         chatName={chatName}
         onSettingsClick={() => setIsSettingsOpen(true)}
@@ -77,6 +79,7 @@ function App() {
         onMessageSent={handleSendMessage}
         disabled={isSendMessageDisabled}
         onModelChange={setModel}
+        modelsVersion={modelsVersion}
       />
     </main>
   )

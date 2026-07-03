@@ -1,6 +1,6 @@
 export interface AiProvider {
     name: string;
     baseUrl: string;
-    apiType: 'openai' | 'gemini';
+    clientType: 'openai' | 'gemini';
     icon: string;
 }

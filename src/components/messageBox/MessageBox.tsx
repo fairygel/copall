@@ -1,24 +1,54 @@
 import { ArrowUp } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './MessageBox.css';
-import Select from "../select/Select";
+import { getAvailableModels } from "../../service/ChatService";
+import AiModelSelect from "../select/AiModelSelect";
+import AiModel from "../../models/AiModel";
 
-const models = ["Mistral/mistral-medium-3-5", "Mistral/mistral-small-2603", "Mistral/mistral-large-2512", "Google/gemini-3.5-flash", "Google/gemini-3-flash-preview", "Google/gemini-3.1-flash-lite"];
-
-function MessageBox({ onMessageSent, disabled, onModelChange }: { 
-    onMessageSent: (msg: string) => void; 
+function MessageBox({ onMessageSent, disabled, onModelChange, modelsVersion = 0 }: {
+    onMessageSent: (msg: string) => void;
     disabled: boolean;
-    onModelChange: (model: string) => void;
+    onModelChange: (model: AiModel | null) => void;
+    modelsVersion?: number;
 }) {
     const [inputValue, setInputValue] = useState('');
+    const [models, setModels] = useState<AiModel[]>([]);
+    const [defaultModel, setDefaultModel] = useState<AiModel | null>(null);
+    const [isLoadingModels, setIsLoadingModels] = useState(true);
 
-    const isDisabled = disabled || inputValue.trim() === '';
+    useEffect(() => {
+        let cancelled = false;
+        setIsLoadingModels(true);
 
-    const [defaultModel, setDefaultModel] = useState(() => {
-        const model = localStorage.getItem('selectedModel') || models[0];
-        onModelChange(model);
-        return model;
-    });
+        getAvailableModels()
+            .then(loadedModels => {
+                if (cancelled) return;
+                setModels(loadedModels);
+
+                const savedModelId = localStorage.getItem('selectedModel');
+                const savedModel = savedModelId
+                    ? loadedModels.find(m => m.id === savedModelId) ?? null
+                    : null;
+                const model = savedModel || loadedModels[0] || null;
+
+                setDefaultModel(model);
+                onModelChange(model);
+            })
+            .catch(err => {
+                console.error('Failed to load available models:', err);
+            })
+            .finally(() => {
+                if (!cancelled) {
+                    setIsLoadingModels(false);
+                }
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [modelsVersion]);
+
+    const isDisabled = disabled || inputValue.trim() === '' || isLoadingModels || !defaultModel;
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -37,8 +67,12 @@ function MessageBox({ onMessageSent, disabled, onModelChange }: {
         }
     }
 
-    const handleModelSelect = (model: string) => {
-        localStorage.setItem('selectedModel', model);
+    const handleModelSelect = (model: AiModel | null) => {
+        if (model) {
+            localStorage.setItem('selectedModel', model.id);
+        } else {
+            localStorage.removeItem('selectedModel');
+        }
         setDefaultModel(model);
         onModelChange(model);
     }
@@ -54,12 +88,11 @@ function MessageBox({ onMessageSent, disabled, onModelChange }: {
                 onChange={(e) => setInputValue(e.target.value)}
             />
             <div className="tooltip">
-                <Select 
-                    list={models} 
-                    onSelect={handleModelSelect} 
-                    defaultItem={defaultModel} 
-                    disabled={models.length === 0}
-                    shouldGroup={true}
+                <AiModelSelect
+                    list={models}
+                    onSelect={handleModelSelect}
+                    defaultItem={defaultModel ?? undefined}
+                    disabled={isLoadingModels || disabled}
                 />
                 <button
                     className="sendMessage"

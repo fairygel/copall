@@ -1,27 +1,60 @@
+import { getApiKey } from "../config/AiProviderConfig";
 import AiModel from "../models/AiModel";
+import { AiProvider } from "../models/AiProvider";
 import Message from "../models/message";
+import { parseStreamResponse } from "./AiUtils";
 import { BaseClient } from "./BaseClient";
 
 
-export function createGeminiService(): BaseClient {
-    const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta';
-
+export function createGeminiService(provider: AiProvider): BaseClient {
     return {
         async getModelInfo(model: string): Promise<AiModel> {
-            const apiKey = getApiKey();
+            const apiKey = getApiKey(provider);
 
             const response = await fetch(
-                `${GEMINI_API_URL}/models/${model}?key=${apiKey}`
+                `${provider.baseUrl}/models/${model}?key=${apiKey}`
             );
 
             await checkErrorResponse(response);
 
             const data = await response.json();
+            const rawId = data.name.replace('models/', '');
             return {
-                id: data.name.replace('models/', ''),
+                id: `${provider.name}/${rawId}`,
                 name: data.displayName,
-                context: data.inputTokenLimit
+                context: data.inputTokenLimit,
+                provider
             };
+        },
+        async getAvailableModels(provider: AiProvider): Promise<AiModel[]> {
+            const apiKey = getApiKey(provider);
+            if (!apiKey) return [];
+
+            try {
+                const response = await fetch(
+                    `${provider.baseUrl}/models?key=${apiKey}`
+                );
+
+                await checkErrorResponse(response);
+
+                const data = await response.json();
+                console.log(`[${provider.name}] models response:`, data);
+
+                const items = Array.isArray(data?.models) ? data.models : [];
+
+                return items.map((model: any) => {
+                    const rawId = (model.name ?? '').replace('models/', '');
+                    return {
+                        id: `${provider.name}/${rawId}`,
+                        name: model.displayName ?? rawId,
+                        context: model.inputTokenLimit ?? 0,
+                        provider
+                    };
+                });
+            } catch (error) {
+                console.error(`Failed to load models for ${provider.name}:`, error);
+                return [];
+            }
         },
         async generateResponse(messages: Message[], model: string): Promise<string> {
             const response = await fetchChatRequest(messages, model, false);
@@ -36,39 +69,19 @@ export function createGeminiService(): BaseClient {
 
             await checkErrorResponse(response);
 
-            const reader = response.body?.getReader();
-            if (!reader) throw new Error('No response body');
-
-            const decoder = new TextDecoder();
-
-            while (true) {
-                const { done, value } = await reader.read();
-
-                if (done) break;
-
-                const text = decoder.decode(value, { stream: true });
-                const lines = text.split('\n').filter(line => line.trim());
-
-                for (const line of lines) {
-                    if (!line.startsWith('data: ')) continue;
-
-                    const json = JSON.parse(line.slice(6));
-                    const content = json.candidates?.[0]?.content?.parts?.[0]?.text;
-
-                    if (content) {
-                        yield content;
-                    }
-                }
-            }
+            yield* parseStreamResponse(
+                response,
+                (json) => json.candidates?.[0]?.content?.parts?.[0]?.text
+            );
         }
     }
 
     async function fetchChatRequest(messages: Message[], model: string, streaming: boolean): Promise<Response> {
-        const apiKey = getApiKey();
+        const apiKey = getApiKey(provider);
 
         const url = streaming
-            ? `${GEMINI_API_URL}/models/${model}:streamGenerateContent?alt=sse`
-            : `${GEMINI_API_URL}/models/${model}:generateContent`;
+            ? `${provider.baseUrl}/models/${model}:streamGenerateContent?alt=sse`
+            : `${provider.baseUrl}/models/${model}:generateContent`;
 
         const response = await fetch(url, {
             method: 'POST',
@@ -82,14 +95,6 @@ export function createGeminiService(): BaseClient {
         });
 
         return response;
-    }
-
-    function getApiKey(): string {
-        const apiKey = localStorage.getItem('geminiApiKey');
-        if (!apiKey) {
-            throw new Error('Gemini API key not found');
-        }
-        return apiKey;
     }
 
     function toGeminiFormat(messages: Message[]) {

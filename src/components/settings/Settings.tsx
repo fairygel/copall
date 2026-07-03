@@ -1,31 +1,42 @@
 import { useState } from 'react';
 import './Settings.css';
 import { SunMoon, X } from "lucide-react";
+import { AVAILABLE_PROVIDERS, getApiKey, setApiKey } from '../../config/AiProviderConfig';
+import { AiProvider } from '../../models/AiProvider';
 
 function Settings({ onClose }: { onClose: () => void }) {
-    const [mistralApiKey, setMistralApiKey] = useState(() =>
-        localStorage.getItem('mistralApiKey') || ''
-    );
-
-    const [geminiApiKey, setGeminiApiKey] = useState(() =>
-        localStorage.getItem('geminiApiKey') || ''
-    );
+    const [apiKeys, setApiKeys] = useState<Record<string, string>>(() => {
+        const initial: Record<string, string> = {};
+        for (const provider of AVAILABLE_PROVIDERS) {
+            initial[provider.name] = getApiKey(provider);
+        }
+        return initial;
+    });
 
     const [theme, setTheme] = useState<'light' | 'dark'>(
         localStorage.getItem('theme') === 'light' ? 'light' : 'dark'
     );
 
-    const saveSettings = () => {
-        localStorage.setItem('mistralApiKey', mistralApiKey);
-        localStorage.setItem('geminiApiKey', geminiApiKey);
+    const handleKeyBlur = (provider: AiProvider) => {
+        setApiKey(provider, apiKeys[provider.name] ?? '');
+    };
+
+    const handleClose = () => {
+        for (const provider of AVAILABLE_PROVIDERS) {
+            const value = apiKeys[provider.name] ?? '';
+            const stored = localStorage.getItem(provider.name + 'ApiKey') || '';
+            if (value !== stored) {
+                setApiKey(provider, value);
+            }
+        }
         onClose();
     };
 
-    const setAppTheme = (theme: 'light' | 'dark') => {
-        localStorage.setItem('theme', theme);
-        setTheme(theme);
+    const setAppTheme = (next: 'light' | 'dark') => {
+        localStorage.setItem('theme', next);
+        setTheme(next);
 
-        if (theme === 'dark') {
+        if (next === 'dark') {
             document.documentElement.removeAttribute('data-theme');
         } else {
             document.documentElement.setAttribute('data-theme', 'light');
@@ -33,11 +44,11 @@ function Settings({ onClose }: { onClose: () => void }) {
     };
 
     return (
-        <div className="modalBackdrop" onClick={() => saveSettings()}>
+        <div className="modalBackdrop" onClick={handleClose}>
             <div className="modalContent" onClick={(e) => e.stopPropagation()}>
                 <div className="modalHeader">
                     <h3>Settings</h3>
-                    <button className="clickable" onClick={() => saveSettings()}>
+                    <button className="clickable" onClick={handleClose}>
                         <X size={14} />
                     </button>
                 </div>
@@ -62,30 +73,24 @@ function Settings({ onClose }: { onClose: () => void }) {
                     </div>
                     <h4>Api Keys</h4>
                     <div className="settingsSection">
-                        <div className="settingItem">
-                            <div className="settingLabel">
-                                <img src="/mistral.svg" alt="icon" width={18} height={18} />
-                                <span>Mistral</span>
+                        {AVAILABLE_PROVIDERS.map(provider => (
+                            <div key={provider.name} className="settingItem">
+                                <div className="settingLabel">
+                                    <img src={`/${provider.icon}`} alt={provider.name} width={18} height={18} />
+                                    <span>{provider.name}</span>
+                                </div>
+                                <input
+                                    type="password"
+                                    placeholder={`Enter ${provider.name} API Key`}
+                                    value={apiKeys[provider.name] ?? ''}
+                                    onChange={(e) => setApiKeys(prev => ({
+                                        ...prev,
+                                        [provider.name]: e.target.value,
+                                    }))}
+                                    onBlur={() => handleKeyBlur(provider)}
+                                />
                             </div>
-                            <input
-                                type="password"
-                                placeholder="Enter Mistral API Key"
-                                value={mistralApiKey}
-                                onChange={(e) => setMistralApiKey(e.target.value)}
-                            />
-                        </div>
-                        <div className="settingItem">
-                            <div className="settingLabel">
-                                <img src="/gemini.svg" alt="icon" width={18} height={18} />
-                                <span>Gemini</span>
-                            </div>
-                            <input
-                                type="password"
-                                placeholder="Enter Gemini API Key"
-                                value={geminiApiKey}
-                                onChange={(e) => setGeminiApiKey(e.target.value)}
-                            />
-                        </div>
+                        ))}
                     </div>
                 </div>
             </div>
