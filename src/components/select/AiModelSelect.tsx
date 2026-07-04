@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import './Select.css';
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Search } from "lucide-react";
 import AiModel from "../../models/AiModel";
 
 const PLACEHOLDER = 'Select Model';
@@ -13,6 +13,7 @@ function AiModelSelect({ list, onSelect, defaultItem, disabled }: {
 }) {
     const [isOpened, setIsOpened] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const resolvedDefault = useMemo<AiModel | null>(() => {
         if (!defaultItem) return null;
@@ -34,6 +35,7 @@ function AiModelSelect({ list, onSelect, defaultItem, disabled }: {
     const handleItemSelect = (item: AiModel) => {
         setDefaultSelect(item);
         setIsOpened(false);
+        setSearchQuery('');
         onSelect(item);
     }
 
@@ -60,17 +62,50 @@ function AiModelSelect({ list, onSelect, defaultItem, disabled }: {
         };
     }, [isOpened]);
 
-    const groups: Record<string, AiModel[]> = {};
-    list.forEach(item => {
-        const providerName = item.provider.name;
-        if (!groups[providerName]) {
-            groups[providerName] = [];
+    const filteredGroups = useMemo(() => {
+        const query = searchQuery.toLowerCase().trim().replace(/\s+/g, '-');
+        if (!query) {
+            const groups: Record<string, AiModel[]> = {};
+            list.forEach(item => {
+                const providerName = item.provider.name;
+                if (!groups[providerName]) {
+                    groups[providerName] = [];
+                }
+                groups[providerName].push(item);
+            });
+            return groups;
         }
-        groups[providerName].push(item);
-    });
 
-    const providers = Object.keys(groups);
+        const groups: Record<string, AiModel[]> = {};
+        list.forEach(item => {
+            const providerName = item.provider.name;
+            const matchName = item.name.toLowerCase().includes(query);
+            const matchProvider = providerName.toLowerCase().includes(query);
+            const matchId = item.id.toLowerCase().includes(query);
+
+            if (matchName || matchProvider || matchId) {
+                if (!groups[providerName]) {
+                    groups[providerName] = [];
+                }
+                groups[providerName].push(item);
+            }
+        });
+        return groups;
+    }, [list, searchQuery]);
+
+    useEffect(() => {
+        if (searchQuery.trim()) {
+            const allExpanded: Record<string, boolean> = {};
+            Object.keys(filteredGroups).forEach(provider => {
+                allExpanded[provider] = true;
+            });
+            setExpandedProviders(allExpanded);
+        }
+    }, [searchQuery, filteredGroups]);
+
+    const providers = Object.keys(filteredGroups);
     const showPlaceholder = !defaultSelect || list.length === 0;
+    const showNoModelsFound = list.length > 0 && providers.length === 0 && searchQuery.trim().length > 0;
 
     return (
         <div
@@ -88,39 +123,59 @@ function AiModelSelect({ list, onSelect, defaultItem, disabled }: {
                     <ChevronDown size={14} />
                 </span>
             </button>
-            {isOpened && providers.length > 0 && (
+            {isOpened && (
                 <div onClick={(e) => e.stopPropagation()} className="selectDropdown">
-                    {providers.map((provider) => {
-                        const isExpanded = !!expandedProviders[provider];
-                        const modelsInGroup = groups[provider];
+                    {providers.length > 0 && (
+                        <div className="selectDropdownList">
+                            {providers.map((provider) => {
+                                const isExpanded = !!expandedProviders[provider];
+                                const modelsInGroup = filteredGroups[provider];
 
-                        return (
-                            <div key={provider} className="selectGroup">
-                                <button
-                                    onClick={() => toggleProvider(provider)}
-                                    className="selectGroupHeader"
-                                >
-                                    <span className={`groupChevron ${isExpanded ? 'groupExpanded' : ''}`}>
-                                        <ChevronRight size={14}></ChevronRight>
-                                    </span>
-                                    <span>{provider}</span>
-                                </button>
-                                {isExpanded && (
-                                    <div className="selectGroupItems">
-                                        {modelsInGroup.map((item, index) => (
-                                            <button
-                                                onClick={() => handleItemSelect(item)}
-                                                key={index}
-                                                className="selectItem selectSubItem"
-                                            >
-                                                {item.name}
-                                            </button>
-                                        ))}
+                                return (
+                                    <div key={provider} className="selectGroup">
+                                        <button
+                                            onClick={() => toggleProvider(provider)}
+                                            className="selectGroupHeader"
+                                        >
+                                            <span className={`groupChevron ${isExpanded ? 'groupExpanded' : ''}`}>
+                                                <ChevronRight size={14}></ChevronRight>
+                                            </span>
+                                            <span>{provider}</span>
+                                        </button>
+                                        {isExpanded && (
+                                            <div className="selectGroupItems">
+                                                {modelsInGroup.map((item, index) => (
+                                                    <button
+                                                        onClick={() => handleItemSelect(item)}
+                                                        key={index}
+                                                        className="selectItem selectSubItem"
+                                                    >
+                                                        {item.name}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </div>
-                        );
-                    })}
+                                );
+                            })}
+                        </div>
+                    )}
+                    {showNoModelsFound && (
+                        <div className="selectEmptyState">
+                            <span className="selectEmptyTitle">No models found</span>
+                        </div>
+                    )}
+                    <div className="selectSearchContainer">
+                        <Search size={14}/>
+                        <input
+                            type="text"
+                            className="selectSearchInput"
+                            placeholder="Search models..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                        />
+                    </div>
                 </div>
             )}
         </div>

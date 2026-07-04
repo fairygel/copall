@@ -95,8 +95,8 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
 
     async function checkErrorResponse(response: Response) {
         if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`OpenAI API - ${response.status}: ${errorText}`);
+            const err = await response.json();
+            throw new Error(`OpenAI API - ${response.status}: ${err.error?.message || err.message || err.toString()}`);
         }
     }
 }

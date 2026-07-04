@@ -20,15 +20,13 @@ export function createGeminiService(provider: AiProvider): BaseClient {
                 await checkErrorResponse(response);
 
                 const data = await response.json();
-                console.log(`[${provider.name}] models response:`, data);
-
                 const items = Array.isArray(data?.models) ? data.models : [];
 
                 return items.map((model: any) => {
                     const rawId = (model.name ?? '').replace('models/', '');
                     return {
                         id: `${provider.name}/${rawId}`,
-                        name: model.displayName ?? rawId,
+                        name: rawId,
                         context: model.inputTokenLimit ?? 0,
                         provider
                     };
@@ -88,8 +86,8 @@ export function createGeminiService(provider: AiProvider): BaseClient {
 
     async function checkErrorResponse(response: Response) {
         if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Gemini API ${response.status}: ${errorText}`);
+            const err = await response.json();
+            throw new Error(`Gemini API - ${response.status}: ${err.error?.message || err.message || err.toString()}`);
         }
     }
 }
