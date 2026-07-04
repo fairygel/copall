@@ -15,6 +15,7 @@ html, body {
   --border-color: #99999930;
   --container-color: #3d3d3d70;
   --shadow-color: rgba(39, 39, 39, 0.2);
+  --accent-color: #B09ECF;
 
   --font-color: #ffffff;
   --inactive-font-color: #adadad;
@@ -26,6 +27,7 @@ html, body {
   --border-color: #70707030;
   --container-color: #e4e4e470;
   --shadow-color: rgba(0, 0, 0, 0.2);
+  --accent-color: #807097;
 
   --font-color: #000000;
   --inactive-font-color: #757575;

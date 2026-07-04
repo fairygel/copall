@@ -11,6 +11,13 @@
     "core:window:allow-set-focus",
     "core:window:allow-start-dragging",
     "opener:allow-open-url",
-    "opener:default"
+    "opener:default",
+    "core:window:allow-set-always-on-top",
+    "core:window:allow-is-always-on-top",
+    "autostart:allow-enable",
+    "autostart:allow-disable",
+    "autostart:allow-is-enabled",
+    "os:allow-os-type",
+    "log:default"
   ]
 }

@@ -1,7 +1,8 @@
 use tauri::{
-    Manager, WindowEvent, include_image, 
-    menu::{Menu, MenuItem}, 
+    include_image,
+    menu::{Menu, MenuItem},
     tray::{MouseButton, TrayIconBuilder, TrayIconEvent},
+    Manager, WindowEvent,
 };
 use tauri_plugin_log::{Target, TargetKind, TimezoneStrategy};
 
@@ -13,17 +14,23 @@ fn close_window(window: tauri::WebviewWindow) {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_os::init())
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            Some(vec!["--tray"]),
+        ))
         .plugin(tauri_plugin_opener::init())
         .plugin(
             tauri_plugin_log::Builder::new()
-                .targets([
-                    Target::new(TargetKind::Stdout),
-                ])
+                .targets([Target::new(TargetKind::Stdout)])
                 .timezone_strategy(TimezoneStrategy::UseLocal)
                 .level(log::LevelFilter::Debug)
                 .build(),
         )
         .setup(|app| {
+            let args: Vec<String> = std::env::args().collect();
+            let start_in_tray = args.contains(&"--tray".to_string());
+
             let open_chat_i = MenuItem::with_id(app, "open_chat", "Open Chat", true, None::<&str>)?;
             let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
             let menu = Menu::with_items(app, &[&open_chat_i, &quit_i])?;
@@ -60,6 +67,15 @@ pub fn run() {
                     _ => {}
                 })
                 .build(app)?;
+
+            if let Some(window) = app.get_webview_window("main") {
+                if start_in_tray {
+                    let _ = window.hide();
+                } else {
+                    let _ = window.show();
+                    let _ = window.set_focus();
+                }
+            }
 
             Ok(())
         })

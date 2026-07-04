@@ -2,6 +2,7 @@ import "./App.css";
 
 import Header from "./components/header/Header";
 import Settings from "./components/settings/Settings";
+import ApiKeys from "./components/settings/ApiKeys";
 import MessageBox from "./components/messageBox/MessageBox";
 import Chat from './components/chat/Chat';
 
@@ -13,7 +14,7 @@ import { generateAssistantResponse, generateChatTitle } from "./service/ChatServ
 import { useState } from "react";
 
 function App() {
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [settingsView, setSettingsView] = useState<"settings" | "apiKeys" | null>(null);
   const [isSendMessageDisabled, setSendMessageDisabled] = useState(false);
 
   const [model, setModel] = useState<AiModel | null>(null);
@@ -65,10 +66,21 @@ function App() {
 
   return (
     <main>
-      {isSettingsOpen && <Settings onClose={() => { setIsSettingsOpen(false); }} />}
+      {settingsView === "settings" && (
+        <Settings
+          onClose={() => { setSettingsView(null); }}
+          onManageApiKeys={() => { setSettingsView("apiKeys"); }}
+        />
+      )}
+      {settingsView === "apiKeys" && (
+        <ApiKeys
+          onBack={() => { setSettingsView("settings"); }}
+          onClose={() => { setSettingsView(null); }}
+        />
+      )}
       <Header
         chatName={chatName}
-        onSettingsClick={() => setIsSettingsOpen(true)}
+        onSettingsClick={() => setSettingsView("settings")}
         onNewChatClick={() => { setMessages([]); setChatName(''); setSendMessageDisabled(false); }}
       />
 

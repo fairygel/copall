@@ -1,52 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Settings.css';
-import { SunMoon, X } from "lucide-react";
-import { AVAILABLE_PROVIDERS, getApiKey, setApiKey } from '../../config/AiProviderConfig';
-import { AiProvider } from '../../models/AiProvider';
-import { useQueryClient } from '@tanstack/react-query';
+import { CircleAlert, KeyRound, Pin, Power, SunMoon, X } from "lucide-react";
+import { getCurrentWindow } from '@tauri-apps/api/window';
+import { enable, disable, isEnabled } from '@tauri-apps/plugin-autostart';
+import { type } from '@tauri-apps/plugin-os';
 
-function Settings({ onClose }: { onClose: () => void }) {
-    const queryClient = useQueryClient();
+function Settings({ onClose, onManageApiKeys }: { onClose: () => void; onManageApiKeys: () => void }) {
+    const appWindow = getCurrentWindow();
+    const osType = type();
 
-    const [apiKeys, setApiKeys] = useState<Record<string, string>>(() => {
-        const initial: Record<string, string> = {};
-        for (const provider of AVAILABLE_PROVIDERS) {
-            initial[provider.name] = getApiKey(provider);
-        }
-        return initial;
-    });
-
-    const [initialApiKeys] = useState(() => {
-        const initial: Record<string, string> = {};
-        for (const provider of AVAILABLE_PROVIDERS) {
-            initial[provider.name] = getApiKey(provider);
-        }
-        return initial;
-    });
+    const isLinux = osType === 'linux';
 
     const [theme, setTheme] = useState<'light' | 'dark'>(
         localStorage.getItem('theme') === 'light' ? 'light' : 'dark'
     );
 
-    const handleKeyBlur = (provider: AiProvider) => {
-        setApiKey(provider, apiKeys[provider.name] ?? '');
-    };
+    const [alwaysOnTop, setAlwaysOnTop] = useState(false);
+    const [openOnStartup, setOpenOnStartup] = useState(false);
 
     const handleClose = () => {
-        let keysChanged = false;
-        for (const provider of AVAILABLE_PROVIDERS) {
-            const newValue = apiKeys[provider.name] ?? '';
-            const oldValue = initialApiKeys[provider.name] ?? '';
-            
-            if (newValue !== oldValue) {
-                setApiKey(provider, newValue);
-                keysChanged = true;
-            }
-        }
-
-        if (keysChanged) {
-            queryClient.invalidateQueries({ queryKey: ['ai-models-list'] });
-        }
         onClose();
     };
 
@@ -61,10 +33,28 @@ function Settings({ onClose }: { onClose: () => void }) {
         }
     };
 
+    const handleAlwaysOnTopToggle = async () => {
+        const next = !alwaysOnTop;
+        await appWindow.setAlwaysOnTop(next);
+        setAlwaysOnTop(next);
+    };
+
+    const handleStartupToggle = async () => {
+        const next = !openOnStartup;
+        next ? await enable() : await disable();
+        setOpenOnStartup(next);
+    };
+
+    useEffect(() => {
+        appWindow.isAlwaysOnTop().then(setAlwaysOnTop);
+        isEnabled().then(setOpenOnStartup);
+    }, []);
+
     return (
         <div className="modalBackdrop" onClick={handleClose}>
             <div className="modalContent" onClick={(e) => e.stopPropagation()}>
                 <div className="modalHeader">
+                    <div />
                     <h3>Settings</h3>
                     <button className="clickable" onClick={handleClose}>
                         <X size={14} />
@@ -88,27 +78,54 @@ function Settings({ onClose }: { onClose: () => void }) {
                                     onClick={() => setAppTheme('dark')}>Dark</button>
                             </div>
                         </div>
-                    </div>
-                    <h4>Api Keys</h4>
-                    <div className="settingsSection">
-                        {AVAILABLE_PROVIDERS.map(provider => (
-                            <div key={provider.name} className="settingItem">
-                                <div className="settingLabel">
-                                    <img src={`/${provider.icon}`} alt={provider.name} width={18} height={18} />
-                                    <span>{provider.name}</span>
-                                </div>
-                                <input
-                                    type="password"
-                                    placeholder={`Enter ${provider.name} API Key`}
-                                    value={apiKeys[provider.name] ?? ''}
-                                    onChange={(e) => setApiKeys(prev => ({
-                                        ...prev,
-                                        [provider.name]: e.target.value,
-                                    }))}
-                                    onBlur={() => handleKeyBlur(provider)}
-                                />
+                        <div className="settingItem">
+                            <div className="settingLabel">
+                                <Pin size={18} />
+                                <span>Always On Top</span>
+                                {isLinux && (
+                                    <button
+                                        type="button"
+                                        className="settingTooltipTrigger"
+                                        aria-label="Linux only: This may not work on all Linux desktop environments"
+                                    >
+                                        <CircleAlert size={14} />
+                                        <span className="settingTooltipBubble" role="tooltip">
+                                            This may not work on all Linux desktop environments
+                                        </span>
+                                    </button>
+                                )}
                             </div>
-                        ))}
+                            <button
+                                className={`toggleSwitch ${alwaysOnTop ? 'active' : ''}`}
+                                aria-pressed={alwaysOnTop}
+                                onClick={handleAlwaysOnTopToggle}
+                            >
+                                <span className="toggleThumb" />
+                            </button>
+                        </div>
+                        <div className="settingItem">
+                            <div className="settingLabel">
+                                <Power size={18} />
+                                <span>Open on System Start up</span>
+                            </div>
+                            <button
+                                className={`toggleSwitch ${openOnStartup ? 'active' : ''}`}
+                                aria-pressed={openOnStartup}
+                                onClick={handleStartupToggle}
+                            >
+                                <span className="toggleThumb" />
+                            </button>
+                        </div>
+                    </div>
+                    <h4>Providers</h4>
+                    <div className="settingsSection">
+                        <button type="button" className="settingItem settingLinkItem textActionButton" onClick={onManageApiKeys}>
+                            <div className="settingLabel">
+                                <KeyRound size={18} />
+                                <span>Api Keys</span>
+                            </div>
+                            <span className="manageLink">Manage &gt;</span>
+                        </button>
                     </div>
                 </div>
             </div>
