@@ -7,6 +7,7 @@ import { AVAILABLE_PROVIDERS, getApiKey } from "../config/AiProviderConfig";
 
 import { Dispatch, SetStateAction } from "react";
 import { getEncoding } from "js-tiktoken";
+import { queryClient } from "../storage/queryClient";
 
 const enc = getEncoding("cl100k_base");
 
@@ -119,17 +120,12 @@ export async function getAvailableModels(): Promise<AiModel[]> {
 }
 
 async function getModelInfo(model: string): Promise<AiModel> {
-    const { provider, modelId } = parseModel(model);
-    const cacheKey = `modelInfo_${provider.name}_${modelId}`;
-
-    let modelInfo = localStorage.getItem(cacheKey);
-
-    if (!modelInfo) {
-        const client = createClient(provider);
-        let fetchedModelInfo = await client.getModelInfo(modelId);
-        localStorage.setItem(cacheKey, JSON.stringify(fetchedModelInfo));
-        modelInfo = JSON.stringify(fetchedModelInfo);
+    const cachedModels = queryClient.getQueryData<AiModel[]>(['ai-models-list']);
+    
+    const found = cachedModels?.find(m => m.id === model);
+    if (found) {
+        return found;
+    } else {
+        throw new Error(`Model ${model} not found in storage.`);
     }
-
-    return JSON.parse(modelInfo);
 }

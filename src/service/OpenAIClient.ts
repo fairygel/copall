@@ -1,33 +1,12 @@
-import AiModel from "../models/AiModel";
 import { AiProvider } from "../models/AiProvider";
 import Message from "../models/message";
 import { getApiKey } from "../config/AiProviderConfig";
 import { BaseClient } from "./BaseClient";
 import { parseStreamResponse } from "./AiUtils";
+import AiModel from "../models/AiModel";
 
 export function createOpenAIClient(provider: AiProvider): BaseClient {
     return {
-        async getModelInfo(model: string): Promise<AiModel> {
-            const apiKey = getApiKey(provider);
-            if (!apiKey) throw new Error(`For getting model info, ${provider.name}ApiKey is required.`)
-
-            const response = await fetch(provider.baseUrl + `/v1/models/${model}`, {
-                headers: {
-                    'Authorization': `Bearer ${apiKey}`
-                }
-            });
-
-            await checkErrorResponse(response);
-
-            const data = await response.json();
-            return {
-                id: `${provider.name}/${data.id}`,
-                name: data.name,
-                context: data.max_context_length,
-                provider
-            };
-        },
-
         async generateResponse(messages: Message[], model: string): Promise<string> {
             const response = await fetchChatRequest(messages, model, false);
 
@@ -48,7 +27,7 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
             );
         },
 
-        async getAvailableModels(provider: AiProvider) {
+        async getAvailableModels(provider: AiProvider): Promise<AiModel[]> {
             const apiKey = getApiKey(provider);
             if (!apiKey) return [];
 
@@ -73,7 +52,11 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
                 return items.map((model: any) => ({
                     id: `${provider.name}/${model.id}`,
                     name: model.id ?? model.name,
-                    context: model.max_context_length ?? 0,
+                    context:
+                        model.context_length ??
+                        model.max_context_length ??
+                        model.top_provider?.context_length ??
+                        0,
                     provider
                 }));
             } catch (error) {
@@ -95,7 +78,7 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
             },
             body: JSON.stringify({
                 model: model,
-                messages: toMistralFormat(messages),
+                messages: toChatFormat(messages),
                 stream: streaming,
             })
         });
@@ -103,7 +86,7 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
         return response;
     }
 
-    function toMistralFormat(messages: Message[]) {
+    function toChatFormat(messages: Message[]) {
         return messages.map((msg) => ({
             role: msg.sender,
             content: msg.content

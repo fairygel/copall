@@ -8,24 +8,6 @@ import { BaseClient } from "./BaseClient";
 
 export function createGeminiService(provider: AiProvider): BaseClient {
     return {
-        async getModelInfo(model: string): Promise<AiModel> {
-            const apiKey = getApiKey(provider);
-
-            const response = await fetch(
-                `${provider.baseUrl}/models/${model}?key=${apiKey}`
-            );
-
-            await checkErrorResponse(response);
-
-            const data = await response.json();
-            const rawId = data.name.replace('models/', '');
-            return {
-                id: `${provider.name}/${rawId}`,
-                name: data.displayName,
-                context: data.inputTokenLimit,
-                provider
-            };
-        },
         async getAvailableModels(provider: AiProvider): Promise<AiModel[]> {
             const apiKey = getApiKey(provider);
             if (!apiKey) return [];
