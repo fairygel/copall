@@ -3,9 +3,20 @@ import './Settings.css';
 import { SunMoon, X } from "lucide-react";
 import { AVAILABLE_PROVIDERS, getApiKey, setApiKey } from '../../config/AiProviderConfig';
 import { AiProvider } from '../../models/AiProvider';
+import { useQueryClient } from '@tanstack/react-query';
 
 function Settings({ onClose }: { onClose: () => void }) {
+    const queryClient = useQueryClient();
+
     const [apiKeys, setApiKeys] = useState<Record<string, string>>(() => {
+        const initial: Record<string, string> = {};
+        for (const provider of AVAILABLE_PROVIDERS) {
+            initial[provider.name] = getApiKey(provider);
+        }
+        return initial;
+    });
+
+    const [initialApiKeys] = useState(() => {
         const initial: Record<string, string> = {};
         for (const provider of AVAILABLE_PROVIDERS) {
             initial[provider.name] = getApiKey(provider);
@@ -22,12 +33,19 @@ function Settings({ onClose }: { onClose: () => void }) {
     };
 
     const handleClose = () => {
+        let keysChanged = false;
         for (const provider of AVAILABLE_PROVIDERS) {
-            const value = apiKeys[provider.name] ?? '';
-            const stored = localStorage.getItem(provider.name + 'ApiKey') || '';
-            if (value !== stored) {
-                setApiKey(provider, value);
+            const newValue = apiKeys[provider.name] ?? '';
+            const oldValue = initialApiKeys[provider.name] ?? '';
+            
+            if (newValue !== oldValue) {
+                setApiKey(provider, newValue);
+                keysChanged = true;
             }
+        }
+
+        if (keysChanged) {
+            queryClient.invalidateQueries({ queryKey: ['ai-models-list'] });
         }
         onClose();
     };

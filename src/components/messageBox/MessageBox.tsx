@@ -1,52 +1,37 @@
 import { ArrowUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import './MessageBox.css';
-import { getAvailableModels } from "../../service/ChatService";
+import { useAiModels } from "../../storage/useAiModels";
 import AiModelSelect from "../select/AiModelSelect";
 import AiModel from "../../models/AiModel";
 
-function MessageBox({ onMessageSent, disabled, onModelChange, modelsVersion = 0 }: {
+function MessageBox({ onMessageSent, disabled, onModelChange }: {
     onMessageSent: (msg: string) => void;
     disabled: boolean;
     onModelChange: (model: AiModel | null) => void;
-    modelsVersion?: number;
 }) {
     const [inputValue, setInputValue] = useState('');
-    const [models, setModels] = useState<AiModel[]>([]);
     const [defaultModel, setDefaultModel] = useState<AiModel | null>(null);
-    const [isLoadingModels, setIsLoadingModels] = useState(true);
+
+    const { 
+        data: models = [],
+        isLoading: isLoadingModels,
+        isError,
+        error,
+    } = useAiModels();
 
     useEffect(() => {
-        let cancelled = false;
-        setIsLoadingModels(true);
+        if (models.length === 0) return;
 
-        getAvailableModels()
-            .then(loadedModels => {
-                if (cancelled) return;
-                setModels(loadedModels);
+        const savedModelId = localStorage.getItem('selectedModel');
+        const savedModel = savedModelId
+            ? models.find(m => m.id === savedModelId) ?? null
+            : null;
+        const model = savedModel || models[0] || null;
 
-                const savedModelId = localStorage.getItem('selectedModel');
-                const savedModel = savedModelId
-                    ? loadedModels.find(m => m.id === savedModelId) ?? null
-                    : null;
-                const model = savedModel || loadedModels[0] || null;
-
-                setDefaultModel(model);
-                onModelChange(model);
-            })
-            .catch(err => {
-                console.error('Failed to load available models:', err);
-            })
-            .finally(() => {
-                if (!cancelled) {
-                    setIsLoadingModels(false);
-                }
-            });
-
-        return () => {
-            cancelled = true;
-        };
-    }, [modelsVersion]);
+        setDefaultModel(model);
+        onModelChange(model);
+    }, [models, onModelChange]);
 
     const isDisabled = disabled || inputValue.trim() === '' || isLoadingModels || !defaultModel;
 
@@ -75,6 +60,10 @@ function MessageBox({ onMessageSent, disabled, onModelChange, modelsVersion = 0 
         }
         setDefaultModel(model);
         onModelChange(model);
+    }
+
+    if (isError) {
+        console.error('Failed to load models:', error);
     }
 
     return (

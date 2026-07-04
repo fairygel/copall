@@ -15,7 +15,6 @@ import { useState } from "react";
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isSendMessageDisabled, setSendMessageDisabled] = useState(false);
-  const [modelsVersion, setModelsVersion] = useState(0);
 
   const [model, setModel] = useState<AiModel | null>(null);
 
@@ -66,7 +65,7 @@ function App() {
 
   return (
     <main>
-      {isSettingsOpen && <Settings onClose={() => { setModelsVersion(v => v + 1); setIsSettingsOpen(false); }} />}
+      {isSettingsOpen && <Settings onClose={() => { setIsSettingsOpen(false); }} />}
       <Header
         chatName={chatName}
         onSettingsClick={() => setIsSettingsOpen(true)}
@@ -79,7 +78,6 @@ function App() {
         onMessageSent={handleSendMessage}
         disabled={isSendMessageDisabled}
         onModelChange={setModel}
-        modelsVersion={modelsVersion}
       />
     </main>
   )
