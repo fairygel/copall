@@ -1,9 +1,9 @@
-import { AiProvider } from "../models/AiProvider";
-import Message from "../models/message";
-import { getApiKey } from "../config/AiProviderConfig";
-import { BaseClient } from "./BaseClient";
-import { parseStreamResponse } from "./AiUtils";
-import AiModel from "../models/AiModel";
+import { AiProvider } from '../models/AiProvider';
+import Message from '../models/message';
+import { getApiKey } from '../config/AiProviderConfig';
+import { BaseClient } from './BaseClient';
+import { parseStreamResponse } from './AiUtils';
+import AiModel from '../models/AiModel';
 
 export function createOpenAIClient(provider: AiProvider): BaseClient {
     return {
@@ -21,10 +21,7 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
 
             await checkErrorResponse(response);
 
-            yield* parseStreamResponse(
-                response,
-                (json) => json.choices?.[0]?.delta?.content
-            );
+            yield* parseStreamResponse(response, json => json.choices?.[0]?.delta?.content);
         },
 
         async getAvailableModels(provider: AiProvider): Promise<AiModel[]> {
@@ -34,8 +31,8 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
             try {
                 const response = await fetch(provider.baseUrl + `/v1/models`, {
                     headers: {
-                        'Authorization': `Bearer ${apiKey}`
-                    }
+                        Authorization: `Bearer ${apiKey}`,
+                    },
                 });
 
                 await checkErrorResponse(response);
@@ -46,8 +43,8 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
                 const items = Array.isArray(data)
                     ? data
                     : Array.isArray(data?.data)
-                        ? data.data
-                        : [];
+                      ? data.data
+                      : [];
 
                 return items.map((model: any) => ({
                     id: `${provider.name}/${model.id}`,
@@ -57,47 +54,52 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
                         model.max_context_length ??
                         model.top_provider?.context_length ??
                         0,
-                    provider
+                    provider,
                 }));
             } catch (error) {
                 console.error(`Failed to load models for ${provider.name}:`, error);
                 return [];
             }
-        }
+        },
     };
 
-    async function fetchChatRequest(messages: Message[], model: string, streaming: boolean): Promise<Response> {
+    async function fetchChatRequest(
+        messages: Message[],
+        model: string,
+        streaming: boolean
+    ): Promise<Response> {
         const apiKey = getApiKey(provider);
-        if (!apiKey) throw new Error(`For chatting, ${provider.name}ApiKey is required.`)
+        if (!apiKey) throw new Error(`For chatting, ${provider.name}ApiKey is required.`);
 
         const response = await fetch(provider.baseUrl + '/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
+                Authorization: `Bearer ${apiKey}`,
             },
             body: JSON.stringify({
                 model: model,
                 messages: toChatFormat(messages),
                 stream: streaming,
-            })
+            }),
         });
 
         return response;
     }
 
     function toChatFormat(messages: Message[]) {
-        return messages.map((msg) => ({
+        return messages.map(msg => ({
             role: msg.sender,
-            content: msg.content
+            content: msg.content,
         }));
     }
 
     async function checkErrorResponse(response: Response) {
         if (!response.ok) {
             const err = await response.json();
-            throw new Error(`OpenAI API - ${response.status}: ${err.error?.message || err.message || err.toString()}`);
+            throw new Error(
+                `OpenAI API - ${response.status}: ${err.error?.message || err.message || err.toString()}`
+            );
         }
     }
 }
-

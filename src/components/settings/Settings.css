@@ -1,19 +1,19 @@
 .clickable {
-  cursor: pointer;
-  border-radius: 50%;
-  padding: 4px;
-  width: 32px;
-  height: 32px;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  border: none;
-  background-color: transparent;
-  color: var(--font-color);
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 4px;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    color: var(--font-color);
 }
 
 .clickable:hover {
-  background-color: var(--border-color);
+    background-color: var(--border-color);
 }
 
 .textActionButton {
@@ -36,7 +36,10 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: var(--shadow-color);
     border-radius: 24px;
     backdrop-filter: blur(2px);
@@ -49,7 +52,7 @@
     border-radius: 12px;
     border: 1px solid var(--border-color);
     max-width: 500px;
-    width: 90%;    
+    width: 90%;
 }
 
 .modalHeader {
@@ -75,11 +78,14 @@
     justify-self: end;
 }
 
-.modalBody, input, .modalHeader {
+.modalBody,
+input,
+.modalHeader {
     color: var(--font-color);
 }
 
-.modalHeader h3, h4, 
+.modalHeader h3,
+h4,
 .settingItem span,
 .settingItem input::placeholder {
     margin: 0;
@@ -170,7 +176,9 @@
     font-size: 12px;
     line-height: 1;
     box-shadow: 0 2px 8px var(--shadow-color);
-    transition: opacity 0.15s ease, transform 0.15s ease;
+    transition:
+        opacity 0.15s ease,
+        transform 0.15s ease;
     z-index: 1;
 }
 
@@ -192,24 +200,24 @@
 }
 
 .switchOption {
-  cursor: pointer;
-  border-radius: 6px;
-  padding: 4px 6px;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  border: none;
-  background-color: transparent;
-  color: var(--inactive-font-color);
-  font-family: 'Andika', sans-serif;
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 4px 6px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    color: var(--inactive-font-color);
+    font-family: 'Andika', sans-serif;
 }
 
 .active {
-  color: var(--font-color);
+    color: var(--font-color);
 }
 
 .switchOption:hover {
-  background-color: var(--border-color);
+    background-color: var(--border-color);
 }
 
 .toggleSwitch {

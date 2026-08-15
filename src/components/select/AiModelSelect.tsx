@@ -1,11 +1,16 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from 'react';
 import './Select.css';
-import { ChevronDown, ChevronRight, Search } from "lucide-react";
-import AiModel from "../../models/AiModel";
+import { ChevronDown, ChevronRight, Search } from 'lucide-react';
+import AiModel from '../../models/AiModel';
 
 const PLACEHOLDER = 'Select Model';
 
-function AiModelSelect({ list, onSelect, defaultItem, disabled }: {
+function AiModelSelect({
+    list,
+    onSelect,
+    defaultItem,
+    disabled,
+}: {
     list: AiModel[];
     onSelect: (item: AiModel | null) => void;
     defaultItem?: AiModel;
@@ -37,14 +42,14 @@ function AiModelSelect({ list, onSelect, defaultItem, disabled }: {
         setIsOpened(false);
         setSearchQuery('');
         onSelect(item);
-    }
+    };
 
     const toggleProvider = (provider: string) => {
         setExpandedProviders(prev => ({
             ...prev,
-            [provider]: !prev[provider]
+            [provider]: !prev[provider],
         }));
-    }
+    };
 
     useEffect(() => {
         if (!isOpened) return;
@@ -105,7 +110,8 @@ function AiModelSelect({ list, onSelect, defaultItem, disabled }: {
 
     const providers = Object.keys(filteredGroups);
     const showPlaceholder = !defaultSelect || list.length === 0;
-    const showNoModelsFound = list.length > 0 && providers.length === 0 && searchQuery.trim().length > 0;
+    const showNoModelsFound =
+        list.length > 0 && providers.length === 0 && searchQuery.trim().length > 0;
 
     return (
         <div
@@ -124,10 +130,10 @@ function AiModelSelect({ list, onSelect, defaultItem, disabled }: {
                 </span>
             </button>
             {isOpened && (
-                <div onClick={(e) => e.stopPropagation()} className="selectDropdown">
+                <div onClick={e => e.stopPropagation()} className="selectDropdown">
                     {providers.length > 0 && (
                         <div className="selectDropdownList">
-                            {providers.map((provider) => {
+                            {providers.map(provider => {
                                 const isExpanded = !!expandedProviders[provider];
                                 const modelsInGroup = filteredGroups[provider];
 
@@ -137,7 +143,9 @@ function AiModelSelect({ list, onSelect, defaultItem, disabled }: {
                                             onClick={() => toggleProvider(provider)}
                                             className="selectGroupHeader"
                                         >
-                                            <span className={`groupChevron ${isExpanded ? 'groupExpanded' : ''}`}>
+                                            <span
+                                                className={`groupChevron ${isExpanded ? 'groupExpanded' : ''}`}
+                                            >
                                                 <ChevronRight size={14}></ChevronRight>
                                             </span>
                                             <span>{provider}</span>
@@ -166,20 +174,20 @@ function AiModelSelect({ list, onSelect, defaultItem, disabled }: {
                         </div>
                     )}
                     <div className="selectSearchContainer">
-                        <Search size={14}/>
+                        <Search size={14} />
                         <input
                             type="text"
                             className="selectSearchInput"
                             placeholder="Search models..."
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            onClick={(e) => e.stopPropagation()}
+                            onChange={e => setSearchQuery(e.target.value)}
+                            onClick={e => e.stopPropagation()}
                         />
                     </div>
                 </div>
             )}
         </div>
-    )
+    );
 }
 
 export default AiModelSelect;

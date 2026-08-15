@@ -1,4 +1,4 @@
-import { AiProvider } from "./AiProvider";
+import { AiProvider } from './AiProvider';
 
 interface AiModel {
     id: string;

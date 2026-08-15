@@ -1,11 +1,10 @@
-import ReactMarkdown from "react-markdown";
-import Message from "../../models/message";
+import ReactMarkdown from 'react-markdown';
+import Message from '../../models/message';
 import './Chat.css';
-import { useEffect, useState } from "react";
-import React from "react";
-import { openUrl } from "@tauri-apps/plugin-opener";
-import { Check, Copy } from "lucide-react";
-
+import { useEffect, useState } from 'react';
+import React from 'react';
+import { openUrl } from '@tauri-apps/plugin-opener';
+import { Check, Copy } from 'lucide-react';
 
 function Chat({ messages }: { messages: Message[] }) {
     const bottomRef = React.useRef<HTMLDivElement>(null);
@@ -22,13 +21,17 @@ function Chat({ messages }: { messages: Message[] }) {
             setCopiedId(id);
             setTimeout(() => setCopiedId(null), 2000);
         } catch (err) {
-            console.error("Failed to copy:", err);
+            console.error('Failed to copy:', err);
         }
     };
 
     const components = {
         a: ({ href, children }: { href?: string; children?: React.ReactNode }) => {
-            if (!href || href.startsWith('#') || (!href.startsWith('http://') && !href.startsWith('https://'))) {
+            if (
+                !href ||
+                href.startsWith('#') ||
+                (!href.startsWith('http://') && !href.startsWith('https://'))
+            ) {
                 return <a href={href}>{children}</a>;
             }
 
@@ -42,37 +45,35 @@ function Chat({ messages }: { messages: Message[] }) {
                     {children}
                 </a>
             );
-        }
-    }
+        },
+    };
 
-    return (
-        messages.length === 0 ? (
-            <div className="emptyContainer">
-                <img src="/copall_nobg.svg" alt="Me .-." className="logo" />
-                <p>Copall.</p>
-            </div>
-        ) : (
-            <div className="chatContainer">
-                {messages.map((message) => (
-                    <div key={message.id} className="messageWrapper">
-                        <div
-                            className={`message ${message.sender === 'user' ? 'userMessage' : 'aiMessage'}`}
-                        >
-                            <ReactMarkdown components={components}>{message.content}</ReactMarkdown>
-                        </div>
-
-                        <button
-                            className="copyButton"
-                            onClick={() => handleCopy(message.content, message.id)}
-                            title="Copy message"
-                        >
-                            {copiedId === message.id ? <Check size={14} /> : <Copy size={14} />}
-                        </button>
+    return messages.length === 0 ? (
+        <div className="emptyContainer">
+            <img src="/copall_nobg.svg" alt="Me .-." className="logo" />
+            <p>Copall.</p>
+        </div>
+    ) : (
+        <div className="chatContainer">
+            {messages.map(message => (
+                <div key={message.id} className="messageWrapper">
+                    <div
+                        className={`message ${message.sender === 'user' ? 'userMessage' : 'aiMessage'}`}
+                    >
+                        <ReactMarkdown components={components}>{message.content}</ReactMarkdown>
                     </div>
-                ))}
-                <div ref={bottomRef}></div>
-            </div>
-        )
+
+                    <button
+                        className="copyButton"
+                        onClick={() => handleCopy(message.content, message.id)}
+                        title="Copy message"
+                    >
+                        {copiedId === message.id ? <Check size={14} /> : <Copy size={14} />}
+                    </button>
+                </div>
+            ))}
+            <div ref={bottomRef}></div>
+        </div>
     );
 }
 

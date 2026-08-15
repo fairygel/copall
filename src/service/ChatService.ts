@@ -1,19 +1,19 @@
-import AiModel from "../models/AiModel";
-import Message from "../models/message";
-import { parseModel } from "./AiUtils";
+import AiModel from '../models/AiModel';
+import Message from '../models/message';
+import { parseModel } from './AiUtils';
 
-import { createClient } from "./ClientProviderFactory";
-import { AVAILABLE_PROVIDERS, getApiKey } from "../config/AiProviderConfig";
+import { createClient } from './ClientProviderFactory';
+import { AVAILABLE_PROVIDERS, getApiKey } from '../config/AiProviderConfig';
 
-import { Dispatch, SetStateAction } from "react";
-import { getEncoding } from "js-tiktoken";
-import { queryClient } from "../storage/queryClient";
+import { Dispatch, SetStateAction } from 'react';
+import { getEncoding } from 'js-tiktoken';
+import { queryClient } from '../storage/queryClient';
 
-const enc = getEncoding("cl100k_base");
+const enc = getEncoding('cl100k_base');
 
 const GENERATE_CHAT_NAME_SYSTEM_PROMPT =
-    'Generate a concise chat title (max 40 chars) based on the user\'s message. ' +
-    'The title must be in the SAME LANGUAGE as the user\'s text. ' +
+    "Generate a concise chat title (max 40 chars) based on the user's message. " +
+    "The title must be in the SAME LANGUAGE as the user's text. " +
     'Be specific and descriptive. No quotes or formatting. Output title only.\n\n' +
     'User: [message]\nTitle:';
 
@@ -82,17 +82,23 @@ export async function generateAssistantResponse(
 
         for await (const chunk of stream) {
             messageContent += chunk;
-            setMessages(prev => prev.map(
-                msg => msg.id === assistantMessageId ? { ...msg, content: messageContent } : msg
-            ));
+            setMessages(prev =>
+                prev.map(msg =>
+                    msg.id === assistantMessageId ? { ...msg, content: messageContent } : msg
+                )
+            );
         }
 
         return messageContent;
     } catch (error) {
         const errorMsg = (error as Error).message;
-        setMessages(prev => prev.map(
-            msg => msg.id === assistantMessageId ? { ...msg, content: messageContent + '\n' + errorMsg } : msg
-        ));
+        setMessages(prev =>
+            prev.map(msg =>
+                msg.id === assistantMessageId
+                    ? { ...msg, content: messageContent + '\n' + errorMsg }
+                    : msg
+            )
+        );
         throw error;
     }
 }
@@ -101,7 +107,7 @@ export async function getAvailableModels(): Promise<AiModel[]> {
     const providersWithKeys = AVAILABLE_PROVIDERS.filter(provider => !!getApiKey(provider));
 
     const results = await Promise.allSettled(
-        providersWithKeys.map(async (provider) => {
+        providersWithKeys.map(async provider => {
             const client = createClient(provider);
             return await client.getAvailableModels(provider);
         })
@@ -121,7 +127,7 @@ export async function getAvailableModels(): Promise<AiModel[]> {
 
 async function getModelInfo(model: string): Promise<AiModel> {
     const cachedModels = queryClient.getQueryData<AiModel[]>(['ai-models-list']);
-    
+
     const found = cachedModels?.find(m => m.id === model);
     if (found) {
         return found;

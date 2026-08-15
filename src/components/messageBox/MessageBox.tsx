@@ -1,11 +1,15 @@
-import { ArrowUp } from "lucide-react";
-import { useState, useEffect } from "react";
+import { ArrowUp } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import './MessageBox.css';
-import { useAiModels } from "../../storage/useAiModels";
-import AiModelSelect from "../select/AiModelSelect";
-import AiModel from "../../models/AiModel";
+import { useAiModels } from '../../storage/useAiModels';
+import AiModelSelect from '../select/AiModelSelect';
+import AiModel from '../../models/AiModel';
 
-function MessageBox({ onMessageSent, disabled, onModelChange }: {
+function MessageBox({
+    onMessageSent,
+    disabled,
+    onModelChange,
+}: {
     onMessageSent: (msg: string) => void;
     disabled: boolean;
     onModelChange: (model: AiModel | null) => void;
@@ -13,20 +17,13 @@ function MessageBox({ onMessageSent, disabled, onModelChange }: {
     const [inputValue, setInputValue] = useState('');
     const [defaultModel, setDefaultModel] = useState<AiModel | null>(null);
 
-    const { 
-        data: models = [],
-        isLoading: isLoadingModels,
-        isError,
-        error,
-    } = useAiModels();
+    const { data: models = [], isLoading: isLoadingModels, isError, error } = useAiModels();
 
     useEffect(() => {
         if (models.length === 0) return;
 
         const savedModelId = localStorage.getItem('selectedModel');
-        const savedModel = savedModelId
-            ? models.find(m => m.id === savedModelId) ?? null
-            : null;
+        const savedModel = savedModelId ? (models.find(m => m.id === savedModelId) ?? null) : null;
         const model = savedModel || models[0] || null;
 
         setDefaultModel(model);
@@ -43,14 +40,14 @@ function MessageBox({ onMessageSent, disabled, onModelChange }: {
                 setInputValue('');
             }
         }
-    }
+    };
 
     const handleSendClick = () => {
         if (!isDisabled) {
             setInputValue('');
             onMessageSent(inputValue);
         }
-    }
+    };
 
     const handleModelSelect = (model: AiModel | null) => {
         if (model) {
@@ -60,7 +57,7 @@ function MessageBox({ onMessageSent, disabled, onModelChange }: {
         }
         setDefaultModel(model);
         onModelChange(model);
-    }
+    };
 
     if (isError) {
         console.error('Failed to load models:', error);
@@ -74,7 +71,7 @@ function MessageBox({ onMessageSent, disabled, onModelChange }: {
                 placeholder="Your move, Ask!"
                 value={inputValue}
                 onKeyDown={handleKeyDown}
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={e => setInputValue(e.target.value)}
             />
             <div className="tooltip">
                 <AiModelSelect
@@ -83,15 +80,12 @@ function MessageBox({ onMessageSent, disabled, onModelChange }: {
                     defaultItem={defaultModel ?? undefined}
                     disabled={isLoadingModels || disabled}
                 />
-                <button
-                    className="sendMessage"
-                    disabled={isDisabled}
-                    onClick={handleSendClick}>
+                <button className="sendMessage" disabled={isDisabled} onClick={handleSendClick}>
                     <ArrowUp size={20} />
                 </button>
             </div>
         </div>
-    )
+    );
 }
 
 export default MessageBox;

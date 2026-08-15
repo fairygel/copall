@@ -71,7 +71,7 @@
     background-color: transparent;
     flex-shrink: 0;
     gap: 4px;
-    color: var(--font-color)
+    color: var(--font-color);
 }
 
 .selectSearchInput {

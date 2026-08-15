@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react';
 import './Settings.css';
-import { CircleAlert, KeyRound, Pin, Power, SunMoon, X } from "lucide-react";
+import { CircleAlert, KeyRound, Pin, Power, SunMoon, X } from 'lucide-react';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { enable, disable, isEnabled } from '@tauri-apps/plugin-autostart';
 import { type } from '@tauri-apps/plugin-os';
 
-function Settings({ onClose, onManageApiKeys }: { onClose: () => void; onManageApiKeys: () => void }) {
+function Settings({
+    onClose,
+    onManageApiKeys,
+}: {
+    onClose: () => void;
+    onManageApiKeys: () => void;
+}) {
     const appWindow = getCurrentWindow();
     const osType = type();
 
@@ -52,7 +58,7 @@ function Settings({ onClose, onManageApiKeys }: { onClose: () => void; onManageA
 
     return (
         <div className="modalBackdrop" onClick={handleClose}>
-            <div className="modalContent" onClick={(e) => e.stopPropagation()}>
+            <div className="modalContent" onClick={e => e.stopPropagation()}>
                 <div className="modalHeader">
                     <div />
                     <h3>Settings</h3>
@@ -71,11 +77,17 @@ function Settings({ onClose, onManageApiKeys }: { onClose: () => void; onManageA
                             <div className="textSwitch">
                                 <button
                                     className={`switchOption ${theme === 'light' ? 'active' : ''}`}
-                                    onClick={() => setAppTheme('light')}>Light</button>
+                                    onClick={() => setAppTheme('light')}
+                                >
+                                    Light
+                                </button>
                                 <span>/</span>
                                 <button
                                     className={`switchOption ${theme === 'dark' ? 'active' : ''}`}
-                                    onClick={() => setAppTheme('dark')}>Dark</button>
+                                    onClick={() => setAppTheme('dark')}
+                                >
+                                    Dark
+                                </button>
                             </div>
                         </div>
                         <div className="settingItem">
@@ -119,7 +131,11 @@ function Settings({ onClose, onManageApiKeys }: { onClose: () => void; onManageA
                     </div>
                     <h4>Providers</h4>
                     <div className="settingsSection">
-                        <button type="button" className="settingItem settingLinkItem textActionButton" onClick={onManageApiKeys}>
+                        <button
+                            type="button"
+                            className="settingItem settingLinkItem textActionButton"
+                            onClick={onManageApiKeys}
+                        >
                             <div className="settingLabel">
                                 <KeyRound size={18} />
                                 <span>Api Keys</span>

@@ -1,10 +1,9 @@
-import { getApiKey } from "../config/AiProviderConfig";
-import AiModel from "../models/AiModel";
-import { AiProvider } from "../models/AiProvider";
-import Message from "../models/message";
-import { parseStreamResponse } from "./AiUtils";
-import { BaseClient } from "./BaseClient";
-
+import { getApiKey } from '../config/AiProviderConfig';
+import AiModel from '../models/AiModel';
+import { AiProvider } from '../models/AiProvider';
+import Message from '../models/message';
+import { parseStreamResponse } from './AiUtils';
+import { BaseClient } from './BaseClient';
 
 export function createGeminiService(provider: AiProvider): BaseClient {
     return {
@@ -13,9 +12,7 @@ export function createGeminiService(provider: AiProvider): BaseClient {
             if (!apiKey) return [];
 
             try {
-                const response = await fetch(
-                    `${provider.baseUrl}/models?key=${apiKey}`
-                );
+                const response = await fetch(`${provider.baseUrl}/models?key=${apiKey}`);
 
                 await checkErrorResponse(response);
 
@@ -28,7 +25,7 @@ export function createGeminiService(provider: AiProvider): BaseClient {
                         id: `${provider.name}/${rawId}`,
                         name: rawId,
                         context: model.inputTokenLimit ?? 0,
-                        provider
+                        provider,
                     };
                 });
             } catch (error) {
@@ -51,12 +48,16 @@ export function createGeminiService(provider: AiProvider): BaseClient {
 
             yield* parseStreamResponse(
                 response,
-                (json) => json.candidates?.[0]?.content?.parts?.[0]?.text
+                json => json.candidates?.[0]?.content?.parts?.[0]?.text
             );
-        }
-    }
+        },
+    };
 
-    async function fetchChatRequest(messages: Message[], model: string, streaming: boolean): Promise<Response> {
+    async function fetchChatRequest(
+        messages: Message[],
+        model: string,
+        streaming: boolean
+    ): Promise<Response> {
         const apiKey = getApiKey(provider);
 
         const url = streaming
@@ -67,27 +68,29 @@ export function createGeminiService(provider: AiProvider): BaseClient {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-goog-api-key': apiKey
+                'x-goog-api-key': apiKey,
             },
             body: JSON.stringify({
-                contents: toGeminiFormat(messages)
-            })
+                contents: toGeminiFormat(messages),
+            }),
         });
 
         return response;
     }
 
     function toGeminiFormat(messages: Message[]) {
-        return messages.map((msg) => ({
+        return messages.map(msg => ({
             role: msg.sender === 'assistant' ? 'model' : 'user',
-            parts: [{ text: msg.content }]
+            parts: [{ text: msg.content }],
         }));
     }
 
     async function checkErrorResponse(response: Response) {
         if (!response.ok) {
             const err = await response.json();
-            throw new Error(`Gemini API - ${response.status}: ${err.error?.message || err.message || err.toString()}`);
+            throw new Error(
+                `Gemini API - ${response.status}: ${err.error?.message || err.message || err.toString()}`
+            );
         }
     }
 }

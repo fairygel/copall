@@ -1,8 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 import './Select.css';
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from 'lucide-react';
 
-function Select({ list, onSelect, defaultItem, disabled }: {
+function Select({
+    list,
+    onSelect,
+    defaultItem,
+    disabled,
+}: {
     list: string[];
     onSelect: (item: string) => void;
     defaultItem?: string;
@@ -19,7 +24,7 @@ function Select({ list, onSelect, defaultItem, disabled }: {
         setDefaultSelect(item);
         setIsOpened(false);
         onSelect(item);
-    }
+    };
 
     useEffect(() => {
         if (!isOpened) return;
@@ -54,7 +59,7 @@ function Select({ list, onSelect, defaultItem, disabled }: {
                 </span>
             </button>
             {isOpened && (
-                <div onClick={(e) => e.stopPropagation()} className="selectDropdown">
+                <div onClick={e => e.stopPropagation()} className="selectDropdown">
                     {list.map((item, index) => (
                         <button
                             onClick={() => handleItemSelect(item)}
@@ -67,7 +72,7 @@ function Select({ list, onSelect, defaultItem, disabled }: {
                 </div>
             )}
         </div>
-    )
+    );
 }
 
 export default Select;

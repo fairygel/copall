@@ -1,5 +1,5 @@
-import { AVAILABLE_PROVIDERS } from "../config/AiProviderConfig";
-import { AiProvider } from "../models/AiProvider";
+import { AVAILABLE_PROVIDERS } from '../config/AiProviderConfig';
+import { AiProvider } from '../models/AiProvider';
 
 export function parseModel(model: string): { provider: AiProvider; modelId: string } {
     const slashIndex = model.indexOf('/');
@@ -8,10 +8,11 @@ export function parseModel(model: string): { provider: AiProvider; modelId: stri
     }
     const providerName = model.slice(0, slashIndex);
 
-    const provider = AVAILABLE_PROVIDERS.find(p => p.name===providerName);
+    const provider = AVAILABLE_PROVIDERS.find(p => p.name === providerName);
 
-    if (!provider) throw new Error(`Unknown provider name: ${providerName}.
-        Please, use one of the next: ${AVAILABLE_PROVIDERS.map(p => p.name).join(', ')}.`)
+    if (!provider)
+        throw new Error(`Unknown provider name: ${providerName}.
+        Please, use one of the next: ${AVAILABLE_PROVIDERS.map(p => p.name).join(', ')}.`);
 
     const modelId = model.slice(slashIndex + 1);
 

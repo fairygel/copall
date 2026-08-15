@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './Settings.css';
-import { X } from "lucide-react";
+import { X } from 'lucide-react';
 import { AVAILABLE_PROVIDERS, getApiKey, setApiKey } from '../../config/AiProviderConfig';
 import { AiProvider } from '../../models/AiProvider';
 import { useQueryClient } from '@tanstack/react-query';
@@ -59,7 +59,7 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
 
     return (
         <div className="modalBackdrop" onClick={handleClose}>
-            <div className="modalContent" onClick={(e) => e.stopPropagation()}>
+            <div className="modalContent" onClick={e => e.stopPropagation()}>
                 <div className="modalHeader">
                     <button className="textActionButton backButton" onClick={handleBack}>
                         &lt; Back
@@ -75,17 +75,24 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
                         {AVAILABLE_PROVIDERS.map(provider => (
                             <div key={provider.name} className="settingItem">
                                 <div className="settingLabel">
-                                    <img src={`/${provider.icon}`} alt={provider.name} width={18} height={18} />
+                                    <img
+                                        src={`/${provider.icon}`}
+                                        alt={provider.name}
+                                        width={18}
+                                        height={18}
+                                    />
                                     <span>{provider.name}</span>
                                 </div>
                                 <input
                                     type="password"
                                     placeholder={`Enter ${provider.name} API Key`}
                                     value={apiKeys[provider.name] ?? ''}
-                                    onChange={(e) => setApiKeys(prev => ({
-                                        ...prev,
-                                        [provider.name]: e.target.value,
-                                    }))}
+                                    onChange={e =>
+                                        setApiKeys(prev => ({
+                                            ...prev,
+                                            [provider.name]: e.target.value,
+                                        }))
+                                    }
                                     onBlur={() => handleKeyBlur(provider)}
                                 />
                             </div>
