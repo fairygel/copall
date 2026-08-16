@@ -8,11 +8,9 @@ import AiModel from '../../models/AiModel';
 function MessageBox({
     onMessageSent,
     disabled,
-    onModelChange,
 }: {
-    onMessageSent: (msg: string) => void;
+    onMessageSent: (msg: string, selectedModel: AiModel) => void;
     disabled: boolean;
-    onModelChange: (model: AiModel | null) => void;
 }) {
     const [inputValue, setInputValue] = useState('');
     const [defaultModel, setDefaultModel] = useState<AiModel | null>(null);
@@ -27,8 +25,7 @@ function MessageBox({
         const model = savedModel || models[0] || null;
 
         setDefaultModel(model);
-        onModelChange(model);
-    }, [models, onModelChange]);
+    }, [models]);
 
     const isDisabled = disabled || inputValue.trim() === '' || isLoadingModels || !defaultModel;
 
@@ -36,7 +33,7 @@ function MessageBox({
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             if (!isDisabled) {
-                onMessageSent(inputValue);
+                onMessageSent(inputValue, defaultModel);
                 setInputValue('');
             }
         }
@@ -45,7 +42,7 @@ function MessageBox({
     const handleSendClick = () => {
         if (!isDisabled) {
             setInputValue('');
-            onMessageSent(inputValue);
+            onMessageSent(inputValue, defaultModel);
         }
     };
 
@@ -56,7 +53,6 @@ function MessageBox({
             localStorage.removeItem('selectedModel');
         }
         setDefaultModel(model);
-        onModelChange(model);
     };
 
     if (isError) {

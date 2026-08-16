@@ -17,13 +17,11 @@ function App() {
     const [settingsView, setSettingsView] = useState<'settings' | 'apiKeys' | null>(null);
     const [isSendMessageDisabled, setSendMessageDisabled] = useState(false);
 
-    const [model, setModel] = useState<AiModel | null>(null);
-
     const [chatName, setChatName] = useState('');
 
     const [messages, setMessages] = useState<Message[]>([]);
 
-    const generateTitle = async (message: string) => {
+    const generateTitle = async (message: string, model: AiModel) => {
         if (!message || !model) return;
 
         setChatName(await generateChatTitle(message, model.id));
@@ -42,8 +40,8 @@ function App() {
         return updatedMessages;
     };
 
-    const handleSendMessage = async (content: string) => {
-        if (!model) return;
+    const handleSendMessage = async (content: string, selectedModel: AiModel) => {
+        if (!selectedModel) return;
 
         setSendMessageDisabled(true);
 
@@ -53,12 +51,12 @@ function App() {
         try {
             const response = await generateAssistantResponse(
                 updatedMessages,
-                model.id,
+                selectedModel.id,
                 setMessages
             );
 
             if (isFirstMessage && response) {
-                await generateTitle(response);
+                await generateTitle(response, selectedModel);
             }
         } catch (e) {
             console.log(e);
@@ -104,7 +102,6 @@ function App() {
             <MessageBox
                 onMessageSent={handleSendMessage}
                 disabled={isSendMessageDisabled}
-                onModelChange={setModel}
             />
         </main>
     );
