@@ -1,9 +1,8 @@
-import { AiProvider } from '../models/AiProvider';
-import Message from '../models/message';
-import { getApiKey } from '../config/AiProviderConfig';
+import { AiProvider } from '../../models/AiProvider';
+import Message from '../../models/message';
+import { getApiKey } from '../../config/AiProviderConfig';
 import { BaseClient } from './BaseClient';
-import { parseStreamResponse } from './AiUtils';
-import AiModel from '../models/AiModel';
+import { parseStreamResponse } from '../AiUtils';
 
 export function createOpenAIClient(provider: AiProvider): BaseClient {
     return {
@@ -22,44 +21,6 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
             await checkErrorResponse(response);
 
             yield* parseStreamResponse(response, json => json.choices?.[0]?.delta?.content);
-        },
-
-        async getAvailableModels(provider: AiProvider): Promise<AiModel[]> {
-            const apiKey = getApiKey(provider);
-            if (!apiKey) return [];
-
-            try {
-                const response = await fetch(provider.baseUrl + `/v1/models`, {
-                    headers: {
-                        Authorization: `Bearer ${apiKey}`,
-                    },
-                });
-
-                await checkErrorResponse(response);
-
-                const data = await response.json();
-                console.log(`[${provider.name}] models response:`, data);
-
-                const items = Array.isArray(data)
-                    ? data
-                    : Array.isArray(data?.data)
-                      ? data.data
-                      : [];
-
-                return items.map((model: any) => ({
-                    id: `${provider.name}/${model.id}`,
-                    name: model.id ?? model.name,
-                    context:
-                        model.context_length ??
-                        model.max_context_length ??
-                        model.top_provider?.context_length ??
-                        0,
-                    provider,
-                }));
-            } catch (error) {
-                console.error(`Failed to load models for ${provider.name}:`, error);
-                return [];
-            }
         },
     };
 

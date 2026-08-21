@@ -1,38 +1,11 @@
-import { getApiKey } from '../config/AiProviderConfig';
-import AiModel from '../models/AiModel';
-import { AiProvider } from '../models/AiProvider';
-import Message from '../models/message';
-import { parseStreamResponse } from './AiUtils';
+import { getApiKey } from '../../config/AiProviderConfig';
+import { AiProvider } from '../../models/AiProvider';
+import Message from '../../models/message';
+import { parseStreamResponse } from '../AiUtils';
 import { BaseClient } from './BaseClient';
 
 export function createGeminiService(provider: AiProvider): BaseClient {
     return {
-        async getAvailableModels(provider: AiProvider): Promise<AiModel[]> {
-            const apiKey = getApiKey(provider);
-            if (!apiKey) return [];
-
-            try {
-                const response = await fetch(`${provider.baseUrl}/models?key=${apiKey}`);
-
-                await checkErrorResponse(response);
-
-                const data = await response.json();
-                const items = Array.isArray(data?.models) ? data.models : [];
-
-                return items.map((model: any) => {
-                    const rawId = (model.name ?? '').replace('models/', '');
-                    return {
-                        id: `${provider.name}/${rawId}`,
-                        name: rawId,
-                        context: model.inputTokenLimit ?? 0,
-                        provider,
-                    };
-                });
-            } catch (error) {
-                console.error(`Failed to load models for ${provider.name}:`, error);
-                return [];
-            }
-        },
         async generateResponse(messages: Message[], model: string): Promise<string> {
             const response = await fetchChatRequest(messages, model, false);
 

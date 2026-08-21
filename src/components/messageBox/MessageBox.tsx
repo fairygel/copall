@@ -1,9 +1,9 @@
 import { ArrowUp } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import './MessageBox.css';
-import { useAiModels } from '../../storage/useAiModels';
 import AiModelSelect from '../select/AiModelSelect';
 import AiModel from '../../models/AiModel';
+import { getModelsFromCatalog } from '../../service/CatalogService';
 
 function MessageBox({
     onMessageSent,
@@ -15,7 +15,15 @@ function MessageBox({
     const [inputValue, setInputValue] = useState('');
     const [defaultModel, setDefaultModel] = useState<AiModel | null>(null);
 
-    const { data: models = [], isLoading: isLoadingModels, isError, error } = useAiModels();
+    const [models, setModels] = useState<AiModel[]>([]);
+    const [isLoadingModels, setIsLoadingModels] = useState(true);
+
+    useEffect(() => {
+        getModelsFromCatalog()
+            .then(setModels)
+            .catch(e => console.error('Failed to load models:', e))
+            .finally(() => setIsLoadingModels(false));
+    }, []);
 
     useEffect(() => {
         if (models.length === 0) return;
@@ -54,10 +62,6 @@ function MessageBox({
         }
         setDefaultModel(model);
     };
-
-    if (isError) {
-        console.error('Failed to load models:', error);
-    }
 
     return (
         <div className="messageContainer">

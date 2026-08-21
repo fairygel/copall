@@ -9,6 +9,7 @@ import { Check, Copy } from 'lucide-react';
 function Chat({ messages }: { messages: Message[] }) {
     const bottomRef = React.useRef<HTMLDivElement>(null);
 
+    // auto-scroll
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
@@ -25,6 +26,7 @@ function Chat({ messages }: { messages: Message[] }) {
         }
     };
 
+    // prevent web link open(open link in browser instead of webview)
     const components = {
         a: ({ href, children }: { href?: string; children?: React.ReactNode }) => {
             if (

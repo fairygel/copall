@@ -8,11 +8,11 @@ export function parseModel(model: string): { provider: AiProvider; modelId: stri
     }
     const providerName = model.slice(0, slashIndex);
 
-    const provider = AVAILABLE_PROVIDERS.find(p => p.name === providerName);
+    const provider = AVAILABLE_PROVIDERS.find(p => p.id === providerName);
 
     if (!provider)
         throw new Error(`Unknown provider name: ${providerName}.
-        Please, use one of the next: ${AVAILABLE_PROVIDERS.map(p => p.name).join(', ')}.`);
+        Please, use one of the next: ${AVAILABLE_PROVIDERS.map(p => p.id).join(', ')}.`);
 
     const modelId = model.slice(slashIndex + 1);
 

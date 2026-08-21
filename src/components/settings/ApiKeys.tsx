@@ -3,15 +3,13 @@ import './Settings.css';
 import { X } from 'lucide-react';
 import { AVAILABLE_PROVIDERS, getApiKey, setApiKey } from '../../config/AiProviderConfig';
 import { AiProvider } from '../../models/AiProvider';
-import { useQueryClient } from '@tanstack/react-query';
 
 function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void }) {
-    const queryClient = useQueryClient();
 
     const [apiKeys, setApiKeys] = useState<Record<string, string>>(() => {
         const initial: Record<string, string> = {};
         for (const provider of AVAILABLE_PROVIDERS) {
-            initial[provider.name] = getApiKey(provider);
+            initial[provider.id] = getApiKey(provider);
         }
         return initial;
     });
@@ -19,29 +17,25 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
     const [initialApiKeys] = useState(() => {
         const initial: Record<string, string> = {};
         for (const provider of AVAILABLE_PROVIDERS) {
-            initial[provider.name] = getApiKey(provider);
+            initial[provider.id] = getApiKey(provider);
         }
         return initial;
     });
 
     const handleKeyBlur = (provider: AiProvider) => {
-        setApiKey(provider, apiKeys[provider.name] ?? '');
+        setApiKey(provider, apiKeys[provider.id] ?? '');
     };
 
     const persistApiKeys = () => {
         let keysChanged = false;
         for (const provider of AVAILABLE_PROVIDERS) {
-            const newValue = apiKeys[provider.name] ?? '';
-            const oldValue = initialApiKeys[provider.name] ?? '';
+            const newValue = apiKeys[provider.id] ?? '';
+            const oldValue = initialApiKeys[provider.id] ?? '';
 
             if (newValue !== oldValue) {
                 setApiKey(provider, newValue);
                 keysChanged = true;
             }
-        }
-
-        if (keysChanged) {
-            queryClient.invalidateQueries({ queryKey: ['ai-models-list'] });
         }
 
         return keysChanged;
@@ -73,7 +67,7 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
                     <h4>Api Keys</h4>
                     <div className="settingsSection">
                         {AVAILABLE_PROVIDERS.map(provider => (
-                            <div key={provider.name} className="settingItem">
+                            <div key={provider.id} className="settingItem">
                                 <div className="settingLabel">
                                     <img
                                         src={`/${provider.icon}`}
@@ -86,11 +80,11 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
                                 <input
                                     type="password"
                                     placeholder={`Enter ${provider.name} API Key`}
-                                    value={apiKeys[provider.name] ?? ''}
+                                    value={apiKeys[provider.id] ?? ''}
                                     onChange={e =>
                                         setApiKeys(prev => ({
                                             ...prev,
-                                            [provider.name]: e.target.value,
+                                            [provider.id]: e.target.value,
                                         }))
                                     }
                                     onBlur={() => handleKeyBlur(provider)}

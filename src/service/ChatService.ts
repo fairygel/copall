@@ -1,13 +1,11 @@
-import AiModel from '../models/AiModel';
 import Message from '../models/message';
 import { parseModel } from './AiUtils';
 
 import { createClient } from './ClientProviderFactory';
-import { AVAILABLE_PROVIDERS, getApiKey } from '../config/AiProviderConfig';
 
 import { Dispatch, SetStateAction } from 'react';
 import { getEncoding } from 'js-tiktoken';
-import { queryClient } from '../storage/queryClient';
+import { getModelsFromCatalog, getModelFromCatalog } from './CatalogService';
 
 const enc = getEncoding('cl100k_base');
 
@@ -41,7 +39,7 @@ export async function generateChatTitle(message: string, model: string) {
 
 async function trimMessagesToFitContext(messages: Message[], model: string): Promise<Message[]> {
     let resultMessages = [...messages];
-    let modelInfo = await getModelInfo(model);
+    let modelInfo = await getModelFromCatalog(model);
     let contextLimit = modelInfo.context;
 
     let messageTokens = enc.encode(JSON.stringify(resultMessages)).length;
@@ -102,36 +100,4 @@ export async function generateAssistantResponse(
         throw error;
     }
 }
-
-export async function getAvailableModels(): Promise<AiModel[]> {
-    const providersWithKeys = AVAILABLE_PROVIDERS.filter(provider => !!getApiKey(provider));
-
-    const results = await Promise.allSettled(
-        providersWithKeys.map(async provider => {
-            const client = createClient(provider);
-            return await client.getAvailableModels(provider);
-        })
-    );
-
-    const models: AiModel[] = [];
-    for (const result of results) {
-        if (result.status === 'fulfilled') {
-            models.push(...result.value);
-        } else {
-            console.error('Failed to load models for provider:', result.reason);
-        }
-    }
-
-    return models;
-}
-
-async function getModelInfo(model: string): Promise<AiModel> {
-    const cachedModels = queryClient.getQueryData<AiModel[]>(['ai-models-list']);
-
-    const found = cachedModels?.find(m => m.id === model);
-    if (found) {
-        return found;
-    } else {
-        throw new Error(`Model ${model} not found in storage.`);
-    }
-}
+export { getModelsFromCatalog as getAvailableModels, getModelFromCatalog };
