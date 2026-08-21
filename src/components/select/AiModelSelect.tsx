@@ -30,7 +30,7 @@ function AiModelSelect({
 
     useEffect(() => {
         setDefaultSelect(resolvedDefault);
-        if (!resolvedDefault) {
+        if (!resolvedDefault && list.length > 0) {
             onSelect(null);
         }
     }, [resolvedDefault]);

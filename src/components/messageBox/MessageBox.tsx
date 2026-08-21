@@ -32,6 +32,10 @@ function MessageBox({
         const savedModel = savedModelId ? (models.find(m => m.id === savedModelId) ?? null) : null;
         const model = savedModel || models[0] || null;
 
+        if (model && !savedModel) {
+            localStorage.setItem('selectedModel', model.id);
+        }
+
         setDefaultModel(model);
     }, [models]);
 
