@@ -65,6 +65,7 @@ async function buildCatalog() {
 
     const catalog: Record<string, Model[]> = {};
     catalog['open-router'] = [];
+    catalog['vercel'] = [];
 
     for (let model of json.data) {
         const providerId = model.id.split('/')[0];
@@ -102,6 +103,27 @@ async function buildCatalog() {
 
         catalog['open-router'].push(openRouterEntry);
     }
+
+    try {
+        const vercelRes = await fetch('https://ai-gateway.vercel.sh/v1/models');
+        const vercelJson = await vercelRes.json();
+
+        for (const model of vercelJson.data) {
+            catalog['vercel'].push({
+                id: 'vercel/' + model.id,
+                name: model.name ?? model.id,
+                context: model.context_window ?? model.max_tokens ?? 0,
+                created: model.created ?? 0,
+                inputModalities: model.modalities?.input ?? ['text'],
+                outputModalities: model.modalities?.output ?? ['text'],
+                inputPricing: model.pricing?.input ?? '0',
+                outputPricing: model.pricing?.output ?? '0',
+            });
+        }
+    } catch (e) {
+        console.error('Vercel error:', e);
+    }
+
     const jsonString = JSON.stringify(catalog, null, 4);
     writeFileSync('public/catalog.json', jsonString);
 }

@@ -8,15 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@tanstack/query-async-storage-persister':
-        specifier: ^5.101.2
-        version: 5.101.2
-      '@tanstack/react-query':
-        specifier: ^5.101.2
-        version: 5.101.2(react@19.2.7)
-      '@tanstack/react-query-persist-client':
-        specifier: ^5.101.2
-        version: 5.101.2(@tanstack/react-query@5.101.2(react@19.2.7))(react@19.2.7)
       '@tauri-apps/api':
         specifier: ^2.11.1
         version: 2.11.1
@@ -479,26 +470,6 @@ packages:
     resolution: {integrity: sha512-BfzEnDJOt9T8M989/lA37EcJgat01wLRnoi5dQf3QzOH7jzpqTAzdDbVfRljVr5r+jzKqpbHeyOfAaXxAd0PAA==}
     cpu: [x64]
     os: [win32]
-
-  '@tanstack/query-async-storage-persister@5.101.2':
-    resolution: {integrity: sha512-jf7zvVKZ5q2j/xuhbTIBUpw5xt6cw/ioOFQquxK7fRY0AmMQP8A0JVMOgYoeQLA4PKdeT7RxsuLAF0Lft9oJ8Q==}
-
-  '@tanstack/query-core@5.101.2':
-    resolution: {integrity: sha512-hH5MLoJhF7KaIGd7q3xTXGXvslI+GYlM1Z/35aSHHWaCJWB7XvTSHYuV3eM7tw+aE0mT/xMro4M4Q9rCGHT0lw==}
-
-  '@tanstack/query-persist-client-core@5.101.2':
-    resolution: {integrity: sha512-rgMsbvBVpSPDUsprC9FYxojdG0Q1LH6yq1i3DXz2aps4VEqv2l4Msj3YDqIifU3xkl/DrYe9YWntZAJLrM6xTg==}
-
-  '@tanstack/react-query-persist-client@5.101.2':
-    resolution: {integrity: sha512-19UpaRtf0lvB2QAJ2MoixxtGf3osMOd508g99EsttUj4+3eLs+ulnNgYjB7AkQMHrRlcbVXqpVNqWkB4a7g8Zw==}
-    peerDependencies:
-      '@tanstack/react-query': ^5.101.2
-      react: ^18 || ^19
-
-  '@tanstack/react-query@5.101.2':
-    resolution: {integrity: sha512-seDkr6kzGzX1okaaTtZPtgA688CDPlXUz1C6xSg0ESqn04Vuc8tlrYms1s3de+znBqhPVxFRfpAfUf+6XvfPWg==}
-    peerDependencies:
-      react: ^18 || ^19
 
   '@tauri-apps/api@2.11.1':
     resolution: {integrity: sha512-M2FPuYND2m+wh5hfW9ZpSdxMPdEJovPBWwoHJmwUpysTYNHaOkVFN419m/K0LIgjb/7KU2vBgsUepJWugQCvAA==}
@@ -1396,28 +1367,6 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.62.2':
     optional: true
-
-  '@tanstack/query-async-storage-persister@5.101.2':
-    dependencies:
-      '@tanstack/query-core': 5.101.2
-      '@tanstack/query-persist-client-core': 5.101.2
-
-  '@tanstack/query-core@5.101.2': {}
-
-  '@tanstack/query-persist-client-core@5.101.2':
-    dependencies:
-      '@tanstack/query-core': 5.101.2
-
-  '@tanstack/react-query-persist-client@5.101.2(@tanstack/react-query@5.101.2(react@19.2.7))(react@19.2.7)':
-    dependencies:
-      '@tanstack/query-persist-client-core': 5.101.2
-      '@tanstack/react-query': 5.101.2(react@19.2.7)
-      react: 19.2.7
-
-  '@tanstack/react-query@5.101.2(react@19.2.7)':
-    dependencies:
-      '@tanstack/query-core': 5.101.2
-      react: 19.2.7
 
   '@tauri-apps/api@2.11.1': {}
 

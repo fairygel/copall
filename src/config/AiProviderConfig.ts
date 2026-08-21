@@ -22,6 +22,13 @@ export const AVAILABLE_PROVIDERS: AiProvider[] = [
         clientType: 'openai',
         icon: 'openrouter.svg',
     },
+    {
+        id: 'vercel',
+        name: 'Vercel',
+        baseUrl: 'https://ai-gateway.vercel.sh',
+        clientType: 'openai',
+        icon: 'vercel.svg',
+    },
 ];
 
 export function getApiKey(provider: AiProvider): string {
