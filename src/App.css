@@ -22,6 +22,18 @@ body {
     --inactive-font-color: #adadad;
 }
 
+[data-theme='exclusive'] {
+    --is-dark-mode: 0;
+    --background-color: #FFC9D6;
+    --border-color: #ED799730;
+    --container-color: #FF8AA540;
+    --shadow-color: rgba(204, 184, 188, 0.2);
+    --accent-color: #A30078;
+
+    --font-color: #470034;
+    --inactive-font-color: #66465D;
+}
+
 [data-theme='light'] {
     --is-dark-mode: 0;
     --background-color: #ffffff;

@@ -4,6 +4,17 @@ import { CircleAlert, KeyRound, Pin, Power, SunMoon, X } from 'lucide-react';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { enable, disable, isEnabled } from '@tauri-apps/plugin-autostart';
 import { type } from '@tauri-apps/plugin-os';
+import Select from '../select/Select';
+
+type Theme = 'dark' | 'light' | 'exclusive';
+
+const THEMES: Theme[] = ['dark', 'light', 'exclusive'];
+
+const THEME_LABEL: Record<Theme, string> = {
+    dark: 'Dark',
+    light: 'Light',
+    exclusive: 'Exclusive',
+};
 
 function Settings({
     onClose,
@@ -17,9 +28,10 @@ function Settings({
 
     const isLinux = osType === 'linux';
 
-    const [theme, setTheme] = useState<'light' | 'dark'>(
-        localStorage.getItem('theme') === 'light' ? 'light' : 'dark'
-    );
+    const [theme, setTheme] = useState<Theme>(() => {
+        const saved = localStorage.getItem('theme') as Theme | null;
+        return saved && THEMES.includes(saved) ? saved : 'dark';
+    });
 
     const [alwaysOnTop, setAlwaysOnTop] = useState(false);
     const [openOnStartup, setOpenOnStartup] = useState(false);
@@ -28,14 +40,14 @@ function Settings({
         onClose();
     };
 
-    const setAppTheme = (next: 'light' | 'dark') => {
+    const setAppTheme = (next: Theme) => {
         localStorage.setItem('theme', next);
         setTheme(next);
 
         if (next === 'dark') {
             document.documentElement.removeAttribute('data-theme');
         } else {
-            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.setAttribute('data-theme', next);
         }
     };
 
@@ -74,21 +86,16 @@ function Settings({
                                 <SunMoon size={18} />
                                 <span>Theme</span>
                             </div>
-                            <div className="textSwitch">
-                                <button
-                                    className={`switchOption ${theme === 'light' ? 'active' : ''}`}
-                                    onClick={() => setAppTheme('light')}
-                                >
-                                    Light
-                                </button>
-                                <span>/</span>
-                                <button
-                                    className={`switchOption ${theme === 'dark' ? 'active' : ''}`}
-                                    onClick={() => setAppTheme('dark')}
-                                >
-                                    Dark
-                                </button>
-                            </div>
+                            <Select
+                                list={THEMES.map(t => THEME_LABEL[t])}
+                                defaultItem={THEME_LABEL[theme]}
+                                onSelect={label => {
+                                    const next = (Object.entries(THEME_LABEL).find(
+                                        ([, v]) => v === label
+                                    )?.[0] ?? 'dark') as Theme;
+                                    setAppTheme(next);
+                                }}
+                            />
                         </div>
                         <div className="settingItem">
                             <div className="settingLabel">

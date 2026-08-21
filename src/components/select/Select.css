@@ -1,6 +1,6 @@
 .selectContainer {
     color: var(--font-color);
-    background-color: var(--background-color);
+    background-color: transparent;
     border: none;
     font-family: 'Geist', sans-serif;
     font-size: 14px;
@@ -31,7 +31,6 @@
     gap: 10px;
     align-items: stretch;
     width: max-content;
-    min-width: 260px;
     max-width: min(520px, 90vw);
     max-height: 220px;
     overflow-y: auto;
@@ -155,7 +154,7 @@
     font-family: 'Geist', sans-serif;
     cursor: pointer;
     white-space: nowrap;
-    width: max-content;
+    width: 100%;
     text-align: left;
 }
 
