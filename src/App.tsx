@@ -21,12 +21,12 @@ function App() {
     <main>
       <div className="header">
         <div className="icons">
-          <div className="clickable"><Settings size={20}/></div>
-          <div className="clickable"><MessageCirclePlus size={20}/></div>
+          <button className="clickable" aria-label="Settings"><Settings size={20}/></button>
+          <button className="clickable" aria-label="New chat"><MessageCirclePlus size={20}/></button>
         </div>
         <div className="chatName">Chat Name a little longer</div>
         <div className="windowIcons">
-          <div className="clickable"><X size={14} /></div>
+          <button className="clickable" aria-label="Close"><X size={14} /></button>
         </div>
       </div>
       <div className="chatContainer">
@@ -34,7 +34,7 @@ function App() {
         <div className="message aiMessage">
           <ReactMarkdown>{aiMessage1}</ReactMarkdown>
         </div>
-        <div className="message userMessage">Say what countries has the highest population in worldSay what countries has the highest population in world</div>
+        <div className="message userMessage">Say what countries has the highest population in world</div>
 
         <div className="message aiMessage">
           <ReactMarkdown>{aiMessage2}</ReactMarkdown>
@@ -42,9 +42,9 @@ function App() {
       </div>
 
       <div className="messageContainer">
-        <textarea className="inputArea" placeholder="Your move, Ask!"></textarea>
+        <textarea className="inputArea" placeholder="Your move, Ask!" aria-label="Message input"></textarea>
         <div className="tooltip">
-          <button className="sendMessage">
+          <button className="sendMessage" aria-label="Send message" type="button" disabled>
             <ArrowUp size={24} color="white" />
           </button>
         </div>
