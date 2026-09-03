@@ -1,51 +1,56 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
+import { ArrowUp, MessageCirclePlus, Settings, X } from "lucide-react";
+import ReactMarkdown from 'react-markdown';
 import "./App.css";
 
+const aiMessage1 = 'Hello! How can I help you today?';
+const aiMessage2 = 'Based on general knowledge, here are the countries with the highest populations in the world:' +
+  '\n1. **India** — approximately 1.43 billion (surpassed China in 2023)' +
+  '\n2. **China** — approximately 1.41 billion' +
+  '\n3. **United States** — approximately 340 million' +
+  '\n4. **Indonesia** — approximately 280 million' +
+  '\n5. **Pakistan** — approximately 240 million' +
+  '\n6. **Nigeria** — approximately 220 million' +
+  '\n7. **Brazil** — approximately 216 million' +
+  '\n8. **Bangladesh** — approximately 173 million' +
+  '\n9. **Russia** — approximately 144 million' +
+  '\n10. **Mexico** — approximately 130 million\n' +
+  '\nIndia overtook China as the world\'s most populous country around mid-2023, according to UN estimates. These figures are approximate and fluctuate with births, deaths, and migration.';
+
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
-
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
-
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <main>
+      <div className="header">
+        <div className="icons">
+          <button className="clickable" aria-label="Settings"><Settings size={20}/></button>
+          <button className="clickable" aria-label="New chat"><MessageCirclePlus size={20}/></button>
+        </div>
+        <div className="chatName">Chat Name a little longer</div>
+        <div className="windowIcons">
+          <button className="clickable" aria-label="Close"><X size={14} /></button>
+        </div>
       </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
+      <div className="chatContainer">
+        <div className="message userMessage">hello!</div>
+        <div className="message aiMessage">
+          <ReactMarkdown>{aiMessage1}</ReactMarkdown>
+        </div>
+        <div className="message userMessage">Say what countries has the highest population in world</div>
 
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
+        <div className="message aiMessage">
+          <ReactMarkdown>{aiMessage2}</ReactMarkdown>
+        </div>
+      </div>
+
+      <div className="messageContainer">
+        <textarea className="inputArea" placeholder="Your move, Ask!" aria-label="Message input"></textarea>
+        <div className="tooltip">
+          <button className="sendMessage" aria-label="Send message" type="button" disabled>
+            <ArrowUp size={24} color="white" />
+          </button>
+        </div>
+      </div>
     </main>
-  );
+  )
 }
 
 export default App;
