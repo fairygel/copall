@@ -59,6 +59,10 @@ async function fetchAllowedModels(): Promise<Set<string>> {
         }
     }
 
+    if (!GEMINI_API_KEY && !MISTRAL_API_KEY) {
+        console.warn('No GEMINI_API_KEY or MISTRAL_API_KEY set — per-provider catalog entries will be empty');
+    }
+
     return allowedModels;
 }
 
@@ -96,7 +100,7 @@ async function buildCatalog() {
         if (allowedProviders.has(providerId) && allowedModels.has(modelName)) {
             const providerModelEntry: Model = {
                 id: model.id,
-                name: model.name.split(': ')[1],
+                name: model.name.split(': ')[1] ?? model.name,
                 context: model.context_length,
                 created: model.created,
                 inputModalities: model.architecture.input_modalities,
