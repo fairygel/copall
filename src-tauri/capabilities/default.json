@@ -1,10 +1,21 @@
 {
-  "$schema": "../gen/schemas/desktop-schema.json",
-  "identifier": "default",
-  "description": "Capability for the main window",
-  "windows": ["main"],
-  "permissions": [
-    "core:default",
-    "opener:default"
-  ]
+    "$schema": "../gen/schemas/desktop-schema.json",
+    "identifier": "default",
+    "description": "Capability for the main window",
+    "windows": ["main"],
+    "permissions": [
+        "core:window:allow-show",
+        "core:window:allow-hide",
+        "core:window:allow-set-focus",
+        "core:window:allow-start-dragging",
+        "opener:allow-open-url",
+        "opener:default",
+        "core:window:allow-set-always-on-top",
+        "core:window:allow-is-always-on-top",
+        "autostart:allow-enable",
+        "autostart:allow-disable",
+        "autostart:allow-is-enabled",
+        "os:allow-os-type",
+        "log:default"
+    ]
 }

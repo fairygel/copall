@@ -1,0 +1,49 @@
+.header {
+    background-color: var(--background-color);
+    height: 48px;
+    z-index: 2;
+    padding: 12px 24px 8px 24px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    border-radius: 24px 24px 0 0;
+}
+
+.chatName {
+    color: var(--font-color);
+    font-family: 'Andika', sans-serif;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.windowIcons {
+    justify-self: end;
+}
+
+.clickable {
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 4px;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    color: var(--font-color);
+}
+
+.clickable:hover {
+    background-color: var(--border-color);
+}
+
+.icons {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+}

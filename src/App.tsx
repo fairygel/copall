@@ -1,56 +1,96 @@
-import { ArrowUp, MessageCirclePlus, Settings, X } from "lucide-react";
-import ReactMarkdown from 'react-markdown';
-import "./App.css";
+import './App.css';
 
-const aiMessage1 = 'Hello! How can I help you today?';
-const aiMessage2 = 'Based on general knowledge, here are the countries with the highest populations in the world:' +
-  '\n1. **India** — approximately 1.43 billion (surpassed China in 2023)' +
-  '\n2. **China** — approximately 1.41 billion' +
-  '\n3. **United States** — approximately 340 million' +
-  '\n4. **Indonesia** — approximately 280 million' +
-  '\n5. **Pakistan** — approximately 240 million' +
-  '\n6. **Nigeria** — approximately 220 million' +
-  '\n7. **Brazil** — approximately 216 million' +
-  '\n8. **Bangladesh** — approximately 173 million' +
-  '\n9. **Russia** — approximately 144 million' +
-  '\n10. **Mexico** — approximately 130 million\n' +
-  '\nIndia overtook China as the world\'s most populous country around mid-2023, according to UN estimates. These figures are approximate and fluctuate with births, deaths, and migration.';
+import Header from './components/header/Header';
+import Settings from './components/settings/Settings';
+import ApiKeys from './components/settings/ApiKeys';
+import MessageBox from './components/messageBox/MessageBox';
+import Chat from './components/chat/Chat';
+
+import AiModel from './models/AiModel';
+
+import { generateAssistantResponse, generateChatTitle } from './service/ChatService';
+
+import { useState } from 'react';
+import { useChat } from './hooks/useChat';
 
 function App() {
-  return (
-    <main>
-      <div className="header">
-        <div className="icons">
-          <button className="clickable" aria-label="Settings"><Settings size={20}/></button>
-          <button className="clickable" aria-label="New chat"><MessageCirclePlus size={20}/></button>
-        </div>
-        <div className="chatName">Chat Name a little longer</div>
-        <div className="windowIcons">
-          <button className="clickable" aria-label="Close"><X size={14} /></button>
-        </div>
-      </div>
-      <div className="chatContainer">
-        <div className="message userMessage">hello!</div>
-        <div className="message aiMessage">
-          <ReactMarkdown>{aiMessage1}</ReactMarkdown>
-        </div>
-        <div className="message userMessage">Say what countries has the highest population in world</div>
+    const [settingsView, setSettingsView] = useState<'settings' | 'apiKeys' | null>(null);
+    const [isSendMessageDisabled, setSendMessageDisabled] = useState(false);
 
-        <div className="message aiMessage">
-          <ReactMarkdown>{aiMessage2}</ReactMarkdown>
-        </div>
-      </div>
+    const { messages, chatName, setMessages, setChatName, createNewChat } = useChat();
 
-      <div className="messageContainer">
-        <textarea className="inputArea" placeholder="Your move, Ask!" aria-label="Message input"></textarea>
-        <div className="tooltip">
-          <button className="sendMessage" aria-label="Send message" type="button" disabled>
-            <ArrowUp size={24} color="white" />
-          </button>
-        </div>
-      </div>
-    </main>
-  )
+    const generateTitle = async (message: string, model: AiModel) => {
+        if (!message || !model) return;
+        try {
+            setChatName(await generateChatTitle(message, model.id));
+        } catch (e) {
+            console.error('Failed to generate chat title:', e);
+        }
+    };
+
+    const handleSendMessage = async (content: string, selectedModel: AiModel) => {
+        if (!selectedModel) return;
+
+        setSendMessageDisabled(true);
+
+        const isFirstMessage = messages.length === 0;
+
+        const newMessage = {
+            id: crypto.randomUUID(),
+            content,
+            sender: 'user' as const,
+        };
+
+        const updatedMessages = [...messages, newMessage];
+        setMessages(updatedMessages);
+
+        try {
+            const response = await generateAssistantResponse(
+                updatedMessages,
+                selectedModel.id,
+                setMessages as any
+            );
+
+            if (isFirstMessage && response) {
+                await generateTitle(response, selectedModel);
+            }
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setSendMessageDisabled(false);
+        }
+    };
+
+    const handleNewChat = async () => {
+        await createNewChat();
+        setSendMessageDisabled(false);
+    };
+
+    return (
+        <main>
+            {settingsView === 'settings' && (
+                <Settings
+                    onClose={() => setSettingsView(null)}
+                    onManageApiKeys={() => setSettingsView('apiKeys')}
+                />
+            )}
+            {settingsView === 'apiKeys' && (
+                <ApiKeys
+                    onBack={() => setSettingsView('settings')}
+                    onClose={() => setSettingsView(null)}
+                />
+            )}
+            <Header
+                chatName={chatName}
+                onSettingsClick={() => setSettingsView('settings')}
+                onNewChatClick={handleNewChat}
+            />
+
+            <Chat messages={messages} />
+
+            <MessageBox onMessageSent={handleSendMessage} disabled={isSendMessageDisabled} />
+        </main>
+    );
 }
 
 export default App;

@@ -1,14 +1,92 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+use tauri::{
+    include_image,
+    menu::{Menu, MenuItem},
+    tray::{MouseButton, TrayIconBuilder, TrayIconEvent},
+    Manager, WindowEvent,
+};
+use tauri_plugin_log::{Target, TargetKind, TimezoneStrategy};
+
 #[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+fn close_window(window: tauri::WebviewWindow) {
+    let _ = window.hide();
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_os::init())
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            Some(vec!["--tray"]),
+        ))
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet])
+        .plugin(
+            tauri_plugin_log::Builder::new()
+                .targets([Target::new(TargetKind::Stdout)])
+                .timezone_strategy(TimezoneStrategy::UseLocal)
+                .level(log::LevelFilter::Debug)
+                .build(),
+        )
+        .setup(|app| {
+            let args: Vec<String> = std::env::args().collect();
+            let start_in_tray = args.contains(&"--tray".to_string());
+
+            let open_chat_i = MenuItem::with_id(app, "open_chat", "Open Chat", true, None::<&str>)?;
+            let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
+            let menu = Menu::with_items(app, &[&open_chat_i, &quit_i])?;
+
+            let tray_icon = include_image!("icons/tray-icon.png");
+
+            let _tray = TrayIconBuilder::new()
+                .icon(tray_icon)
+                .menu(&menu)
+                .show_menu_on_left_click(false)
+                .on_tray_icon_event(|tray, event| {
+                    if let TrayIconEvent::Click {
+                        button: MouseButton::Left,
+                        ..
+                    } = event
+                    {
+                        let app = tray.app_handle();
+                        if let Some(window) = app.get_webview_window("main") {
+                            let _ = window.show();
+                            let _ = window.set_focus();
+                        }
+                    }
+                })
+                .on_menu_event(|app, event| match event.id.as_ref() {
+                    "open_chat" => {
+                        if let Some(window) = app.get_webview_window("main") {
+                            let _ = window.show();
+                            let _ = window.set_focus();
+                        }
+                    }
+                    "quit" => {
+                        app.exit(0);
+                    }
+                    _ => {}
+                })
+                .build(app)?;
+
+            if let Some(window) = app.get_webview_window("main") {
+                if start_in_tray {
+                    let _ = window.hide();
+                } else {
+                    let _ = window.show();
+                    let _ = window.set_focus();
+                }
+            }
+
+            Ok(())
+        })
+        .on_window_event(|window, event| match event {
+            WindowEvent::CloseRequested { api, .. } => {
+                let _ = window.hide();
+                api.prevent_close();
+            }
+            _ => {}
+        })
+        .invoke_handler(tauri::generate_handler![close_window])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

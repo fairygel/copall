@@ -1,0 +1,104 @@
+.chatContainer {
+    flex: 1;
+    overflow-y: auto;
+    margin: 0 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-top: 24px;
+    padding-bottom: 140px;
+}
+
+.message {
+    padding: 0 16px;
+    margin: 0 4px;
+    text-align: left;
+    font-family: 'Geist', sans-serif;
+    color: var(--font-color);
+}
+
+.userMessage {
+    margin-left: auto;
+    max-width: 75%;
+    background-color: var(--container-color);
+    box-shadow: 0 2px 4px var(--shadow-color);
+    border-radius: 20px;
+}
+
+.aiMessage {
+    margin-right: auto;
+    max-width: 90%;
+}
+
+.logo {
+    width: 36px;
+    height: 36px;
+}
+
+.emptyContainer > p {
+    margin: 0;
+    padding: 8px 0;
+    font-size: 20px;
+    color: var(--inactive-font-color);
+}
+
+.emptyContainer {
+    gap: 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding-bottom: 140px;
+    font-family: 'Andika', sans-serif;
+}
+
+.messageWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.messageWrapper:has(.userMessage) {
+    align-items: flex-end;
+}
+
+.messageWrapper:has(.aiMessage) {
+    align-items: flex-start;
+}
+
+.copyButton {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: var(--inactive-font-color);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+
+    margin: 2px 8px;
+}
+
+.copyButton:hover {
+    background-color: var(--container-color);
+    color: var(--font-color);
+}
+
+.messageWrapper:hover .copyButton {
+    opacity: 1;
+}
+
+.messageWrapper:focus-within .copyButton {
+    opacity: 1;
+}
+
+.copyButton:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
