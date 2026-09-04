@@ -26,13 +26,17 @@ async function fetchAllowedModels(): Promise<Set<string>> {
             let result = await fetch(
                 `https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_API_KEY}`
             );
+            if (!result.ok) {
+                throw new Error(`Gemini API error: ${result.status} ${result.statusText}`);
+            }
             let json = await result.json();
-            
+
             for (const model of json.models ?? []) {
                 allowedModels.add(model.name.split('/')[1]);
             }
-        } catch (e) { 
+        } catch (e) {
             console.error('Gemini error:', e);
+            throw e;
         }
     }
 
@@ -41,13 +45,17 @@ async function fetchAllowedModels(): Promise<Set<string>> {
             let result = await fetch('https://api.mistral.ai/v1/models', {
                 headers: { Authorization: `Bearer ${MISTRAL_API_KEY}` }
             });
+            if (!result.ok) {
+                throw new Error(`Mistral API error: ${result.status} ${result.statusText}`);
+            }
             let json = await result.json()
 
             for (const model of json.data ?? []) {
                 allowedModels.add(model.id);
             }
-        } catch (e) { 
+        } catch (e) {
             console.error('Mistral error:', e)
+            throw e;
         }
     }
 
@@ -59,6 +67,9 @@ async function buildCatalog() {
     let response = await fetch(
         'https://openrouter.ai/api/v1/models?output_modalities=text&input_modalities=text&sort=newest'
     );
+    if (!response.ok) {
+        throw new Error(`OpenRouter API error: ${response.status} ${response.statusText}`);
+    }
     let json = await response.json();
 
     let allowedModels = await fetchAllowedModels();
@@ -93,7 +104,7 @@ async function buildCatalog() {
                 inputPricing: model.pricing.prompt,
                 outputPricing: model.pricing.completion,
             };
-            
+
             if (!catalog[providerId]) {
                 catalog[providerId] = [];
             }
@@ -106,22 +117,31 @@ async function buildCatalog() {
 
     try {
         const vercelRes = await fetch('https://ai-gateway.vercel.sh/v1/models');
+        if (!vercelRes.ok) {
+            throw new Error(`Vercel API error: ${vercelRes.status} ${vercelRes.statusText}`);
+        }
         const vercelJson = await vercelRes.json();
 
         for (const model of vercelJson.data) {
+            const inputMods: string[] = model.modalities?.input ?? ['text'];
+            const outputMods: string[] = model.modalities?.output ?? ['text'];
+            if (!inputMods.includes('text') || !outputMods.includes('text')) {
+                continue;
+            }
             catalog['vercel'].push({
                 id: 'vercel/' + model.id,
                 name: model.name ?? model.id,
                 context: model.context_window ?? model.max_tokens ?? 0,
                 created: model.created ?? 0,
-                inputModalities: model.modalities?.input ?? ['text'],
-                outputModalities: model.modalities?.output ?? ['text'],
+                inputModalities: inputMods,
+                outputModalities: outputMods,
                 inputPricing: model.pricing?.input ?? '0',
                 outputPricing: model.pricing?.output ?? '0',
             });
         }
     } catch (e) {
         console.error('Vercel error:', e);
+        throw e;
     }
 
     const jsonString = JSON.stringify(catalog, null, 4);
