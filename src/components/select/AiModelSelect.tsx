@@ -52,6 +52,10 @@ function AiModelSelect({
     };
 
     useEffect(() => {
+        if (disabled) setIsOpened(false);
+    }, [disabled]);
+
+    useEffect(() => {
         if (!isOpened) return;
 
         const handleClickOutside = (event: MouseEvent) => {
@@ -129,7 +133,7 @@ function AiModelSelect({
                     <ChevronDown size={14} />
                 </span>
             </button>
-            {isOpened && (
+            {isOpened && !disabled && (
                 <div onClick={e => e.stopPropagation()} className="selectDropdown">
                     {providers.length > 0 && (
                         <div className="selectDropdownList">
