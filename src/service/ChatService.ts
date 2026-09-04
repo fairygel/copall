@@ -47,9 +47,13 @@ async function trimMessagesToFitContext(messages: Message[], model: string): Pro
     // Reserve 10% of the context for safety
     let safeContextLimit = contextLimit - contextLimit * 0.1;
 
-    while (messageTokens > safeContextLimit && resultMessages.length > 0) {
+    while (messageTokens > safeContextLimit && resultMessages.length > 1) {
         resultMessages = resultMessages.slice(1);
         messageTokens = enc.encode(JSON.stringify(resultMessages)).length;
+    }
+
+    if (resultMessages.length === 0 || messageTokens > safeContextLimit) {
+        throw new Error('The most recent message exceeds the model context limit.');
     }
 
     return resultMessages;
