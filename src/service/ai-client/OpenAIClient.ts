@@ -57,10 +57,18 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
 
     async function checkErrorResponse(response: Response) {
         if (!response.ok) {
-            const err = await response.json();
-            throw new Error(
-                `OpenAI API - ${response.status}: ${err.error?.message || err.message || err.toString()}`
-            );
+            let details = '';
+            try {
+                const err = await response.json();
+                details = err.error?.message || err.message || JSON.stringify(err);
+            } catch {
+                try {
+                    details = await response.text();
+                } catch {
+                    details = response.statusText;
+                }
+            }
+            throw new Error(`OpenAI API - ${response.status}: ${details || response.statusText}`);
         }
     }
 }
