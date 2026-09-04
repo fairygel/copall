@@ -37,8 +37,18 @@ export async function createChat(name = 'New Chat'): Promise<Chat> {
     return new Promise((resolve, reject) => {
         const tx = db.transaction(['chatMetas', 'chatMessages'], 'readwrite');
 
-        tx.oncomplete = () => resolve({ ...meta, messages: [] });
-        tx.onerror = () => reject(tx.error);
+        tx.oncomplete = () => {
+            db.close();
+            resolve({ ...meta, messages: [] });
+        };
+        tx.onerror = () => {
+            db.close();
+            reject(tx.error);
+        };
+        tx.onabort = () => {
+            db.close();
+            reject(tx.error);
+        };
 
         tx.objectStore('chatMetas').add(meta);
         tx.objectStore('chatMessages').add({ id, messages: [] as Message[] });
@@ -61,10 +71,18 @@ export async function getChat(id: string): Promise<Chat | null> {
         msgReq.onsuccess = () => { raw = msgReq.result; };
 
         tx.oncomplete = () => {
+            db.close();
             if (!meta) resolve(null);
             else resolve({ ...meta, messages: raw?.messages ?? [] });
         };
-        tx.onerror = () => reject(tx.error);
+        tx.onerror = () => {
+            db.close();
+            reject(tx.error);
+        };
+        tx.onabort = () => {
+            db.close();
+            reject(tx.error);
+        };
     });
 }
 
@@ -75,11 +93,24 @@ export async function getChatPreviews(): Promise<ChatMeta[]> {
         const tx = db.transaction('chatMetas', 'readonly');
         const req = tx.objectStore('chatMetas').getAll();
 
+        let result: ChatMeta[] = [];
+
         req.onsuccess = () => {
-            const result = (req.result as ChatMeta[]).sort((a, b) => b.updatedAt - a.updatedAt);
+            result = (req.result as ChatMeta[]).sort((a, b) => b.updatedAt - a.updatedAt);
+        };
+
+        tx.oncomplete = () => {
+            db.close();
             resolve(result);
         };
-        req.onerror = () => reject(req.error);
+        tx.onerror = () => {
+            db.close();
+            reject(tx.error);
+        };
+        tx.onabort = () => {
+            db.close();
+            reject(tx.error);
+        };
     });
 }
 
@@ -91,8 +122,18 @@ export async function saveChat(chat: Chat): Promise<void> {
 
     return new Promise((resolve, reject) => {
         const tx = db.transaction(['chatMetas', 'chatMessages'], 'readwrite');
-        tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error);
+        tx.oncomplete = () => {
+            db.close();
+            resolve();
+        };
+        tx.onerror = () => {
+            db.close();
+            reject(tx.error);
+        };
+        tx.onabort = () => {
+            db.close();
+            reject(tx.error);
+        };
 
         tx.objectStore('chatMetas').put(meta);
         tx.objectStore('chatMessages').put({ id: chat.id, messages: chat.messages });
@@ -104,8 +145,18 @@ export async function deleteChat(id: string): Promise<void> {
 
     return new Promise((resolve, reject) => {
         const tx = db.transaction(['chatMetas', 'chatMessages'], 'readwrite');
-        tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error);
+        tx.oncomplete = () => {
+            db.close();
+            resolve();
+        };
+        tx.onerror = () => {
+            db.close();
+            reject(tx.error);
+        };
+        tx.onabort = () => {
+            db.close();
+            reject(tx.error);
+        };
 
         tx.objectStore('chatMetas').delete(id);
         tx.objectStore('chatMessages').delete(id);
