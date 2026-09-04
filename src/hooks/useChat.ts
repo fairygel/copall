@@ -44,12 +44,20 @@ export function useChat() {
 
         if (saveTimeout.current) window.clearTimeout(saveTimeout.current);
 
+        const chatToSave = chat;
         saveTimeout.current = window.setTimeout(() => {
-            saveChat(chat).catch(e => console.error('Failed to save chat:', e));
+            saveChat(chatToSave).catch(e => console.error('Failed to save chat:', e));
         }, 300);
 
         return () => {
-            if (saveTimeout.current) window.clearTimeout(saveTimeout.current);
+            if (saveTimeout.current) {
+                window.clearTimeout(saveTimeout.current);
+                saveTimeout.current = null;
+              
+                if (chatRef.current) {
+                    saveChat(chatRef.current).catch(e => console.error('Failed to flush chat on unmount:', e));
+                }
+            }
         };
     }, [chat, isLoaded]);
 
@@ -69,6 +77,16 @@ export function useChat() {
     const setChatName = (name: string) => {
         setChat(prevChatState => (prevChatState ? { ...prevChatState, name } : prevChatState));
     };
+
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            if (chatRef.current) {
+                saveChat(chatRef.current).catch(() => {});
+            }
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    }, []);
 
     const createNewChat = async () => {
         if (saveTimeout.current) {
