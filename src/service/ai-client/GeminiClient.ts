@@ -32,11 +32,13 @@ export function createGeminiService(provider: AiProvider): BaseClient {
         streaming: boolean
     ): Promise<Response> {
         const apiKey = getApiKey(provider);
+        if (!apiKey) throw new Error(`For chatting, ${provider.name}ApiKey is required.`);
 
         const url = streaming
             ? `${provider.baseUrl}/models/${model}:streamGenerateContent?alt=sse`
             : `${provider.baseUrl}/models/${model}:generateContent`;
 
+        const systemInstruction = toGeminiSystemInstruction(messages);
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -44,6 +46,7 @@ export function createGeminiService(provider: AiProvider): BaseClient {
                 'x-goog-api-key': apiKey,
             },
             body: JSON.stringify({
+                ...(systemInstruction ? { systemInstruction: { parts: [{ text: systemInstruction }] } } : {}),
                 contents: toGeminiFormat(messages),
             }),
         });
@@ -52,18 +55,34 @@ export function createGeminiService(provider: AiProvider): BaseClient {
     }
 
     function toGeminiFormat(messages: Message[]) {
-        return messages.map(msg => ({
-            role: msg.sender === 'assistant' ? 'model' : 'user',
-            parts: [{ text: msg.content }],
-        }));
+        return messages
+            .filter(msg => msg.sender !== 'system')
+            .map(msg => ({
+                role: msg.sender === 'assistant' ? 'model' : 'user',
+                parts: [{ text: msg.content }],
+            }));
+    }
+
+    function toGeminiSystemInstruction(messages: Message[]): string | undefined {
+        const systemParts = messages.filter(msg => msg.sender === 'system').map(m => m.content);
+        if (systemParts.length === 0) return undefined;
+        return systemParts.join('\n');
     }
 
     async function checkErrorResponse(response: Response) {
         if (!response.ok) {
-            const err = await response.json();
-            throw new Error(
-                `Gemini API - ${response.status}: ${err.error?.message || err.message || err.toString()}`
-            );
+            let details = '';
+            try {
+                const err = await response.json();
+                details = err.error?.message || err.message || JSON.stringify(err);
+            } catch {
+                try {
+                    details = await response.text();
+                } catch {
+                    details = response.statusText;
+                }
+            }
+            throw new Error(`Gemini API - ${response.status}: ${details || response.statusText}`);
         }
     }
 }
