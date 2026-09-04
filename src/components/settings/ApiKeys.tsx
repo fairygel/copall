@@ -14,7 +14,7 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
         return initial;
     });
 
-    const [initialApiKeys] = useState(() => {
+    const [initialApiKeys, setInitialApiKeys] = useState(() => {
         const initial: Record<string, string> = {};
         for (const provider of AVAILABLE_PROVIDERS) {
             initial[provider.id] = getApiKey(provider);
@@ -23,7 +23,9 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
     });
 
     const handleKeyBlur = (provider: AiProvider) => {
-        setApiKey(provider, apiKeys[provider.id] ?? '');
+        const value = apiKeys[provider.id] ?? '';
+        setApiKey(provider, value);
+        setInitialApiKeys(prev => ({ ...prev, [provider.id]: value }));
     };
 
     const persistApiKeys = () => {
