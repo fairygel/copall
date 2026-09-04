@@ -81,7 +81,7 @@ pub fn run() {
         })
         .on_window_event(|window, event| match event {
             WindowEvent::CloseRequested { api, .. } => {
-                window.hide().unwrap();
+                let _ = window.hide();
                 api.prevent_close();
             }
             _ => {}
