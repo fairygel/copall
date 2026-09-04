@@ -68,7 +68,7 @@ function AiModelSelect({
     }, [isOpened]);
 
     const filteredGroups = useMemo(() => {
-        const query = searchQuery.toLowerCase().trim().replace(/\s+/g, '-');
+        const query = searchQuery.toLowerCase().trim();
         if (!query) {
             const groups: Record<string, AiModel[]> = {};
             list.forEach(item => {
