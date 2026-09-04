@@ -33,6 +33,11 @@ export function useChat() {
     }, []);
 
     const saveTimeout = useRef<number | null>(null);
+    const chatRef = useRef<Chat | null>(null);
+
+    useEffect(() => {
+        chatRef.current = chat;
+    }, [chat]);
 
     useEffect(() => {
         if (!isLoaded || !chat) return;
@@ -66,6 +71,18 @@ export function useChat() {
     };
 
     const createNewChat = async () => {
+        if (saveTimeout.current) {
+            window.clearTimeout(saveTimeout.current);
+            saveTimeout.current = null;
+        }
+        const current = chatRef.current;
+        if (current) {
+            try {
+                await saveChat(current);
+            } catch (e) {
+                console.error('Failed to flush chat before creating new chat:', e);
+            }
+        }
         const fresh = await createChat();
         setCurrentChatId(fresh.id);
         setChat(fresh);
