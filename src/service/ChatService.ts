@@ -42,6 +42,10 @@ async function trimMessagesToFitContext(messages: Message[], model: string): Pro
     let modelInfo = await getModelFromCatalog(model);
     let contextLimit = modelInfo.context;
 
+    if (!contextLimit || contextLimit <= 0) {
+        return resultMessages;
+    }
+
     let messageTokens = enc.encode(JSON.stringify(resultMessages)).length;
 
     // Reserve 10% of the context for safety
