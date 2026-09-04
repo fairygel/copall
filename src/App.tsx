@@ -21,7 +21,11 @@ function App() {
 
     const generateTitle = async (message: string, model: AiModel) => {
         if (!message || !model) return;
-        setChatName(await generateChatTitle(message, model.id));
+        try {
+            setChatName(await generateChatTitle(message, model.id));
+        } catch (e) {
+            console.error('Failed to generate chat title:', e);
+        }
     };
 
     const handleSendMessage = async (content: string, selectedModel: AiModel) => {
