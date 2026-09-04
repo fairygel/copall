@@ -18,10 +18,10 @@ function Header({
     return (
         <div data-tauri-drag-region className="header">
             <div data-tauri-drag-region className="icons">
-                <button className="clickable" onClick={onSettingsClick}>
+                <button aria-label="Open settings" className="clickable" onClick={onSettingsClick}>
                     <Settings size={20} />
                 </button>
-                <button className="clickable" onClick={onNewChatClick}>
+                <button aria-label="Create new chat" className="clickable" onClick={onNewChatClick}>
                     <MessageCirclePlus size={20} />
                 </button>
             </div>
@@ -30,6 +30,7 @@ function Header({
             </div>
             <div className="windowIcons">
                 <button
+                    aria-label="Close window"
                     onClick={() => {
                         handleClose();
                     }}
