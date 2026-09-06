@@ -12,17 +12,18 @@ const CARGO_LOCK = 'src-tauri/Cargo.lock';
 const VERSION_FILES = [PACKAGE_JSON, TAURI_CONF, CARGO_TOML, CARGO_LOCK];
 
 const USAGE = [
-    'Usage: node scripts/bump-version.mjs <version|minor|major|beta>',
+    'Usage: node scripts/bump-version.mjs <version|major|minor|patch|prerelease>',
     '',
-    '  <version>  explicit semver version, must be greater than the current one (leading v allowed)',
-    '  minor      bump patch: 0.0.1 -> 0.0.2',
-    '  major      bump minor: 0.0.1 -> 0.1.0',
-    '  beta       append auto-numbered suffix: 0.0.1 -> 0.0.1-beta1',
+    '  <version>    explicit semver version, must be greater than the current one (leading v allowed)',
+    '  major        bump major: 0.1.2 -> 1.0.0',
+    '  minor        bump minor: 0.1.2 -> 0.2.0',
+    '  patch        bump patch: 0.1.2 -> 0.1.3, or strip prerelease: 0.1.3-beta2 -> 0.1.3',
+    '  prerelease   append auto-numbered beta suffix: 0.1.2 -> 0.1.2-beta1',
     '',
     'Examples:',
     '  node scripts/bump-version.mjs 0.2.0',
-    '  node scripts/bump-version.mjs minor',
-    '  node scripts/bump-version.mjs beta',
+    '  node scripts/bump-version.mjs patch',
+    '  node scripts/bump-version.mjs prerelease',
 ].join('\n');
 
 function fail(message) {
@@ -69,7 +70,7 @@ function compareVersions(a, b) {
     return 0;
 }
 
-function nextBetaNumber(base) {
+function nextPrereleaseNumber(base) {
     const prefix = `v${base}-beta`;
     let max = 0;
     const tags = git(`tag --list "${prefix}*"`);
@@ -110,16 +111,20 @@ function main() {
     if (!current) fail(`Current version "${currentRaw}" in ${PACKAGE_JSON} is not valid semver.`);
 
     let newVersion;
-    if (arg === 'minor') {
-        newVersion = `${current.major}.${current.minor}.${current.patch + 1}`;
-    } else if (arg === 'major') {
+    if (arg === 'major') {
+        newVersion = `${current.major + 1}.0.0`;
+    } else if (arg === 'minor') {
         newVersion = `${current.major}.${current.minor + 1}.0`;
-    } else if (arg === 'beta') {
+    } else if (arg === 'patch') {
+        newVersion = current.prerelease === null
+            ? `${current.major}.${current.minor}.${current.patch + 1}`
+            : `${current.major}.${current.minor}.${current.patch}`;
+    } else if (arg === 'prerelease') {
         const base = `${current.major}.${current.minor}.${current.patch}`;
-        newVersion = `${base}-beta${nextBetaNumber(base)}`;
+        newVersion = `${base}-beta${nextPrereleaseNumber(base)}`;
     } else {
         const parsed = parseVersion(arg);
-        if (!parsed) fail(`"${arg}" is not a version, minor, major or beta.\n${USAGE}`);
+        if (!parsed) fail(`"${arg}" is not a version, major, minor, patch or prerelease.\n${USAGE}`);
         if (compareVersions(parsed, current) <= 0) {
             fail(`New version ${parsed.text} must be greater than current ${currentRaw}.`);
         }
