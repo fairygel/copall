@@ -32,6 +32,11 @@
     "bundle": {
         "active": true,
         "targets": "all",
+        "windows": {
+            "nsis": {},
+            "msi": null,
+            "wix": null
+        },
         "icon": [
             "icons/32x32.png",
             "icons/64x64.png",
