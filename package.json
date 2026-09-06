@@ -1,7 +1,7 @@
 {
     "name": "copall",
     "private": true,
-    "version": "0.1.0",
+    "version": "0.0.1",
     "type": "module",
     "scripts": {
         "dev": "vite",
@@ -11,7 +11,8 @@
         "catalog:sync": "tsx scripts/sync-catalog.ts",
         "build:windows": "tauri build --target x86_64-pc-windows-gnu --no-bundle",
         "build:linux": "tauri build --target x86_64-unknown-linux-gnu",
-        "build:macos": "tauri build --target universal-apple-darwin"
+        "build:macos": "tauri build --target universal-apple-darwin",
+        "version:bump": "node scripts/bump-version.mjs"
     },
     "dependencies": {
         "@tauri-apps/api": "^2.11.1",
