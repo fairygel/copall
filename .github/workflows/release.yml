@@ -19,7 +19,7 @@ jobs:
           - platform: ubuntu-22.04
             args: ''
           - platform: windows-2025
-            args: ''
+            args: --bundles nsis
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout
