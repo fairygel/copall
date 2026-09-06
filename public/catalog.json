@@ -1,6 +1,262 @@
 {
     "open-router": [
         {
+            "id": "open-router/meta/muse-spark-1.3-contributor",
+            "name": "Meta: Muse Spark 1.3 Contributor",
+            "context": 1048576,
+            "created": 1788381519,
+            "inputModalities": [
+                "text",
+                "image",
+                "video",
+                "file",
+                "audio"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000001",
+            "outputPricing": "0.0000002"
+        },
+        {
+            "id": "open-router/meta/muse-spark-1.3",
+            "name": "Meta: Muse Spark 1.3",
+            "context": 1048576,
+            "created": 1788378359,
+            "inputModalities": [
+                "text",
+                "image",
+                "video",
+                "file",
+                "audio"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000125",
+            "outputPricing": "0.00000425"
+        },
+        {
+            "id": "open-router/google/gemini-3.8-flash",
+            "name": "Google: Gemini 3.8 Flash",
+            "context": 1048576,
+            "created": 1788362056,
+            "inputModalities": [
+                "text",
+                "image",
+                "video",
+                "file",
+                "audio"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000075",
+            "outputPricing": "0.00000375"
+        },
+        {
+            "id": "open-router/google/gemini-3.8-flash:batch",
+            "name": "Google: Gemini 3.8 Flash (batch)",
+            "context": 1048576,
+            "created": 1788362056,
+            "inputModalities": [
+                "text",
+                "image",
+                "video",
+                "file",
+                "audio"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000000375",
+            "outputPricing": "0.000001875"
+        },
+        {
+            "id": "open-router/anthropic/claude-fable-5.1",
+            "name": "Anthropic: Claude Fable 5.1",
+            "context": 1000000,
+            "created": 1788285838,
+            "inputModalities": [
+                "text",
+                "image",
+                "file"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00001",
+            "outputPricing": "0.00005"
+        },
+        {
+            "id": "open-router/anthropic/claude-fable-5.1:batch",
+            "name": "Anthropic: Claude Fable 5.1 (batch)",
+            "context": 1000000,
+            "created": 1788285838,
+            "inputModalities": [
+                "text",
+                "image",
+                "file"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000005",
+            "outputPricing": "0.000025"
+        },
+        {
+            "id": "open-router/inception/mercury-2.5-preview",
+            "name": "Inception: Mercury 2.5 Preview",
+            "context": 260000,
+            "created": 1788209864,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000004",
+            "outputPricing": "0.00000015"
+        },
+        {
+            "id": "open-router/ibm-granite/granite-4.2-8b",
+            "name": "IBM: Granite 4.2 8B",
+            "context": 131072,
+            "created": 1788206780,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000001",
+            "outputPricing": "0.00000015"
+        },
+        {
+            "id": "open-router/tencent/hy4-preview",
+            "name": "Tencent: Hy4 preview",
+            "context": 1048576,
+            "created": 1787897375,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000000834",
+            "outputPricing": "0.000002501"
+        },
+        {
+            "id": "open-router/inclusionai/ling-3.0-flash-fin",
+            "name": "Ling 3.0 Flash Fin",
+            "context": 262144,
+            "created": 1787846290,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000006",
+            "outputPricing": "0.00000018"
+        },
+        {
+            "id": "open-router/inclusionai/ling-3.0-flash-fin:free",
+            "name": "Ling 3.0 Flash Fin (free)",
+            "context": 262144,
+            "created": 1787846290,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0"
+        },
+        {
+            "id": "open-router/~z-ai/glm-flash-latest",
+            "name": "Z.ai: GLM Flash Latest",
+            "context": 1310720,
+            "created": 1787817633,
+            "inputModalities": [
+                "text",
+                "image",
+                "video"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000000075",
+            "outputPricing": "0.00000025"
+        },
+        {
+            "id": "open-router/qwen/qwen3.8-flash",
+            "name": "Qwen: Qwen3.8 Flash",
+            "context": 1000000,
+            "created": 1787773060,
+            "inputModalities": [
+                "text",
+                "image",
+                "video"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000015",
+            "outputPricing": "0.00000047"
+        },
+        {
+            "id": "open-router/z-ai/glm-5.3-flash",
+            "name": "Z.ai: GLM 5.3 Flash",
+            "context": 1310720,
+            "created": 1787752741,
+            "inputModalities": [
+                "text",
+                "image",
+                "video"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000000075",
+            "outputPricing": "0.00000025"
+        },
+        {
+            "id": "open-router/z-ai/glm-5.3-flash:batch",
+            "name": "Z.ai: GLM 5.3 Flash (batch)",
+            "context": 1048575,
+            "created": 1787752741,
+            "inputModalities": [
+                "text",
+                "image",
+                "video"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000015",
+            "outputPricing": "0.0000005"
+        },
+        {
+            "id": "open-router/meta/muse-spark-1.2-contributor",
+            "name": "Meta: Muse Spark 1.2 Contributor",
+            "context": 1048576,
+            "created": 1787336476,
+            "inputModalities": [
+                "text",
+                "image",
+                "video",
+                "file",
+                "audio"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000001",
+            "outputPricing": "0.0000002"
+        },
+        {
             "id": "open-router/deepseek/deepseek-v4-flash-vision-exp",
             "name": "DeepSeek: DeepSeek V4 Flash Vision Exp",
             "context": 1048576,
@@ -14,22 +270,6 @@
             ],
             "inputPricing": "0.00000022",
             "outputPricing": "0.00000066"
-        },
-        {
-            "id": "open-router/stealth/ox-alpha",
-            "name": "Ox Alpha",
-            "context": 1048576,
-            "created": 1787256295,
-            "inputModalities": [
-                "text",
-                "image",
-                "video"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
         },
         {
             "id": "open-router/tencent/hy-mt2-1.8b",
@@ -62,7 +302,7 @@
         {
             "id": "open-router/~z-ai/glm-latest",
             "name": "Z.ai: GLM Latest",
-            "context": 1048576,
+            "context": 1310720,
             "created": 1787151053,
             "inputModalities": [
                 "text"
@@ -70,13 +310,27 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000014",
-            "outputPricing": "0.0000044"
+            "inputPricing": "0.00000115",
+            "outputPricing": "0.0000035"
+        },
+        {
+            "id": "open-router/tencent/hy-mt2-7b",
+            "name": "Tencent: Hy-MT2-7B",
+            "context": 8192,
+            "created": 1787148797,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000000074",
+            "outputPricing": "0.000000295"
         },
         {
             "id": "open-router/z-ai/glm-5.3",
             "name": "Z.ai: GLM 5.3",
-            "context": 1048576,
+            "context": 1310720,
             "created": 1787086655,
             "inputModalities": [
                 "text"
@@ -100,8 +354,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000045",
-            "outputPricing": "0.0000032"
+            "inputPricing": "0.00000042",
+            "outputPricing": "0.000003"
         },
         {
             "id": "open-router/dots-studio/dots-3-note-preview:free",
@@ -133,8 +387,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000375",
-            "outputPricing": "0.000001875"
+            "inputPricing": "0.00000075",
+            "outputPricing": "0.00000375"
         },
         {
             "id": "open-router/google/gemini-3.7-flash:batch",
@@ -151,8 +405,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000001875",
-            "outputPricing": "0.0000009375"
+            "inputPricing": "0.000000375",
+            "outputPricing": "0.000001875"
         },
         {
             "id": "open-router/bytedance-seed/seed-2-1-turbo",
@@ -174,6 +428,20 @@
             "id": "open-router/qwen/qwen3.8-2.4t-a95b",
             "name": "Qwen: Qwen3.8 2.4T A95B",
             "context": 1048576,
+            "created": 1786551702,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000002",
+            "outputPricing": "0.000006"
+        },
+        {
+            "id": "open-router/qwen/qwen3.8-2.4t-a95b:batch",
+            "name": "Qwen: Qwen3.8 2.4T A95B (batch)",
+            "context": 1010000,
             "created": 1786551702,
             "inputModalities": [
                 "text"
@@ -211,8 +479,22 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000001188",
-            "outputPricing": "0.000003564"
+            "inputPricing": "0.00000112068",
+            "outputPricing": "0.00000336204"
+        },
+        {
+            "id": "open-router/deepseek/deepseek-v4-pro-0813:batch",
+            "name": "DeepSeek: DeepSeek V4 Pro 0813 (batch)",
+            "context": 1048576,
+            "created": 1786549364,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000132",
+            "outputPricing": "0.00000396"
         },
         {
             "id": "open-router/x-ai/grok-4.6",
@@ -318,6 +600,21 @@
             "outputPricing": "0.0000011"
         },
         {
+            "id": "open-router/meta/muse-glimmer-30b:batch",
+            "name": "Meta: Muse Glimmer 30B (batch)",
+            "context": 131072,
+            "created": 1786302394,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000035",
+            "outputPricing": "0.0000015"
+        },
+        {
             "id": "open-router/meta/muse-spark-1.2",
             "name": "Meta: Muse Spark 1.2",
             "context": 1048576,
@@ -362,8 +659,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000065",
-            "outputPricing": "0.00000018"
+            "inputPricing": "0.00000004998",
+            "outputPricing": "0.00000009996"
         },
         {
             "id": "open-router/deepseek/deepseek-v4-flash-0731",
@@ -376,8 +673,22 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000008",
+            "inputPricing": "0.000000065",
             "outputPricing": "0.00000018"
+        },
+        {
+            "id": "open-router/deepseek/deepseek-v4-flash-0731:batch",
+            "name": "DeepSeek: DeepSeek V4 Flash 0731 (batch)",
+            "context": 1048576,
+            "created": 1785478908,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000014",
+            "outputPricing": "0.00000028"
         },
         {
             "id": "open-router/thinkingmachines/inkling-small",
@@ -396,6 +707,38 @@
             "outputPricing": "0.0000012"
         },
         {
+            "id": "open-router/thinkingmachines/inkling-small:batch",
+            "name": "Thinking Machines: Inkling Small (batch)",
+            "context": 524288,
+            "created": 1785443117,
+            "inputModalities": [
+                "text",
+                "image",
+                "audio"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000005",
+            "outputPricing": "0.0000012"
+        },
+        {
+            "id": "open-router/thinkingmachines/inkling-small:free",
+            "name": "Thinking Machines: Inkling Small (free)",
+            "context": 1048576,
+            "created": 1785443117,
+            "inputModalities": [
+                "text",
+                "image",
+                "audio"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0"
+        },
+        {
             "id": "open-router/qwen/qwen3.7-flash",
             "name": "Qwen: Qwen3.7 Flash",
             "context": 1000000,
@@ -410,22 +753,6 @@
             ],
             "inputPricing": "0.00000003",
             "outputPricing": "0.00000013"
-        },
-        {
-            "id": "open-router/anthropic/claude-opus-5-fast",
-            "name": "Claude Opus 5 (Fast)",
-            "context": 1000000,
-            "created": 1784912546,
-            "inputModalities": [
-                "text",
-                "image",
-                "file"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00001",
-            "outputPricing": "0.00005"
         },
         {
             "id": "open-router/anthropic/claude-opus-5",
@@ -600,7 +927,7 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000095",
+            "inputPricing": "0.000001",
             "outputPricing": "0.00000405"
         },
         {
@@ -618,6 +945,22 @@
             ],
             "inputPricing": "0.000001",
             "outputPricing": "0.00000405"
+        },
+        {
+            "id": "open-router/thinkingmachines/inkling:free",
+            "name": "Thinking Machines: Inkling (free)",
+            "context": 1048576,
+            "created": 1784325956,
+            "inputModalities": [
+                "text",
+                "image",
+                "audio"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0"
         },
         {
             "id": "open-router/openrouter/auto-beta",
@@ -655,6 +998,22 @@
             "outputPricing": "0.000015"
         },
         {
+            "id": "open-router/moonshotai/kimi-k3:batch",
+            "name": "MoonshotAI: Kimi K3 (batch)",
+            "context": 1048576,
+            "created": 1784215858,
+            "inputModalities": [
+                "text",
+                "image",
+                "video"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000003",
+            "outputPricing": "0.000015"
+        },
+        {
             "id": "open-router/meta/muse-spark-1.1",
             "name": "Meta: Muse Spark 1.1",
             "context": 1048576,
@@ -673,23 +1032,9 @@
             "outputPricing": "0.00000425"
         },
         {
-            "id": "open-router/kwaipilot/kat-coder-air-v2.5",
-            "name": "Kwaipilot: KAT-Coder-Air V2.5",
-            "context": 256000,
-            "created": 1783714590,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000015",
-            "outputPricing": "0.0000006"
-        },
-        {
             "id": "open-router/kwaipilot/kat-coder-pro-v2.5",
             "name": "Kwaipilot: KAT-Coder-Pro V2.5",
-            "context": 256000,
+            "context": 262144,
             "created": 1783714589,
             "inputModalities": [
                 "text"
@@ -841,8 +1186,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000025",
-            "outputPricing": "0.000015"
+            "inputPricing": "0.000002",
+            "outputPricing": "0.00001"
         },
         {
             "id": "open-router/openai/gpt-5.6-sol-pro:batch",
@@ -857,8 +1202,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000125",
-            "outputPricing": "0.0000075"
+            "inputPricing": "0.000001",
+            "outputPricing": "0.000005"
         },
         {
             "id": "open-router/openai/gpt-5.6-sol",
@@ -873,8 +1218,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000025",
-            "outputPricing": "0.000015"
+            "inputPricing": "0.000002",
+            "outputPricing": "0.00001"
         },
         {
             "id": "open-router/openai/gpt-5.6-sol:batch",
@@ -889,8 +1234,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000125",
-            "outputPricing": "0.0000075"
+            "inputPricing": "0.000001",
+            "outputPricing": "0.000005"
         },
         {
             "id": "open-router/x-ai/grok-4.5",
@@ -1133,20 +1478,6 @@
             "outputPricing": "0.000003036"
         },
         {
-            "id": "open-router/z-ai/glm-5.2:batch",
-            "name": "Z.ai: GLM 5.2 (batch)",
-            "context": 1048575,
-            "created": 1781631930,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.0000014",
-            "outputPricing": "0.0000044"
-        },
-        {
             "id": "open-router/z-ai/glm-5.2:free",
             "name": "Z.ai: GLM 5.2 (free)",
             "context": 256000,
@@ -1186,23 +1517,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000067",
+            "inputPricing": "0.00000066",
             "outputPricing": "0.0000034"
-        },
-        {
-            "id": "open-router/moonshotai/kimi-k2.7-code:batch",
-            "name": "MoonshotAI: Kimi K2.7 Code (batch)",
-            "context": 262144,
-            "created": 1781266361,
-            "inputModalities": [
-                "text",
-                "image"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000095",
-            "outputPricing": "0.000004"
         },
         {
             "id": "open-router/~anthropic/claude-fable-latest",
@@ -1268,6 +1584,21 @@
             "outputPricing": "0.000001"
         },
         {
+            "id": "open-router/nvidia/nemotron-3.5-content-safety",
+            "name": "NVIDIA: Nemotron 3.5 Content Safety",
+            "context": 131072,
+            "created": 1780581864,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000002",
+            "outputPricing": "0.0000002"
+        },
+        {
             "id": "open-router/nvidia/nemotron-3.5-content-safety:free",
             "name": "NVIDIA: Nemotron 3.5 Content Safety (free)",
             "context": 128000,
@@ -1285,7 +1616,7 @@
         {
             "id": "open-router/nvidia/nemotron-3-ultra-550b-a55b",
             "name": "NVIDIA: Nemotron 3 Ultra",
-            "context": 512288,
+            "context": 262144,
             "created": 1780551208,
             "inputModalities": [
                 "text"
@@ -1293,22 +1624,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000006",
-            "outputPricing": "0.0000036"
-        },
-        {
-            "id": "open-router/nvidia/nemotron-3-ultra-550b-a55b:batch",
-            "name": "NVIDIA: Nemotron 3 Ultra (batch)",
-            "context": 512288,
-            "created": 1780551208,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.0000006",
-            "outputPricing": "0.0000036"
+            "inputPricing": "0.000000625",
+            "outputPricing": "0.000003125"
         },
         {
             "id": "open-router/nvidia/nemotron-3-ultra-550b-a55b:free",
@@ -1372,6 +1689,22 @@
             "outputPricing": "0.0000012"
         },
         {
+            "id": "open-router/minimax/minimax-m3:free",
+            "name": "MiniMax: MiniMax M3 (free)",
+            "context": 1048576,
+            "created": 1780245374,
+            "inputModalities": [
+                "text",
+                "image",
+                "video"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0"
+        },
+        {
             "id": "open-router/stepfun/step-3.7-flash",
             "name": "StepFun: Step 3.7 Flash",
             "context": 262144,
@@ -1386,22 +1719,6 @@
             ],
             "inputPricing": "0.0000002",
             "outputPricing": "0.00000115"
-        },
-        {
-            "id": "open-router/anthropic/claude-opus-4.8-fast",
-            "name": "Anthropic: Claude Opus 4.8 (Fast)",
-            "context": 1000000,
-            "created": 1779913703,
-            "inputModalities": [
-                "text",
-                "image",
-                "file"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00001",
-            "outputPricing": "0.00005"
         },
         {
             "id": "open-router/anthropic/claude-opus-4.8",
@@ -1502,22 +1819,6 @@
             "outputPricing": "0.0000045"
         },
         {
-            "id": "open-router/anthropic/claude-opus-4.7-fast",
-            "name": "Anthropic: Claude Opus 4.7 (Fast)",
-            "context": 1000000,
-            "created": 1778613011,
-            "inputModalities": [
-                "text",
-                "image",
-                "file"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00003",
-            "outputPricing": "0.00015"
-        },
-        {
             "id": "open-router/perceptron/perceptron-mk1",
             "name": "Perceptron: Perceptron Mk1",
             "context": 32768,
@@ -1532,20 +1833,6 @@
             ],
             "inputPricing": "0.00000015",
             "outputPricing": "0.0000015"
-        },
-        {
-            "id": "open-router/inclusionai/ring-2.6-1t",
-            "name": "inclusionAI: Ring-2.6-1T",
-            "context": 262144,
-            "created": 1778247440,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.000000075",
-            "outputPricing": "0.000000625"
         },
         {
             "id": "open-router/google/gemini-3.1-flash-lite",
@@ -1616,6 +1903,22 @@
             "outputPricing": "0.0000025"
         },
         {
+            "id": "open-router/x-ai/grok-4.3:batch",
+            "name": "SpaceXAI: Grok 4.3 (batch)",
+            "context": 1000000,
+            "created": 1777591821,
+            "inputModalities": [
+                "text",
+                "image",
+                "file"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000001",
+            "outputPricing": "0.000002"
+        },
+        {
             "id": "open-router/ibm-granite/granite-4.1-8b",
             "name": "IBM: Granite 4.1 8B",
             "context": 131072,
@@ -1644,6 +1947,22 @@
             ],
             "inputPricing": "0.0000015",
             "outputPricing": "0.0000075"
+        },
+        {
+            "id": "open-router/mistralai/mistral-medium-3-5:batch",
+            "name": "Mistral: Mistral Medium 3.5 (batch)",
+            "context": 32768,
+            "created": 1777570439,
+            "inputModalities": [
+                "text",
+                "image",
+                "file"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000075",
+            "outputPricing": "0.00000375"
         },
         {
             "id": "open-router/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
@@ -1725,8 +2044,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000026",
-            "outputPricing": "0.000013"
+            "inputPricing": "0.0000025",
+            "outputPricing": "0.000014"
         },
         {
             "id": "open-router/~google/gemini-flash-latest",
@@ -1743,8 +2062,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000375",
-            "outputPricing": "0.000001875"
+            "inputPricing": "0.00000075",
+            "outputPricing": "0.00000375"
         },
         {
             "id": "open-router/~anthropic/claude-sonnet-latest",
@@ -1775,8 +2094,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000025",
-            "outputPricing": "0.000015"
+            "inputPricing": "0.000002",
+            "outputPricing": "0.00001"
         },
         {
             "id": "open-router/qwen/qwen3.5-plus-20260420",
@@ -1823,8 +2142,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000014",
-            "outputPricing": "0.000001"
+            "inputPricing": "0.0000001",
+            "outputPricing": "0.0000009"
         },
         {
             "id": "open-router/qwen/qwen3.6-max-preview",
@@ -1931,8 +2250,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000016",
-            "outputPricing": "0.0000032"
+            "inputPricing": "0.000001032342",
+            "outputPricing": "0.000002064684"
         },
         {
             "id": "open-router/deepseek/deepseek-v4-flash",
@@ -1945,22 +2264,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000008106",
-            "outputPricing": "0.00000016212"
-        },
-        {
-            "id": "open-router/inclusionai/ling-2.6-1t",
-            "name": "inclusionAI: Ling-2.6-1T",
-            "context": 262144,
-            "created": 1776948238,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.000000075",
-            "outputPricing": "0.000000625"
+            "inputPricing": "0.00000008834",
+            "outputPricing": "0.00000017668"
         },
         {
             "id": "open-router/tencent/hy3-preview",
@@ -2025,20 +2330,6 @@
             "outputPricing": "0.000015"
         },
         {
-            "id": "open-router/inclusionai/ling-2.6-flash",
-            "name": "inclusionAI: Ling-2.6-flash",
-            "context": 262144,
-            "created": 1776795886,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000001",
-            "outputPricing": "0.00000003"
-        },
-        {
             "id": "open-router/~anthropic/claude-opus-latest",
             "name": "Anthropic: Claude Opus Latest",
             "context": 1000000,
@@ -2080,8 +2371,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000005795",
-            "outputPricing": "0.00000244"
+            "inputPricing": "0.00000095",
+            "outputPricing": "0.000004"
         },
         {
             "id": "open-router/anthropic/claude-opus-4.7",
@@ -2174,8 +2465,24 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000001",
+            "inputPricing": "0.00000009",
             "outputPricing": "0.00000034"
+        },
+        {
+            "id": "open-router/google/gemma-4-31b-it:batch",
+            "name": "Google: Gemma 4 31B (batch)",
+            "context": 262144,
+            "created": 1775148486,
+            "inputModalities": [
+                "image",
+                "text",
+                "video"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000039",
+            "outputPricing": "0.00000097"
         },
         {
             "id": "open-router/google/gemma-4-31b-it:free",
@@ -2236,8 +2543,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000022",
-            "outputPricing": "0.00000085"
+            "inputPricing": "0.00000025",
+            "outputPricing": "0.0000008"
         },
         {
             "id": "open-router/x-ai/grok-4.20-multi-agent",
@@ -2346,6 +2653,20 @@
             ],
             "inputPricing": "0.0000003",
             "outputPricing": "0.0000012"
+        },
+        {
+            "id": "open-router/minimax/minimax-m2.7:free",
+            "name": "MiniMax: MiniMax M2.7 (free)",
+            "context": 196608,
+            "created": 1773836697,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0"
         },
         {
             "id": "open-router/openai/gpt-5.4-nano",
@@ -2499,6 +2820,22 @@
             ],
             "inputPricing": "0.0000001",
             "outputPricing": "0.00000015"
+        },
+        {
+            "id": "open-router/qwen/qwen3.5-9b:batch",
+            "name": "Qwen: Qwen3.5-9B (batch)",
+            "context": 262144,
+            "created": 1773152396,
+            "inputModalities": [
+                "text",
+                "image",
+                "video"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000017",
+            "outputPricing": "0.00000025"
         },
         {
             "id": "open-router/openai/gpt-5.4-pro",
@@ -2673,8 +3010,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000026",
-            "outputPricing": "0.00000208"
+            "inputPricing": "0.00000029",
+            "outputPricing": "0.0000024"
         },
         {
             "id": "open-router/qwen/qwen3.5-flash-02-23",
@@ -2837,8 +3174,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000039",
-            "outputPricing": "0.00000234"
+            "inputPricing": "0.00000055",
+            "outputPricing": "0.0000035"
         },
         {
             "id": "open-router/minimax/minimax-m2.5",
@@ -2852,7 +3189,7 @@
                 "text"
             ],
             "inputPricing": "0.00000027",
-            "outputPricing": "0.00000095"
+            "outputPricing": "0.00000108"
         },
         {
             "id": "open-router/z-ai/glm-5",
@@ -3186,20 +3523,6 @@
             "outputPricing": "0.0000002"
         },
         {
-            "id": "open-router/nvidia/nemotron-3-nano-30b-a3b:free",
-            "name": "NVIDIA: Nemotron 3 Nano 30B A3B (free)",
-            "context": 256000,
-            "created": 1765731275,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
             "id": "open-router/openai/gpt-5.2-chat",
             "name": "OpenAI: GPT-5.2 Chat",
             "context": 128000,
@@ -3278,6 +3601,21 @@
             ],
             "inputPricing": "0.000000875",
             "outputPricing": "0.000007"
+        },
+        {
+            "id": "open-router/mistralai/devstral-2512",
+            "name": "Mistral: Devstral 2 2512",
+            "context": 262144,
+            "created": 1765285419,
+            "inputModalities": [
+                "text",
+                "file"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000004",
+            "outputPricing": "0.000002"
         },
         {
             "id": "open-router/relace/relace-search",
@@ -3463,20 +3801,6 @@
             "outputPricing": "0.0000125"
         },
         {
-            "id": "open-router/allenai/olmo-3-32b-think",
-            "name": "AllenAI: Olmo 3 32B Think",
-            "context": 65536,
-            "created": 1763758276,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000015",
-            "outputPricing": "0.0000005"
-        },
-        {
             "id": "open-router/google/gemini-3-pro-image-preview",
             "name": "Google: Nano Banana Pro (Gemini 3 Pro Image Preview)",
             "context": 65536,
@@ -3491,20 +3815,6 @@
             ],
             "inputPricing": "0.000002",
             "outputPricing": "0.000012"
-        },
-        {
-            "id": "open-router/deepcogito/cogito-v2.1-671b",
-            "name": "Deep Cogito: Cogito v2.1 671B",
-            "context": 128000,
-            "created": 1763071233,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000125",
-            "outputPricing": "0.00000125"
         },
         {
             "id": "open-router/openai/gpt-5.1",
@@ -3615,7 +3925,7 @@
         {
             "id": "open-router/mistralai/voxtral-small-24b-2507",
             "name": "Mistral: Voxtral Small 24B 2507",
-            "context": 32000,
+            "context": 32768,
             "created": 1761835144,
             "inputModalities": [
                 "text",
@@ -3641,22 +3951,6 @@
             ],
             "inputPricing": "0.000000075",
             "outputPricing": "0.0000003"
-        },
-        {
-            "id": "open-router/nvidia/nemotron-nano-12b-v2-vl:free",
-            "name": "NVIDIA: Nemotron Nano 12B 2 VL (free)",
-            "context": 128000,
-            "created": 1761675565,
-            "inputModalities": [
-                "image",
-                "text",
-                "video"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
         },
         {
             "id": "open-router/minimax/minimax-m2",
@@ -3840,8 +4134,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000013",
-            "outputPricing": "0.00000052"
+            "inputPricing": "0.00000015",
+            "outputPricing": "0.0000006"
         },
         {
             "id": "open-router/openai/gpt-5-pro",
@@ -3886,8 +4180,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000005",
-            "outputPricing": "0.000002"
+            "inputPricing": "0.00000055",
+            "outputPricing": "0.0000022"
         },
         {
             "id": "open-router/anthropic/claude-sonnet-4.5",
@@ -4022,21 +4316,6 @@
             "outputPricing": "0.00000325"
         },
         {
-            "id": "open-router/openai/gpt-5-codex:batch",
-            "name": "OpenAI: GPT-5 Codex (batch)",
-            "context": 400000,
-            "created": 1758643403,
-            "inputModalities": [
-                "text",
-                "image"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.000000625",
-            "outputPricing": "0.000005"
-        },
-        {
             "id": "open-router/deepseek/deepseek-v3.1-terminus",
             "name": "DeepSeek: DeepSeek V3.1 Terminus",
             "context": 163840,
@@ -4089,7 +4368,7 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000009",
+            "inputPricing": "0.0000001",
             "outputPricing": "0.0000011"
         },
         {
@@ -4105,34 +4384,6 @@
             ],
             "inputPricing": "0.00000026",
             "outputPricing": "0.00000078"
-        },
-        {
-            "id": "open-router/qwen/qwen-plus-2025-07-28:thinking",
-            "name": "Qwen: Qwen Plus 0728 (thinking)",
-            "context": 1000000,
-            "created": 1757347599,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000026",
-            "outputPricing": "0.00000078"
-        },
-        {
-            "id": "open-router/nvidia/nemotron-nano-9b-v2:free",
-            "name": "NVIDIA: Nemotron Nano 9B V2 (free)",
-            "context": 128000,
-            "created": 1757106807,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
         },
         {
             "id": "open-router/moonshotai/kimi-k2-0905",
@@ -4201,8 +4452,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000025",
-            "outputPricing": "0.00000095"
+            "inputPricing": "0.00000055",
+            "outputPricing": "0.00000165"
         },
         {
             "id": "open-router/mistralai/mistral-medium-3.1",
@@ -4342,8 +4593,22 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000003",
+            "inputPricing": "0.000000037",
             "outputPricing": "0.00000017"
+        },
+        {
+            "id": "open-router/openai/gpt-oss-120b:batch",
+            "name": "OpenAI: gpt-oss-120b (batch)",
+            "context": 131072,
+            "created": 1754414231,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000015",
+            "outputPricing": "0.0000006"
         },
         {
             "id": "open-router/openai/gpt-oss-20b",
@@ -4360,8 +4625,8 @@
             "outputPricing": "0.00000013"
         },
         {
-            "id": "open-router/openai/gpt-oss-20b:free",
-            "name": "OpenAI: gpt-oss-20b (free)",
+            "id": "open-router/openai/gpt-oss-20b:batch",
+            "name": "OpenAI: gpt-oss-20b (batch)",
             "context": 131072,
             "created": 1754414229,
             "inputModalities": [
@@ -4370,8 +4635,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0",
-            "outputPricing": "0"
+            "inputPricing": "0.00000005",
+            "outputPricing": "0.0000002"
         },
         {
             "id": "open-router/anthropic/claude-opus-4.1",
@@ -4479,7 +4744,7 @@
         {
             "id": "open-router/qwen/qwen3-235b-a22b-thinking-2507",
             "name": "Qwen: Qwen3 235B A22B Thinking 2507",
-            "context": 262144,
+            "context": 131072,
             "created": 1753449557,
             "inputModalities": [
                 "text"
@@ -4566,8 +4831,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000009",
-            "outputPricing": "0.00000055"
+            "inputPricing": "0.0000000875",
+            "outputPricing": "0.00000035"
         },
         {
             "id": "open-router/moonshotai/kimi-k2",
@@ -4657,7 +4922,7 @@
         {
             "id": "open-router/mistralai/mistral-small-3.2-24b-instruct",
             "name": "Mistral: Mistral Small 3.2 24B",
-            "context": 256000,
+            "context": 131072,
             "created": 1750443016,
             "inputModalities": [
                 "image",
@@ -4666,8 +4931,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000009375",
-            "outputPricing": "0.00000025"
+            "inputPricing": "0.000000075",
+            "outputPricing": "0.0000002"
         },
         {
             "id": "open-router/minimax/minimax-m1",
@@ -4772,22 +5037,6 @@
             "outputPricing": "0.00008"
         },
         {
-            "id": "open-router/openai/o3-pro:batch",
-            "name": "OpenAI: o3 Pro (batch)",
-            "context": 200000,
-            "created": 1749598352,
-            "inputModalities": [
-                "text",
-                "file",
-                "image"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00001",
-            "outputPricing": "0.00004"
-        },
-        {
             "id": "open-router/google/gemini-2.5-pro-preview",
             "name": "Google: Gemini 2.5 Pro Preview 06-05",
             "context": 1048576,
@@ -4851,20 +5100,6 @@
             "outputPricing": "0.000015"
         },
         {
-            "id": "open-router/google/gemma-3n-e4b-it",
-            "name": "Google: Gemma 3n 4B",
-            "context": 32768,
-            "created": 1747776824,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000006",
-            "outputPricing": "0.00000012"
-        },
-        {
             "id": "open-router/mistralai/mistral-medium-3",
             "name": "Mistral: Mistral Medium 3",
             "context": 131072,
@@ -4899,23 +5134,9 @@
             "outputPricing": "0.00001"
         },
         {
-            "id": "open-router/arcee-ai/virtuoso-large",
-            "name": "Arcee AI: Virtuoso Large",
-            "context": 131072,
-            "created": 1746478885,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000075",
-            "outputPricing": "0.0000012"
-        },
-        {
             "id": "open-router/meta-llama/llama-guard-4-12b",
             "name": "Meta: Llama Guard 4 12B",
-            "context": 1048576,
+            "context": 163840,
             "created": 1745975193,
             "inputModalities": [
                 "image",
@@ -4938,8 +5159,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000013",
-            "outputPricing": "0.00000052"
+            "inputPricing": "0.00000012",
+            "outputPricing": "0.0000005"
         },
         {
             "id": "open-router/qwen/qwen3-8b",
@@ -5012,22 +5233,6 @@
             ],
             "inputPricing": "0.0000011",
             "outputPricing": "0.0000044"
-        },
-        {
-            "id": "open-router/openai/o4-mini-high:batch",
-            "name": "OpenAI: o4 Mini High (batch)",
-            "context": 200000,
-            "created": 1744824212,
-            "inputModalities": [
-                "image",
-                "text",
-                "file"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000055",
-            "outputPricing": "0.0000022"
         },
         {
             "id": "open-router/openai/o3",
@@ -5202,7 +5407,7 @@
                 "text"
             ],
             "inputPricing": "0.0000002",
-            "outputPricing": "0.0000008"
+            "outputPricing": "0.000000696"
         },
         {
             "id": "open-router/meta-llama/llama-4-scout",
@@ -5248,22 +5453,6 @@
             ],
             "inputPricing": "0.00015",
             "outputPricing": "0.0006"
-        },
-        {
-            "id": "open-router/openai/o1-pro:batch",
-            "name": "OpenAI: o1-pro (batch)",
-            "context": 200000,
-            "created": 1742423211,
-            "inputModalities": [
-                "text",
-                "image",
-                "file"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.000075",
-            "outputPricing": "0.0003"
         },
         {
             "id": "open-router/mistralai/mistral-small-3.1-24b-instruct",
@@ -5341,7 +5530,7 @@
         {
             "id": "open-router/google/gemma-3-27b-it",
             "name": "Google: Gemma 3 27B",
-            "context": 262144,
+            "context": 131072,
             "created": 1741756359,
             "inputModalities": [
                 "text",
@@ -5440,21 +5629,6 @@
             ],
             "inputPricing": "0.0000011",
             "outputPricing": "0.0000044"
-        },
-        {
-            "id": "open-router/openai/o3-mini-high:batch",
-            "name": "OpenAI: o3 Mini High (batch)",
-            "context": 200000,
-            "created": 1739372611,
-            "inputModalities": [
-                "text",
-                "file"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000055",
-            "outputPricing": "0.0000022"
         },
         {
             "id": "open-router/aion-labs/aion-rp-llama-3.1-8b",
@@ -5626,8 +5800,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000002574",
-            "outputPricing": "0.0000010287"
+            "inputPricing": "0.00000032",
+            "outputPricing": "0.00000089"
         },
         {
             "id": "open-router/sao10k/l3.3-euryale-70b",
@@ -5658,22 +5832,6 @@
             ],
             "inputPricing": "0.000015",
             "outputPricing": "0.00006"
-        },
-        {
-            "id": "open-router/openai/o1:batch",
-            "name": "OpenAI: o1 (batch)",
-            "context": 200000,
-            "created": 1734459999,
-            "inputModalities": [
-                "text",
-                "image",
-                "file"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.0000075",
-            "outputPricing": "0.00003"
         },
         {
             "id": "open-router/cohere/command-r7b-12-2024",
@@ -5817,22 +5975,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000003",
+            "inputPricing": "0.0000025",
             "outputPricing": "0.000005"
-        },
-        {
-            "id": "open-router/mistralai/ministral-8b",
-            "name": "Mistral: Ministral 8B",
-            "context": 128000,
-            "created": 1729123200,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000011",
-            "outputPricing": "0.00000011"
         },
         {
             "id": "open-router/qwen/qwen-2.5-7b-instruct",
@@ -5847,20 +5991,6 @@
             ],
             "inputPricing": "0.0000001",
             "outputPricing": "0.0000002"
-        },
-        {
-            "id": "open-router/thedrummer/rocinante-12b",
-            "name": "TheDrummer: Rocinante 12B",
-            "context": 65536,
-            "created": 1727654400,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000025",
-            "outputPricing": "0.0000005"
         },
         {
             "id": "open-router/meta-llama/llama-3.2-1b-instruct",
@@ -6331,7 +6461,7 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000005",
+            "inputPricing": "0.0000004",
             "outputPricing": "0.00000075"
         },
         {
@@ -6345,7 +6475,7 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000045",
+            "inputPricing": "0.00000035",
             "outputPricing": "0.00000065"
         },
         {
@@ -6845,8 +6975,39 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000055",
-            "outputPricing": "0.0000033"
+            "inputPricing": "0.0000005",
+            "outputPricing": "0.000003"
+        },
+        {
+            "id": "vercel/alibaba/qwen3.8-flash",
+            "name": "Qwen 3.8 Flash",
+            "context": 991000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image",
+                "pdf"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000016",
+            "outputPricing": "0.00000047"
+        },
+        {
+            "id": "vercel/alibaba/qwen3.8-flash-next",
+            "name": "Qwen 3.8 Flash Next",
+            "context": 1048576,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000012",
+            "outputPricing": "0.0000004"
         },
         {
             "id": "vercel/alibaba/qwen3.8-max",
@@ -6864,116 +7025,20 @@
             "outputPricing": "0.000006"
         },
         {
-            "id": "vercel/alibaba/wan-v2.5-t2v-preview",
-            "name": "Wan v2.5 Text-to-Video Preview",
-            "context": 0,
+            "id": "vercel/alibaba/qwen3.8-max-0902",
+            "name": "Qwen3.8 Max 0902",
+            "context": 991000,
             "created": 1755815280,
             "inputModalities": [
-                "text"
+                "text",
+                "image",
+                "pdf"
             ],
             "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/alibaba/wan-v2.6-i2v",
-            "name": "Wan v2.6 Image-to-Video",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
                 "text"
             ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/alibaba/wan-v2.6-i2v-flash",
-            "name": "Wan v2.6 Image-to-Video Flash",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/alibaba/wan-v2.6-r2v",
-            "name": "Wan v2.6 Reference-to-Video",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/alibaba/wan-v2.6-r2v-flash",
-            "name": "Wan v2.6 Reference-to-Video Flash",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/alibaba/wan-v2.6-t2v",
-            "name": "Wan v2.6 Text-to-Video",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/alibaba/wan-v2.7-r2v",
-            "name": "Wan v2.7 Reference-to-Video",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/alibaba/wan-v2.7-t2v",
-            "name": "Wan v2.7 Text-to-Video",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
+            "inputPricing": "0.000002",
+            "outputPricing": "0.000006"
         },
         {
             "id": "vercel/amazon/nova-2-lite",
@@ -7069,6 +7134,22 @@
         {
             "id": "vercel/anthropic/claude-fable-5",
             "name": "Claude Fable 5",
+            "context": 1000000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image",
+                "pdf"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00001",
+            "outputPricing": "0.00005"
+        },
+        {
+            "id": "vercel/anthropic/claude-fable-5.1",
+            "name": "Claude Fable 5.1",
             "context": 1000000,
             "created": 1755815280,
             "inputModalities": [
@@ -7305,174 +7386,6 @@
             "outputPricing": "0.0000009"
         },
         {
-            "id": "vercel/arcee-ai/trinity-mini",
-            "name": "Trinity Mini",
-            "context": 131072,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.000000045",
-            "outputPricing": "0.00000015"
-        },
-        {
-            "id": "vercel/bfl/flux-2-flex",
-            "name": "FLUX.2 [flex]",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bfl/flux-2-klein-4b",
-            "name": "FLUX.2 [klein] 4B",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bfl/flux-2-klein-9b",
-            "name": "FLUX.2 [klein] 9B",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bfl/flux-2-max",
-            "name": "FLUX.2 [max]",
-            "context": 67300,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bfl/flux-2-pro",
-            "name": "FLUX.2 [pro]",
-            "context": 67300,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bfl/flux-3-video",
-            "name": "Flux 3",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bfl/flux-kontext-max",
-            "name": "FLUX.1 Kontext Max",
-            "context": 512,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bfl/flux-kontext-pro",
-            "name": "FLUX.1 Kontext Pro",
-            "context": 512,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bfl/flux-pro-1.0-fill",
-            "name": "FLUX.1 Fill [pro]",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bfl/flux-pro-1.1",
-            "name": "FLUX1.1 [pro]",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bfl/flux-pro-1.1-ultra",
-            "name": "FLUX1.1 [pro] Ultra",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
             "id": "vercel/bytedance/seed-1.6",
             "name": "Seed 1.6",
             "context": 256000,
@@ -7501,148 +7414,6 @@
             ],
             "inputPricing": "0.00000025",
             "outputPricing": "0.000002"
-        },
-        {
-            "id": "vercel/bytedance/seedance-2.0",
-            "name": "Seedance 2.0",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text",
-                "image"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bytedance/seedance-2.0-fast",
-            "name": "Seedance 2.0 Fast",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text",
-                "image"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bytedance/seedance-2.5",
-            "name": "Seedance 2.5",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bytedance/seedance-v1.0-pro",
-            "name": "Seedance v1.0 Pro",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bytedance/seedance-v1.0-pro-fast",
-            "name": "Seedance v1.0 Pro Fast",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bytedance/seedance-v1.5-pro",
-            "name": "Seedance v1.5 Pro",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bytedance/seedream-4.0",
-            "name": "Seedream 4.0",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bytedance/seedream-4.5",
-            "name": "Seedream 4.5",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bytedance/seedream-5.0-lite",
-            "name": "Seedream 5.0 Lite",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/bytedance/seedream-5.0-pro",
-            "name": "Seedream 5.0 Pro",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0.000000003",
-            "outputPricing": "0"
         },
         {
             "id": "vercel/cohere/command-a",
@@ -7729,20 +7500,6 @@
             "outputPricing": "0.0000054"
         },
         {
-            "id": "vercel/deepseek/deepseek-v3",
-            "name": "DeepSeek V3 0324",
-            "context": 163840,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000027",
-            "outputPricing": "0.00000112"
-        },
-        {
             "id": "vercel/deepseek/deepseek-v3.1",
             "name": "DeepSeek V3.1",
             "context": 163840,
@@ -7823,13 +7580,13 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000013",
-            "outputPricing": "0.00000026"
+            "inputPricing": "0.000000076",
+            "outputPricing": "0.000000153"
         },
         {
             "id": "vercel/deepseek/deepseek-v4-flash-vision-exp",
             "name": "DeepSeek V4 Flash Vision Exp",
-            "context": 1000000,
+            "context": 1048576,
             "created": 1755815280,
             "inputModalities": [
                 "text",
@@ -7844,7 +7601,7 @@
         {
             "id": "vercel/deepseek/deepseek-v4-pro",
             "name": "DeepSeek V4 Pro",
-            "context": 1048600,
+            "context": 1000000,
             "created": 1755815280,
             "inputModalities": [
                 "text"
@@ -7852,8 +7609,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000174",
-            "outputPricing": "0.00000348"
+            "inputPricing": "0.00000066",
+            "outputPricing": "0.00000198"
         },
         {
             "id": "vercel/deepseek/deepseek-v4-pro-0813",
@@ -7866,120 +7623,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000132",
-            "outputPricing": "0.00000396"
-        },
-        {
-            "id": "vercel/fish-audio/s1",
-            "name": "S1",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "audio"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/fish-audio/s1-free",
-            "name": "S1 (Free)",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "audio"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/fish-audio/s2-pro",
-            "name": "S2 Pro",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "audio"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/fish-audio/s2-pro-free",
-            "name": "S2 Pro (Free)",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "audio"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/fish-audio/s2.1-pro",
-            "name": "S2.1 Pro",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "audio"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/fish-audio/s2.1-pro-free",
-            "name": "S2.1 Pro (Free)",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "audio"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/fish-audio/transcribe-1",
-            "name": "Transcribe-1",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "audio"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/fish-audio/transcribe-1-free",
-            "name": "Transcribe-1 (Free)",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "audio"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
+            "inputPricing": "0.00000066",
+            "outputPricing": "0.00000198"
         },
         {
             "id": "vercel/google/gemini-2.5-flash",
@@ -8226,6 +7871,23 @@
             "outputPricing": "0.00000375"
         },
         {
+            "id": "vercel/google/gemini-3.8-flash",
+            "name": "Gemini 3.8 Flash",
+            "context": 1000000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image",
+                "pdf",
+                "video"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000075",
+            "outputPricing": "0.00000375"
+        },
+        {
             "id": "vercel/google/gemini-embedding-001",
             "name": "Gemini Embedding 001",
             "context": 0,
@@ -8261,7 +7923,8 @@
             "inputModalities": [
                 "text",
                 "image",
-                "pdf"
+                "pdf",
+                "video"
             ],
             "outputModalities": [
                 "text",
@@ -8331,76 +7994,6 @@
             "outputPricing": "0"
         },
         {
-            "id": "vercel/google/veo-3.0-fast-generate-001",
-            "name": "Veo 3.0 Fast Generate",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/google/veo-3.0-generate-001",
-            "name": "Veo 3.0",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/google/veo-3.1-fast-generate-001",
-            "name": "Veo 3.1 Fast Generate",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/google/veo-3.1-generate-001",
-            "name": "Veo 3.1",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/google/veo-3.1-lite-generate-001",
-            "name": "Veo 3.1 Lite Generate",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
             "id": "vercel/inception/mercury-2",
             "name": "Mercury 2",
             "context": 128000,
@@ -8443,6 +8036,34 @@
             "outputPricing": "0.00000018"
         },
         {
+            "id": "vercel/inclusionai/ling-3.0-flash-fin",
+            "name": "Ling 3.0 Flash Fin",
+            "context": 256000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0"
+        },
+        {
+            "id": "vercel/inclusionai/ling-3.0-flash-fin-free",
+            "name": "Ling 3.0 Flash Fin (Free)",
+            "context": 256000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0"
+        },
+        {
             "id": "vercel/interfaze/interfaze-beta",
             "name": "Interfaze Beta",
             "context": 1000000,
@@ -8457,118 +8078,6 @@
             ],
             "inputPricing": "0.0000015",
             "outputPricing": "0.0000035"
-        },
-        {
-            "id": "vercel/klingai/kling-v2.5-turbo-i2v",
-            "name": "Kling v2.5 Turbo Image-to-Video",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/klingai/kling-v2.5-turbo-t2v",
-            "name": "Kling v2.5 Turbo Text-to-Video",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/klingai/kling-v2.6-i2v",
-            "name": "Kling v2.6 Image-to-Video",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/klingai/kling-v2.6-motion-control",
-            "name": "Kling v2.6 Motion Control",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/klingai/kling-v2.6-t2v",
-            "name": "Kling v2.6 Text-to-Video",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/klingai/kling-v3.0-i2v",
-            "name": "Kling v3.0 Image-to-Video",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/klingai/kling-v3.0-motion-control",
-            "name": "Kling v3.0 Motion Control",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/klingai/kling-v3.0-t2v",
-            "name": "Kling v3.0 Text-to-Video",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
         },
         {
             "id": "vercel/kwaipilot/kat-coder-air-v2.5",
@@ -8764,19 +8273,36 @@
             "outputPricing": "0.0000002"
         },
         {
-            "id": "vercel/minimax/minimax-h3",
-            "name": "MiniMax H3",
-            "context": 0,
+            "id": "vercel/meta/muse-spark-1.3",
+            "name": "Muse Spark 1.3",
+            "context": 1048576,
             "created": 1755815280,
             "inputModalities": [
                 "text",
-                "image"
+                "image",
+                "pdf"
             ],
             "outputModalities": [
-                "video"
+                "text"
             ],
-            "inputPricing": "0",
-            "outputPricing": "0"
+            "inputPricing": "0.00000125",
+            "outputPricing": "0.00000425"
+        },
+        {
+            "id": "vercel/meta/muse-spark-1.3-contributor",
+            "name": "Muse Spark 1.3 Contributor",
+            "context": 1048576,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image",
+                "pdf"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000001",
+            "outputPricing": "0.0000002"
         },
         {
             "id": "vercel/minimax/minimax-m2",
@@ -8850,7 +8376,7 @@
         },
         {
             "id": "vercel/minimax/minimax-m2.7",
-            "name": "Minimax M2.7",
+            "name": "MiniMax M2.7",
             "context": 204800,
             "created": 1755815280,
             "inputModalities": [
@@ -8861,6 +8387,20 @@
             ],
             "inputPricing": "0.0000003",
             "outputPricing": "0.0000012"
+        },
+        {
+            "id": "vercel/minimax/minimax-m2.7-free",
+            "name": "MiniMax M2.7 (Free)",
+            "context": 196608,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0"
         },
         {
             "id": "vercel/minimax/minimax-m2.7-highspeed",
@@ -8879,7 +8419,7 @@
         {
             "id": "vercel/minimax/minimax-m3",
             "name": "MiniMax M3",
-            "context": 1000000,
+            "context": 512000,
             "created": 1755815280,
             "inputModalities": [
                 "text",
@@ -8891,6 +8431,21 @@
             ],
             "inputPricing": "0.0000003",
             "outputPricing": "0.0000012"
+        },
+        {
+            "id": "vercel/minimax/minimax-m3-free",
+            "name": "MiniMax M3 (Free)",
+            "context": 1048576,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0"
         },
         {
             "id": "vercel/mistral/codestral",
@@ -8948,36 +8503,6 @@
             ],
             "inputPricing": "0.0000001",
             "outputPricing": "0.0000003"
-        },
-        {
-            "id": "vercel/mistral/magistral-medium",
-            "name": "Magistral Medium 2509",
-            "context": 128000,
-            "created": 1755815280,
-            "inputModalities": [
-                "text",
-                "image"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.000002",
-            "outputPricing": "0.000005"
-        },
-        {
-            "id": "vercel/mistral/magistral-small",
-            "name": "Magistral Small 2509",
-            "context": 128000,
-            "created": 1755815280,
-            "inputModalities": [
-                "text",
-                "image"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.0000005",
-            "outputPricing": "0.0000015"
         },
         {
             "id": "vercel/mistral/ministral-14b",
@@ -9559,48 +9084,6 @@
             "outputPricing": "0.000001"
         },
         {
-            "id": "vercel/openai/gpt-4o-mini-search-preview",
-            "name": "GPT 4o Mini Search Preview",
-            "context": 128000,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000015",
-            "outputPricing": "0.0000006"
-        },
-        {
-            "id": "vercel/openai/gpt-4o-mini-transcribe",
-            "name": "GPT-4o mini Transcribe",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "audio"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000125",
-            "outputPricing": "0.000005"
-        },
-        {
-            "id": "vercel/openai/gpt-4o-transcribe",
-            "name": "GPT-4o Transcribe",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "audio"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.0000025",
-            "outputPricing": "0.00001"
-        },
-        {
             "id": "vercel/openai/gpt-5",
             "name": "GPT-5",
             "context": 400000,
@@ -10077,8 +9560,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000025",
-            "outputPricing": "0.000015"
+            "inputPricing": "0.000002",
+            "outputPricing": "0.00001"
         },
         {
             "id": "vercel/openai/gpt-5.6-sol-fast",
@@ -10093,8 +9576,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000005",
-            "outputPricing": "0.00003"
+            "inputPricing": "0.000004",
+            "outputPricing": "0.00002"
         },
         {
             "id": "vercel/openai/gpt-5.6-terra",
@@ -10129,62 +9612,6 @@
             "outputPricing": "0.000024"
         },
         {
-            "id": "vercel/openai/gpt-image-1",
-            "name": "GPT Image 1",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0.000005",
-            "outputPricing": "0.00004"
-        },
-        {
-            "id": "vercel/openai/gpt-image-1-mini",
-            "name": "GPT Image 1 Mini",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0.000002",
-            "outputPricing": "0.000008"
-        },
-        {
-            "id": "vercel/openai/gpt-image-1.5",
-            "name": "GPT Image 1.5",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0.000005",
-            "outputPricing": "0.000032"
-        },
-        {
-            "id": "vercel/openai/gpt-image-2",
-            "name": "GPT Image 2",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0.000005",
-            "outputPricing": "0.00003"
-        },
-        {
             "id": "vercel/openai/gpt-oss-120b",
             "name": "GPT OSS 120B",
             "context": 131072,
@@ -10213,9 +9640,9 @@
             "outputPricing": "0.0000002"
         },
         {
-            "id": "vercel/openai/gpt-oss-safeguard-20b",
-            "name": "GPT OSS Safeguard 20B",
-            "context": 131072,
+            "id": "vercel/openai/gpt-oss-safeguard-120b",
+            "name": "GPT OSS Safeguard 120B",
+            "context": 128000,
             "created": 1755815280,
             "inputModalities": [
                 "text"
@@ -10223,8 +9650,22 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000075",
-            "outputPricing": "0.0000003"
+            "inputPricing": "0.00000015",
+            "outputPricing": "0.0000006"
+        },
+        {
+            "id": "vercel/openai/gpt-oss-safeguard-20b",
+            "name": "GPT OSS Safeguard 20B",
+            "context": 128000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000007",
+            "outputPricing": "0.0000002"
         },
         {
             "id": "vercel/openai/gpt-realtime-1.5",
@@ -10291,20 +9732,6 @@
             "outputPricing": "0.0000024"
         },
         {
-            "id": "vercel/openai/gpt-realtime-whisper",
-            "name": "gpt-realtime-whisper",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "audio"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.0000000002",
-            "outputPricing": "0"
-        },
-        {
             "id": "vercel/openai/o1",
             "name": "o1",
             "context": 200000,
@@ -10351,22 +9778,6 @@
             ],
             "inputPricing": "0.0000035",
             "outputPricing": "0.000014"
-        },
-        {
-            "id": "vercel/openai/o3-deep-research",
-            "name": "o3-deep-research",
-            "context": 200000,
-            "created": 1755815280,
-            "inputModalities": [
-                "text",
-                "image",
-                "pdf"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00001",
-            "outputPricing": "0.00004"
         },
         {
             "id": "vercel/openai/o3-mini",
@@ -10473,48 +9884,6 @@
             "outputPricing": "0"
         },
         {
-            "id": "vercel/openai/tts-1",
-            "name": "TTS-1",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "audio"
-            ],
-            "inputPricing": "0.000015",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/openai/tts-1-hd",
-            "name": "TTS-1 HD",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "audio"
-            ],
-            "inputPricing": "0.00003",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/openai/whisper-1",
-            "name": "Whisper",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "audio"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.0000000001",
-            "outputPricing": "0"
-        },
-        {
             "id": "vercel/perplexity/pplx-embed-v1-0.6b",
             "name": "Embed v1 0.6b",
             "context": 32000,
@@ -10611,146 +9980,6 @@
             ],
             "outputModalities": [
                 "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/prodia/flux-fast-schnell",
-            "name": "Flux Schnell",
-            "context": 512,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/quiverai/arrow-1.1",
-            "name": "Arrow 1.1",
-            "context": 131072,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/recraft/recraft-v2",
-            "name": "Recraft V2",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/recraft/recraft-v3",
-            "name": "Recraft V3",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/recraft/recraft-v4",
-            "name": "Recraft V4",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/recraft/recraft-v4-pro",
-            "name": "Recraft V4 Pro",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/recraft/recraft-v4.1",
-            "name": "Recraft V4.1",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/recraft/recraft-v4.1-pro",
-            "name": "Recraft V4.1 Pro",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/recraft/recraft-v4.1-utility",
-            "name": "Recraft V4.1 Utility",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/recraft/recraft-v4.1-utility-pro",
-            "name": "Recraft V4.1 Utility Pro",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
             ],
             "inputPricing": "0",
             "outputPricing": "0"
@@ -10861,7 +10090,7 @@
         {
             "id": "vercel/tencent/hy3",
             "name": "Hy3",
-            "context": 256000,
+            "context": 262144,
             "created": 1755815280,
             "inputModalities": [
                 "text"
@@ -10869,8 +10098,22 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000132",
-            "outputPricing": "0.000000528"
+            "inputPricing": "0.00000014",
+            "outputPricing": "0.00000058"
+        },
+        {
+            "id": "vercel/tencent/hy4-preview",
+            "name": "Tencent Hy4 Preview",
+            "context": 1024000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000000834",
+            "outputPricing": "0.000002501"
         },
         {
             "id": "vercel/thinkingmachines/inkling",
@@ -11263,104 +10506,6 @@
             "outputPricing": "0.000002"
         },
         {
-            "id": "vercel/spacexai/grok-imagine-image",
-            "name": "Grok Imagine Image",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/spacexai/grok-imagine-image-2.0",
-            "name": "Grok Imagine Image 2.0",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "image"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/spacexai/grok-imagine-video",
-            "name": "Grok Imagine",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/spacexai/grok-imagine-video-1.5",
-            "name": "Grok Imagine Video 1.5",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/spacexai/grok-imagine-video-1.5-preview",
-            "name": "Grok Imagine Video 1.5 Preview",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "video"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/spacexai/grok-stt",
-            "name": "Grok STT",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "audio"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0"
-        },
-        {
-            "id": "vercel/spacexai/grok-tts",
-            "name": "Grok TTS",
-            "context": 0,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "audio"
-            ],
-            "inputPricing": "0.000015",
-            "outputPricing": "0"
-        },
-        {
             "id": "vercel/spacexai/grok-voice-think-fast-1.0",
             "name": "Grok Voice Think Fast 1.0",
             "context": 0,
@@ -11420,6 +10565,20 @@
             ],
             "inputPricing": "0.000000435",
             "outputPricing": "0.00000087"
+        },
+        {
+            "id": "vercel/xiaomi/mimo-v2.5-pro-ultraspeed",
+            "name": "MiMo V2.5 Pro UltraSpeed",
+            "context": 1048576,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000001305",
+            "outputPricing": "0.00000261"
         },
         {
             "id": "vercel/zai/glm-4.5",
@@ -11601,8 +10760,51 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000014",
-            "outputPricing": "0.0000044"
+            "inputPricing": "0.0000007",
+            "outputPricing": "0.0000022"
+        },
+        {
+            "id": "vercel/zai/glm-5.3-fast",
+            "name": "GLM 5.3 Fast",
+            "context": 1048576,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000021",
+            "outputPricing": "0.0000066"
+        },
+        {
+            "id": "vercel/zai/glm-5.3-flash",
+            "name": "GLM 5.3 Flash",
+            "context": 1000000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000015",
+            "outputPricing": "0.0000005"
+        },
+        {
+            "id": "vercel/zai/glm-5.3-promo-50",
+            "name": "GLM 5.3 (50% off)",
+            "context": 1048576,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000007",
+            "outputPricing": "0.0000022"
         },
         {
             "id": "vercel/zai/glm-5v-turbo",
@@ -11623,6 +10825,24 @@
     ],
     "google": [
         {
+            "id": "google/gemini-3.8-flash",
+            "name": "Gemini 3.8 Flash",
+            "context": 1048576,
+            "created": 1788362056,
+            "inputModalities": [
+                "text",
+                "image",
+                "video",
+                "file",
+                "audio"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000075",
+            "outputPricing": "0.00000375"
+        },
+        {
             "id": "google/gemini-3.7-flash",
             "name": "Gemini 3.7 Flash",
             "context": 1048576,
@@ -11637,8 +10857,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000375",
-            "outputPricing": "0.000001875"
+            "inputPricing": "0.00000075",
+            "outputPricing": "0.00000375"
         },
         {
             "id": "google/gemini-3.6-flash",
@@ -11789,7 +11009,7 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000001",
+            "inputPricing": "0.00000009",
             "outputPricing": "0.00000034"
         },
         {
@@ -12075,22 +11295,6 @@
             ],
             "inputPricing": "0.0000001",
             "outputPricing": "0.0000001"
-        },
-        {
-            "id": "mistralai/mistral-large-2512",
-            "name": "Mistral Large 3 2512",
-            "context": 262144,
-            "created": 1764624472,
-            "inputModalities": [
-                "text",
-                "image",
-                "file"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.0000005",
-            "outputPricing": "0.0000015"
         },
         {
             "id": "mistralai/codestral-2508",
