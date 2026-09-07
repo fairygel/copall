@@ -9,7 +9,24 @@ permissions:
   contents: write
 
 jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    outputs:
+      release_id: ${{ steps.create.outputs.id }}
+      upload_url: ${{ steps.create.outputs.upload_url }}
+    steps:
+      - name: Create draft release
+        id: create
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Copall ${{ github.ref_name }}
+          body: See the assets below to download for your OS.
+          draft: true
+          prerelease: ${{ contains(github.ref_name, 'beta') }}
+
   build:
+    needs: create-release
     strategy:
       fail-fast: false
       matrix:
@@ -62,14 +79,46 @@ jobs:
       - name: Install frontend dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build and release
+      - name: Build and upload
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           tagName: ${{ github.ref_name }}
-          releaseName: Copall ${{ github.ref_name }}
-          releaseBody: See the assets below to download for your OS.
-          releaseDraft: false
-          prerelease: ${{ contains(github.ref_name, 'beta') }}
+          releaseId: ${{ needs.create-release.outputs.release_id }}
           args: ${{ matrix.args }}
+
+  updater:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.ref_name, 'beta') }}
+    steps:
+      - name: Download release artifacts
+        uses: robinraju/release-downloader@v1
+        with:
+          tag: ${{ github.ref_name }}
+          fileName: '*'
+          out-file-path: artifacts
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate latest.json
+        run: python3 scripts/generate-latest-json.py '${{ github.ref_name }}' 'fairygel/copall' 'artifacts' 'latest.json'
+
+      - name: Upload latest.json
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: latest.json
+
+  publish:
+    needs: [build, updater]
+    if: always() && needs.build.result == 'success' && (needs.updater.result == 'success' || needs.updater.result == 'skipped')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          draft: false
