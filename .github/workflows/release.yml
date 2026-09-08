@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   create-release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       release_id: ${{ steps.create.outputs.id }}
       upload_url: ${{ steps.create.outputs.upload_url }}
@@ -33,7 +33,7 @@ jobs:
         include:
           - platform: macos-15
             args: --target universal-apple-darwin
-          - platform: ubuntu-22.04
+          - platform: ubuntu-24.04
             args: ''
           - platform: windows-2025
             args: --bundles nsis
@@ -59,7 +59,7 @@ jobs:
           targets: ${{ matrix.platform == 'macos-15' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
       - name: Install Linux dependencies
-        if: matrix.platform == 'ubuntu-22.04'
+        if: matrix.platform == 'ubuntu-24.04'
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -92,7 +92,7 @@ jobs:
 
   updater:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: ${{ !contains(github.ref_name, 'beta') }}
     steps:
       - name: Checkout
@@ -115,7 +115,7 @@ jobs:
   publish:
     needs: [build, updater]
     if: always() && needs.build.result == 'success' && (needs.updater.result == 'success' || needs.updater.result == 'skipped')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Publish release
         uses: softprops/action-gh-release@v2
