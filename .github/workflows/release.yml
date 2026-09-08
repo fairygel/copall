@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           version: latest
 
@@ -96,12 +96,9 @@ jobs:
     if: ${{ !contains(github.ref_name, 'beta') }}
     steps:
       - name: Download release artifacts
-        uses: robinraju/release-downloader@v1
-        with:
-          tag: ${{ github.ref_name }}
-          fileName: '*'
-          out-file-path: artifacts
-          token: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release download '${{ github.ref_name }}' --pattern '*' --dir artifacts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate latest.json
         run: python3 scripts/generate-latest-json.py '${{ github.ref_name }}' 'fairygel/copall' 'artifacts' 'latest.json'
