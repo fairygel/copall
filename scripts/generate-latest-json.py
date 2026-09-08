@@ -8,16 +8,16 @@ from datetime import datetime, timezone
 def classify(name):
     lower = name.lower()
     if name.endswith('.msi') or ('setup' in lower and name.endswith('.exe')):
-        return 'windows-x86_64'
+        return ['windows-x86_64']
     if name.endswith('.AppImage'):
-        return 'linux-x86_64'
+        return ['linux-x86_64']
     if name.endswith('.app.tar.gz'):
         if 'aarch64' in name:
-            return 'darwin-aarch64'
+            return ['darwin-aarch64']
         if 'x86_64' in name:
-            return 'darwin-x86_64'
-        return 'darwin-aarch64'
-    return None
+            return ['darwin-x86_64']
+        return ['darwin-aarch64', 'darwin-x86_64']
+    return []
 
 
 def main():
@@ -32,16 +32,17 @@ def main():
         if not os.path.exists(sig_path):
             print(f'skip {path}: no .sig file')
             continue
-        target = classify(os.path.basename(path))
-        if target is None:
+        targets = classify(os.path.basename(path))
+        if not targets:
             print(f'skip {path}: not an updater bundle')
             continue
         with open(sig_path) as f:
             signature = f.read().strip()
-        platforms[target] = {
-            'url': base_url + '/' + os.path.basename(path),
-            'signature': signature,
-        }
+        for target in targets:
+            platforms[target] = {
+                'url': base_url + '/' + os.path.basename(path),
+                'signature': signature,
+            }
 
     manifest = {
         'version': version,

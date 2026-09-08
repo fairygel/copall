@@ -148,10 +148,15 @@ function main() {
     const cargoTomlRaw = readFileSync(join(ROOT, CARGO_TOML), 'utf8');
     const cargoLockRaw = readFileSync(join(ROOT, CARGO_LOCK), 'utf8');
 
-    writeFileSync(join(ROOT, PACKAGE_JSON), setJsonVersion(pkgRaw, newVersion));
-    writeFileSync(join(ROOT, TAURI_CONF), setJsonVersion(tauriRaw, newVersion));
-    writeFileSync(join(ROOT, CARGO_TOML), setCargoTomlVersion(cargoTomlRaw, newVersion));
-    writeFileSync(join(ROOT, CARGO_LOCK), setCargoLockVersion(cargoLockRaw, newVersion));
+    const pkgNew = setJsonVersion(pkgRaw, newVersion);
+    const tauriNew = setJsonVersion(tauriRaw, newVersion);
+    const cargoTomlNew = setCargoTomlVersion(cargoTomlRaw, newVersion);
+    const cargoLockNew = setCargoLockVersion(cargoLockRaw, newVersion);
+
+    writeFileSync(join(ROOT, PACKAGE_JSON), pkgNew);
+    writeFileSync(join(ROOT, TAURI_CONF), tauriNew);
+    writeFileSync(join(ROOT, CARGO_TOML), cargoTomlNew);
+    writeFileSync(join(ROOT, CARGO_LOCK), cargoLockNew);
 
     git(`add -- ${VERSION_FILES.join(' ')}`);
     try {

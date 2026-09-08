@@ -98,6 +98,12 @@
     opacity: 1;
 }
 
+@media (hover: none) {
+    .copyButton {
+        opacity: 1;
+    }
+}
+
 .copyButton:focus-visible {
     outline: 2px solid var(--accent-color);
     outline-offset: 2px;

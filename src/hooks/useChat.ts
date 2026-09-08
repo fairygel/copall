@@ -7,6 +7,8 @@ export function useChat() {
     const [chat, setChat] = useState<Chat | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
 
+    const initPromise = useRef<Promise<void> | null>(null);
+
     useEffect(() => {
         async function init() {
             const id = getCurrentChatId();
@@ -26,7 +28,7 @@ export function useChat() {
             setIsLoaded(true);
         }
 
-        init().catch(e => {
+        initPromise.current = init().catch(e => {
             console.error('Failed to load chat:', e);
             setIsLoaded(true);
         });
@@ -53,13 +55,17 @@ export function useChat() {
             if (saveTimeout.current) {
                 window.clearTimeout(saveTimeout.current);
                 saveTimeout.current = null;
-              
-                if (chatRef.current) {
-                    saveChat(chatRef.current).catch(e => console.error('Failed to flush chat on unmount:', e));
-                }
             }
         };
     }, [chat, isLoaded]);
+
+    useEffect(() => {
+        return () => {
+            if (chatRef.current) {
+                saveChat(chatRef.current).catch(e => console.error('Failed to flush chat on unmount:', e));
+            }
+        };
+    }, []);
 
     const setMessages = (updater: Message[] | ((prev: Message[]) => Message[])) => {
         setChat(prevChatState => {
@@ -89,6 +95,7 @@ export function useChat() {
     }, []);
 
     const createNewChat = async () => {
+        await initPromise.current;
         if (saveTimeout.current) {
             window.clearTimeout(saveTimeout.current);
             saveTimeout.current = null;

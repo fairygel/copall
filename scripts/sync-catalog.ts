@@ -32,7 +32,8 @@ async function fetchAllowedModels(): Promise<Set<string>> {
             let json = await result.json();
 
             for (const model of json.models ?? []) {
-                allowedModels.add(model.name.split('/')[1]);
+                const segment = model.name?.split('/')?.[1];
+                if (segment) allowedModels.add(segment);
             }
         } catch (e) {
             console.error('Gemini error:', e);
@@ -82,7 +83,7 @@ async function buildCatalog() {
     catalog['open-router'] = [];
     catalog['vercel'] = [];
 
-    for (let model of json.data) {
+    for (let model of json.data ?? []) {
         const providerId = model.id.split('/')[0];
         const modelName = model.id.split('/')[1];
 
@@ -126,7 +127,7 @@ async function buildCatalog() {
         }
         const vercelJson = await vercelRes.json();
 
-        for (const model of vercelJson.data) {
+        for (const model of vercelJson.data ?? []) {
             const inputMods: string[] = model.modalities?.input ?? ['text'];
             const outputMods: string[] = model.modalities?.output ?? ['text'];
             if (!inputMods.includes('text') || !outputMods.includes('text')) {

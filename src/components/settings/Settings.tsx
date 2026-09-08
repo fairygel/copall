@@ -35,6 +35,8 @@ function Settings({
 
     const [alwaysOnTop, setAlwaysOnTop] = useState(false);
     const [openOnStartup, setOpenOnStartup] = useState(false);
+    const [alwaysOnTopPending, setAlwaysOnTopPending] = useState(false);
+    const [startupPending, setStartupPending] = useState(false);
 
     const handleClose = () => {
         onClose();
@@ -52,15 +54,31 @@ function Settings({
     };
 
     const handleAlwaysOnTopToggle = async () => {
+        if (alwaysOnTopPending) return;
         const next = !alwaysOnTop;
-        await appWindow.setAlwaysOnTop(next);
-        setAlwaysOnTop(next);
+        setAlwaysOnTopPending(true);
+        try {
+            await appWindow.setAlwaysOnTop(next);
+            setAlwaysOnTop(next);
+        } catch (e) {
+            console.error('Failed to toggle always on top:', e);
+        } finally {
+            setAlwaysOnTopPending(false);
+        }
     };
 
     const handleStartupToggle = async () => {
+        if (startupPending) return;
         const next = !openOnStartup;
-        next ? await enable() : await disable();
-        setOpenOnStartup(next);
+        setStartupPending(true);
+        try {
+            next ? await enable() : await disable();
+            setOpenOnStartup(next);
+        } catch (e) {
+            console.error('Failed to toggle autostart:', e);
+        } finally {
+            setStartupPending(false);
+        }
     };
 
     useEffect(() => {
@@ -117,6 +135,7 @@ function Settings({
                             <button
                                 className={`toggleSwitch ${alwaysOnTop ? 'active' : ''}`}
                                 aria-pressed={alwaysOnTop}
+                                disabled={alwaysOnTopPending}
                                 onClick={handleAlwaysOnTopToggle}
                             >
                                 <span className="toggleThumb" />
@@ -130,6 +149,7 @@ function Settings({
                             <button
                                 className={`toggleSwitch ${openOnStartup ? 'active' : ''}`}
                                 aria-pressed={openOnStartup}
+                                disabled={startupPending}
                                 onClick={handleStartupToggle}
                             >
                                 <span className="toggleThumb" />
