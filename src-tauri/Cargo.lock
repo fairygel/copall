@@ -626,7 +626,7 @@ dependencies = [
 
 [[package]]
 name = "copall"
-version = "0.0.1-beta4"
+version = "0.0.1"
 dependencies = [
  "log",
  "serde",
