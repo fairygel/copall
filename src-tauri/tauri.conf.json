@@ -49,7 +49,7 @@
             "endpoints": [
                 "https://github.com/fairygel/copall/releases/latest/download/latest.json"
             ],
-            "dialog": true
+            "dialog": false
         }
     }
 }

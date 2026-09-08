@@ -10,13 +10,39 @@ import AiModel from './models/AiModel';
 
 import { generateAssistantResponse, generateChatTitle } from './service/ChatService';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { check, type Update } from '@tauri-apps/plugin-updater';
+import { relaunch } from '@tauri-apps/plugin-process';
 import { useChat } from './hooks/useChat';
+import UpdateDialog from './components/update/UpdateDialog';
 
 function App() {
     const [settingsView, setSettingsView] = useState<'settings' | 'apiKeys' | null>(null);
     const [isSendMessageDisabled, setSendMessageDisabled] = useState(false);
+    const [pendingUpdate, setPendingUpdate] = useState<Update | null>(null);
 
+    useEffect(() => {
+        (async () => {
+            try {
+                const update = await check();
+                if (update) setPendingUpdate(update);
+            } catch (e) {
+                console.error('update check failed:', e);
+            }
+        })();
+    }, []);
+
+    const handleUpdate = async () => {
+        if (!pendingUpdate) return;
+        try {
+            await pendingUpdate.downloadAndInstall();
+            await relaunch();
+        } catch (e) {
+            console.error('update install failed:', e);
+            setPendingUpdate(null);
+        }
+    };
+  
     const { messages, chatName, setMessages, setChatName, createNewChat } = useChat();
 
     const generateTitle = async (message: string, model: AiModel) => {
@@ -67,7 +93,14 @@ function App() {
     };
 
     return (
-        <main>
+      <main>
+            {pendingUpdate && (
+                <UpdateDialog
+                    version={pendingUpdate.version}
+                    onUpdate={handleUpdate}
+                    onLater={() => setPendingUpdate(null)}
+                />
+            )}
             {settingsView === 'settings' && (
                 <Settings
                     onClose={() => setSettingsView(null)}

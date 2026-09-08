@@ -1,0 +1,37 @@
+.updateDialog {
+    max-width: 380px;
+    text-align: center;
+}
+
+.updateDialog p {
+    margin: 0 0 20px;
+    font-family: 'Andika', sans-serif;
+    color: var(--font-color);
+}
+
+.updateActions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.updateButton {
+    cursor: pointer;
+    padding: 8px 28px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--container-color);
+    color: var(--font-color);
+    font-family: 'Andika', sans-serif;
+    font-size: inherit;
+}
+
+.updateButton:hover {
+    opacity: 0.85;
+}
+
+.updatePrimary {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--background-color);
+}
