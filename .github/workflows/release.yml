@@ -33,7 +33,7 @@ jobs:
         include:
           - platform: macos-15
             args: --target universal-apple-darwin
-          - platform: ubuntu-24.04
+          - platform: ubuntu-26.04
             args: ''
           - platform: windows-2025
             args: --bundles nsis
