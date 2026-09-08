@@ -40,7 +40,7 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v5
@@ -48,7 +48,7 @@ jobs:
           version: latest
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: pnpm
@@ -95,8 +95,11 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ !contains(github.ref_name, 'beta') }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
       - name: Download release artifacts
-        run: gh release download '${{ github.ref_name }}' --pattern '*' --dir artifacts
+        run: gh release download '${{ github.ref_name }}' --repo '${{ github.repository }}' --pattern '*' --dir artifacts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
