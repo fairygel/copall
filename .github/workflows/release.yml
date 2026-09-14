@@ -56,11 +56,36 @@ jobs:
       - name: Install frontend dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Cache Electron downloads
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/electron
+            ~/.cache/electron-builder
+            ~/Library/Caches/electron
+            ~/Library/Caches/electron-builder
+            ~/AppData/Local/electron/Cache
+            ~/AppData/Local/electron-builder/Cache
+          key: electron-${{ matrix.platform }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            electron-${{ matrix.platform }}-
+
       - name: Build app
         run: pnpm build
 
       - name: Build and upload
-        run: pnpm exec electron-builder --config electron/builder.json ${{ matrix.args }} --publish always
+        shell: bash
+        run: |
+          attempt=1
+          until pnpm exec electron-builder --config electron/builder.json ${{ matrix.args }} --publish always; do
+            attempt=$((attempt + 1))
+            if [ "$attempt" -gt 3 ]; then
+              echo "electron-builder failed after 3 attempts"
+              exit 1
+            fi
+            echo "Attempt failed, waiting 120s before retry $attempt..."
+            sleep 120
+          done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
