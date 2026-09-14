@@ -6,10 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const PACKAGE_JSON = 'package.json';
-const TAURI_CONF = 'src-tauri/tauri.conf.json';
-const CARGO_TOML = 'src-tauri/Cargo.toml';
-const CARGO_LOCK = 'src-tauri/Cargo.lock';
-const VERSION_FILES = [PACKAGE_JSON, TAURI_CONF, CARGO_TOML, CARGO_LOCK];
+const VERSION_FILES = [PACKAGE_JSON];
 
 const USAGE = [
     'Usage: node scripts/bump-version.mjs <version|major|minor|patch|prerelease>',
@@ -17,8 +14,8 @@ const USAGE = [
     '  <version>    explicit semver version, must be greater than the current one (leading v allowed)',
     '  major        bump major: 0.1.2 -> 1.0.0',
     '  minor        bump minor: 0.1.2 -> 0.2.0',
-    '  patch        bump patch: 0.1.2 -> 0.1.3, or strip prerelease: 0.1.3-beta2 -> 0.1.3',
-    '  prerelease   append auto-numbered beta suffix: 0.1.2 -> 0.1.2-beta1',
+    '  patch        bump patch: 0.1.2 -> 0.1.3, or finalize beta: 0.1.3-beta2 -> 0.1.3',
+    '  prerelease   start next beta: 0.1.2 -> 0.1.3-beta1, or bump beta: 0.1.3-beta1 -> 0.1.3-beta2',
     '',
     'Examples:',
     '  node scripts/bump-version.mjs 0.2.0',
@@ -89,18 +86,6 @@ function setJsonVersion(raw, newVersion) {
     return JSON.stringify(data, null, 4) + (raw.endsWith('\n') ? '\n' : '');
 }
 
-function setCargoTomlVersion(raw, newVersion) {
-    const re = /^version(\s*)=(\s*)"[^"]*"/m;
-    if (!re.test(raw)) fail(`Could not find the [package] version in ${CARGO_TOML}.`);
-    return raw.replace(re, `version$1=$2"${newVersion}"`);
-}
-
-function setCargoLockVersion(raw, newVersion) {
-    const re = /(\[\[package\]\]\nname = "copall"\nversion = ")[^"]*(")/;
-    if (!re.test(raw)) fail(`Could not find the copall entry in ${CARGO_LOCK}.`);
-    return raw.replace(re, `$1${newVersion}$2`);
-}
-
 function main() {
     const argv = process.argv.slice(2);
     if (argv.length !== 1) fail(`Expected exactly one argument.\n${USAGE}`);
@@ -120,8 +105,14 @@ function main() {
             ? `${current.major}.${current.minor}.${current.patch + 1}`
             : `${current.major}.${current.minor}.${current.patch}`;
     } else if (arg === 'prerelease') {
-        const base = `${current.major}.${current.minor}.${current.patch}`;
-        newVersion = `${base}-beta${nextPrereleaseNumber(base)}`;
+        if (current.prerelease === null) {
+            const nextPatch = current.patch + 1;
+            const base = `${current.major}.${current.minor}.${nextPatch}`;
+            newVersion = `${base}-beta${nextPrereleaseNumber(base)}`;
+        } else {
+            const base = `${current.major}.${current.minor}.${current.patch}`;
+            newVersion = `${base}-beta${nextPrereleaseNumber(base)}`;
+        }
     } else {
         const parsed = parseVersion(arg);
         if (!parsed) fail(`"${arg}" is not a version, major, minor, patch or prerelease.\n${USAGE}`);
@@ -144,19 +135,10 @@ function main() {
     if (dirty) fail(`Version files have uncommitted changes, commit or stash them first:\n${dirty}`);
 
     const pkgRaw = readFileSync(join(ROOT, PACKAGE_JSON), 'utf8');
-    const tauriRaw = readFileSync(join(ROOT, TAURI_CONF), 'utf8');
-    const cargoTomlRaw = readFileSync(join(ROOT, CARGO_TOML), 'utf8');
-    const cargoLockRaw = readFileSync(join(ROOT, CARGO_LOCK), 'utf8');
 
     const pkgNew = setJsonVersion(pkgRaw, newVersion);
-    const tauriNew = setJsonVersion(tauriRaw, newVersion);
-    const cargoTomlNew = setCargoTomlVersion(cargoTomlRaw, newVersion);
-    const cargoLockNew = setCargoLockVersion(cargoLockRaw, newVersion);
 
     writeFileSync(join(ROOT, PACKAGE_JSON), pkgNew);
-    writeFileSync(join(ROOT, TAURI_CONF), tauriNew);
-    writeFileSync(join(ROOT, CARGO_TOML), cargoTomlNew);
-    writeFileSync(join(ROOT, CARGO_LOCK), cargoLockNew);
 
     git(`add -- ${VERSION_FILES.join(' ')}`);
     try {

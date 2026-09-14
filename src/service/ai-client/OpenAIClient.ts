@@ -49,10 +49,26 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
     }
 
     function toChatFormat(messages: Message[]) {
-        return messages.map(msg => ({
-            role: msg.sender,
-            content: msg.content,
-        }));
+        return messages.map(msg => {
+            const images = (msg.attachments ?? []).filter(file => file.base64);
+
+            if (images.length === 0) {
+                return { role: msg.sender, content: msg.content };
+            }
+
+            return {
+                role: msg.sender,
+                content: [
+                    ...(msg.content ? [{ type: 'text', text: msg.content }] : []),
+                    ...images.map(file => ({
+                        type: 'image_url',
+                        image_url: {
+                            url: `data:${file.mime};base64,${file.base64}`,
+                        },
+                    })),
+                ],
+            };
+        });
     }
 
     async function checkErrorResponse(response: Response) {

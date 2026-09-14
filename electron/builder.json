@@ -1,0 +1,80 @@
+{
+    "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/electron-builder/schemas/electron-builder.json",
+    "appId": "me.fairygel.copall",
+    "productName": "copall",
+    "directories": {
+        "output": "release",
+        "buildResources": "electron"
+    },
+    "files": [
+        "dist-electron/**/*",
+        "dist/**/*",
+        "package.json"
+    ],
+    "extraResources": [
+        {
+            "from": "electron/tray-icon.png",
+            "to": "tray-icon.png"
+        },
+        {
+            "from": "electron/icon.png",
+            "to": "icon.png"
+        }
+    ],
+    "linux": {
+        "target": [
+            "AppImage"
+        ],
+        "category": "Utility",
+        "icon": "electron/icon.png",
+        "executableName": "copall",
+        "desktop": {
+            "entry": {
+                "Name": "copall",
+                "StartupWMClass": "copall"
+            }
+        },
+        "publish": [
+            {
+                "provider": "github",
+                "owner": "fairygel",
+                "repo": "copall"
+            }
+        ]
+    },
+    "win": {
+        "target": [
+            "nsis"
+        ],
+        "icon": "electron/icon.png",
+        "publish": [
+            {
+                "provider": "github",
+                "owner": "fairygel",
+                "repo": "copall"
+            }
+        ]
+    },
+    "mac": {
+        "target": [
+            "dmg",
+            "zip"
+        ],
+        "category": "public.app-category.utilities",
+        "icon": "electron/icon.png",
+        "publish": [
+            {
+                "provider": "github",
+                "owner": "fairygel",
+                "repo": "copall"
+            }
+        ]
+    },
+    "publish": [
+        {
+            "provider": "github",
+            "owner": "fairygel",
+            "repo": "copall"
+        }
+    ]
+}

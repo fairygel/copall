@@ -2,45 +2,38 @@ import { useState } from 'react';
 import './Settings.css';
 import { X } from 'lucide-react';
 import { AVAILABLE_PROVIDERS, getApiKey, setApiKey } from '../../config/AiProviderConfig';
-import { AiProvider } from '../../models/AiProvider';
 
 function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void }) {
-
-    const [apiKeys, setApiKeys] = useState<Record<string, string>>(() => {
+    const readStoredKeys = () => {
         const initial: Record<string, string> = {};
         for (const provider of AVAILABLE_PROVIDERS) {
             initial[provider.id] = getApiKey(provider);
         }
         return initial;
-    });
+    };
 
-    const [initialApiKeys, setInitialApiKeys] = useState(() => {
-        const initial: Record<string, string> = {};
-        for (const provider of AVAILABLE_PROVIDERS) {
-            initial[provider.id] = getApiKey(provider);
-        }
-        return initial;
-    });
+    const [apiKeys, setApiKeys] = useState<Record<string, string>>(readStoredKeys);
+    const [initialApiKeys, setInitialApiKeys] =
+        useState<Record<string, string>>(readStoredKeys);
 
-    const handleKeyBlur = (provider: AiProvider) => {
-        const value = apiKeys[provider.id] ?? '';
+    const handleKeyBlur = (providerId: string) => {
+        const provider = AVAILABLE_PROVIDERS.find(p => p.id === providerId);
+        if (!provider) return;
+
+        const value = apiKeys[providerId] ?? '';
         setApiKey(provider, value);
-        setInitialApiKeys(prev => ({ ...prev, [provider.id]: value }));
+        setInitialApiKeys(prev => ({ ...prev, [providerId]: value }));
     };
 
     const persistApiKeys = () => {
-        let keysChanged = false;
         for (const provider of AVAILABLE_PROVIDERS) {
             const newValue = apiKeys[provider.id] ?? '';
             const oldValue = initialApiKeys[provider.id] ?? '';
 
             if (newValue !== oldValue) {
                 setApiKey(provider, newValue);
-                keysChanged = true;
             }
         }
-
-        return keysChanged;
     };
 
     const handleClose = () => {
@@ -72,7 +65,7 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
                             <div key={provider.id} className="settingItem">
                                 <div className="settingLabel">
                                     <img
-                                        src={`/${provider.icon}`}
+                                        src={`./${provider.icon}`}
                                         alt={provider.name}
                                         width={18}
                                         height={18}
@@ -89,7 +82,7 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
                                             [provider.id]: e.target.value,
                                         }))
                                     }
-                                    onBlur={() => handleKeyBlur(provider)}
+                                    onBlur={() => handleKeyBlur(provider.id)}
                                 />
                             </div>
                         ))}

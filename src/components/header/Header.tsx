@@ -1,6 +1,6 @@
 import { MessageCirclePlus, Settings, X } from 'lucide-react';
 import './Header.css';
-import { invoke } from '@tauri-apps/api/core';
+import { hideWindow } from '../../service/NativeBridge';
 
 function Header({
     onSettingsClick,
@@ -12,12 +12,12 @@ function Header({
     chatName: string;
 }) {
     const handleClose = async () => {
-        await invoke('close_window');
+        await hideWindow().catch(console.error);
     };
 
     return (
-        <div data-tauri-drag-region className="header">
-            <div data-tauri-drag-region className="icons">
+        <div data-drag-region className="header">
+            <div data-drag-region className="icons">
                 <button aria-label="Open settings" className="clickable" onClick={onSettingsClick}>
                     <Settings size={20} />
                 </button>
@@ -25,7 +25,7 @@ function Header({
                     <MessageCirclePlus size={20} />
                 </button>
             </div>
-            <div data-tauri-drag-region className="chatName">
+            <div data-drag-region className="chatName">
                 {chatName || 'New Chat'}
             </div>
             <div className="windowIcons">

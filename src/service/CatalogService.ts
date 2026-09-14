@@ -5,6 +5,7 @@ type CatalogEntry = {
     id: string;
     name: string;
     context: number;
+    inputModalities?: string[];
 };
 
 type Catalog = Record<string, CatalogEntry[]>;
@@ -14,7 +15,7 @@ let cache: AiModel[] | null = null;
 async function loadCatalog(): Promise<AiModel[]> {
     if (cache) return cache;
 
-    const res = await fetch('/catalog.json');
+    const res = await fetch('./catalog.json');
     if (!res.ok) throw new Error(`Failed to load catalog: ${res.status}`);
 
     const json: Catalog = await res.json();
@@ -31,6 +32,7 @@ async function loadCatalog(): Promise<AiModel[]> {
                 id: e.id,
                 name: e.name,
                 context: e.context ?? 0,
+                inputModalities: e.inputModalities ?? ['text'],
                 provider,
             });
         }

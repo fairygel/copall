@@ -62,3 +62,47 @@ textarea::-webkit-scrollbar {
     background-color: var(--font-color);
     box-shadow: 0 2px 4px var(--inactive-font-color);
 }
+
+.left-tooltip {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+}
+
+.attachButton {
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+    padding: 4px 8px;
+    gap: 6px;
+}
+
+.attachedLabel {
+    font-family: 'Geist', sans-serif;
+    font-size: 12px;
+    color: var(--inactive-font-color);
+    white-space: nowrap;
+}
+
+.visionWarning {
+    font-family: 'Geist', sans-serif;
+    font-size: 11px;
+    color: var(--accent-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2px 8px;
+    white-space: nowrap;
+}
+
+.sendingSpinner {
+    animation: sending-spin 0.9s linear infinite;
+}
+
+@keyframes sending-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

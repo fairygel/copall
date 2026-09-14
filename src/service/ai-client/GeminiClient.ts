@@ -59,7 +59,17 @@ export function createGeminiService(provider: AiProvider): BaseClient {
             .filter(msg => msg.sender !== 'system')
             .map(msg => ({
                 role: msg.sender === 'assistant' ? 'model' : 'user',
-                parts: [{ text: msg.content }],
+                parts: [
+                    ...(msg.content ? [{ text: msg.content }] : []),
+                    ...(msg.attachments ?? [])
+                        .filter(file => file.base64)
+                        .map(file => ({
+                            inlineData: {
+                                mimeType: file.mime,
+                                data: file.base64 as string,
+                            },
+                        })),
+                ],
             }));
     }
 

@@ -7,42 +7,50 @@ import MessageBox from './components/messageBox/MessageBox';
 import Chat from './components/chat/Chat';
 
 import AiModel from './models/AiModel';
+import AttachedFile from './models/AttachedFile';
 
 import { generateAssistantResponse, generateChatTitle } from './service/ChatService';
 
 import { useEffect, useState } from 'react';
-import { check, type Update } from '@tauri-apps/plugin-updater';
-import { relaunch } from '@tauri-apps/plugin-process';
+import {
+    checkForUpdate,
+    onUpdaterDownloaded,
+    relaunchAfterUpdate,
+    type NativePendingUpdate,
+} from './service/NativeBridge';
 import { useChat } from './hooks/useChat';
 import UpdateDialog from './components/update/UpdateDialog';
 
 function App() {
     const [settingsView, setSettingsView] = useState<'settings' | 'apiKeys' | null>(null);
     const [isSendMessageDisabled, setSendMessageDisabled] = useState(false);
-    const [pendingUpdate, setPendingUpdate] = useState<Update | null>(null);
+    const [pendingUpdate, setPendingUpdate] = useState<NativePendingUpdate | null>(null);
 
     useEffect(() => {
         (async () => {
             try {
-                const update = await check();
+                const update = await checkForUpdate();
                 if (update) setPendingUpdate(update);
             } catch (e) {
                 console.error('update check failed:', e);
             }
         })();
+
+        return onUpdaterDownloaded(() => {
+            relaunchAfterUpdate().catch(console.error);
+        });
     }, []);
 
     const handleUpdate = async () => {
         if (!pendingUpdate) return;
         try {
             await pendingUpdate.downloadAndInstall();
-            await relaunch();
         } catch (e) {
             console.error('update install failed:', e);
             setPendingUpdate(null);
         }
     };
-  
+
     const { messages, chatName, setMessages, setChatName, createNewChat } = useChat();
 
     const generateTitle = async (message: string, model: AiModel) => {
@@ -54,17 +62,24 @@ function App() {
         }
     };
 
-    const handleSendMessage = async (content: string, selectedModel: AiModel) => {
+    const handleSendMessage = async (
+        content: string,
+        selectedModel: AiModel,
+        files: AttachedFile[]
+    ) => {
         if (!selectedModel) return;
 
         setSendMessageDisabled(true);
 
         const isFirstMessage = messages.length === 0;
 
+        const liveFiles = files.filter(file => file.base64);
+
         const newMessage = {
             id: crypto.randomUUID(),
             content,
             sender: 'user' as const,
+            ...(liveFiles.length > 0 ? { attachments: liveFiles } : {}),
         };
 
         const updatedMessages = [...messages, newMessage];
@@ -74,7 +89,7 @@ function App() {
             const response = await generateAssistantResponse(
                 updatedMessages,
                 selectedModel.id,
-                setMessages as any
+                setMessages
             );
 
             if (isFirstMessage && response) {
@@ -93,7 +108,7 @@ function App() {
     };
 
     return (
-      <main>
+        <main>
             {pendingUpdate && (
                 <UpdateDialog
                     version={pendingUpdate.version}
@@ -121,7 +136,11 @@ function App() {
 
             <Chat messages={messages} />
 
-            <MessageBox onMessageSent={handleSendMessage} disabled={isSendMessageDisabled} />
+            <MessageBox
+                onMessageSent={handleSendMessage}
+                disabled={isSendMessageDisabled}
+                isSending={isSendMessageDisabled}
+            />
         </main>
     );
 }

@@ -47,3 +47,11 @@
     flex-direction: row;
     gap: 6px;
 }
+
+[data-drag-region] {
+    -webkit-app-region: drag;
+}
+
+[data-drag-region] button {
+    -webkit-app-region: no-drag;
+}

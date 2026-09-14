@@ -108,3 +108,17 @@
     outline: 2px solid var(--accent-color);
     outline-offset: 2px;
 }
+
+.messageAttachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 4px;
+}
+
+.messageAttachmentThumb {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: 12px;
+}

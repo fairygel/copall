@@ -3,13 +3,12 @@ import Message from '../../models/message';
 import './Chat.css';
 import { useEffect, useState } from 'react';
 import React from 'react';
-import { openUrl } from '@tauri-apps/plugin-opener';
+import { openUrl } from '../../service/NativeBridge';
 import { Check, Copy } from 'lucide-react';
 
 function Chat({ messages }: { messages: Message[] }) {
     const bottomRef = React.useRef<HTMLDivElement>(null);
 
-    // auto-scroll
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
@@ -26,7 +25,6 @@ function Chat({ messages }: { messages: Message[] }) {
         }
     };
 
-    // prevent web link open(open link in browser instead of webview)
     const components = {
         a: ({ href, children }: { href?: string; children?: React.ReactNode }) => {
             if (
@@ -52,13 +50,26 @@ function Chat({ messages }: { messages: Message[] }) {
 
     return messages.length === 0 ? (
         <div className="emptyContainer">
-            <img src="/copall_nobg.svg" alt="Me .-." className="logo" />
+            <img src="./copall_nobg.svg" alt="Me .-." className="logo" />
             <p>Copall.</p>
         </div>
     ) : (
         <div className="chatContainer">
             {messages.map(message => (
                 <div key={message.id} className="messageWrapper">
+                    {message.attachments && message.attachments.length > 0 && (
+                        <div className="messageAttachments">
+                            {message.attachments.map(file => (
+                                <img
+                                    key={file.id}
+                                    className="messageAttachmentThumb"
+                                    src={`data:${file.mime};base64,${file.base64}`}
+                                    alt={file.name}
+                                    title={file.name}
+                                />
+                            ))}
+                        </div>
+                    )}
                     <div
                         className={`message ${message.sender === 'user' ? 'userMessage' : 'aiMessage'}`}
                     >
