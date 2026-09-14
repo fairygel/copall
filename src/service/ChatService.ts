@@ -5,7 +5,7 @@ import { createClient } from './ClientProviderFactory';
 
 import { Dispatch, SetStateAction } from 'react';
 import { getEncoding } from 'js-tiktoken';
-import { getModelsFromCatalog, getModelFromCatalog } from './CatalogService';
+import { getModelFromCatalog } from './CatalogService';
 
 const enc = getEncoding('cl100k_base');
 
@@ -108,4 +108,3 @@ export async function generateAssistantResponse(
         throw error;
     }
 }
-export { getModelsFromCatalog as getAvailableModels, getModelFromCatalog };

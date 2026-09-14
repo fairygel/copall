@@ -19,6 +19,25 @@ export function parseModel(model: string): { provider: AiProvider; modelId: stri
     return { provider, modelId };
 }
 
+function extractChunks(text: string, extractor: (json: any) => string | undefined | null): string[] {
+    const chunks: string[] = [];
+
+    for (const raw of text.split('\n')) {
+        const line = raw.trim();
+        if (!line || line === 'data: [DONE]' || !line.startsWith('data: ')) continue;
+
+        try {
+            const content = extractor(JSON.parse(line.slice(6)));
+
+            if (content) chunks.push(content);
+        } catch {
+            // Ignore parse errors for non-JSON stream lines
+        }
+    }
+
+    return chunks;
+}
+
 export async function* parseStreamResponse(
     response: Response,
     extractor: (json: any) => string | undefined | null
@@ -38,45 +57,14 @@ export async function* parseStreamResponse(
         const lines = buffer.split('\n');
         buffer = lines.pop() ?? '';
 
-        for (const raw of lines) {
-            const line = raw.trim();
-            if (!line) continue;
-            if (line === 'data: [DONE]') {
-                return;
-            }
-            if (!line.startsWith('data: ')) continue;
-
-            try {
-                const json = JSON.parse(line.slice(6));
-                const content = extractor(json);
-
-                if (content) {
-                    yield content;
-                }
-            } catch (e) {
-                // Ignore parse errors for non-JSON stream lines
-            }
+        for (const chunk of extractChunks(lines.join('\n'), extractor)) {
+            yield chunk;
         }
     }
-  
-    buffer += decoder.decode();
-    const remaining = buffer.split('\n');
-    for (const raw of remaining) {
-        const line = raw.trim();
-        if (!line) continue;
-        if (line === 'data: [DONE]') {
-            return;
-        }
-        if (!line.startsWith('data: ')) continue;
 
-        try {
-            const json = JSON.parse(line.slice(6));
-            const content = extractor(json);
-            if (content) {
-                yield content;
-            }
-        } catch (e) {
-            // Ignore parse errors for non-JSON stream lines
-        }
+    buffer += decoder.decode();
+
+    for (const chunk of extractChunks(buffer, extractor)) {
+        yield chunk;
     }
 }

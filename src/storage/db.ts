@@ -1,5 +1,4 @@
-import Chat from '../models/Chat';
-import { ChatMeta } from '../models/Chat';
+import Chat, { ChatMeta } from '../models/Chat';
 import Message from '../models/message';
 
 const DB_NAME = 'copall';
@@ -26,33 +25,46 @@ function openDb(): Promise<IDBDatabase> {
     });
 }
 
-export async function createChat(name = 'New Chat'): Promise<Chat> {
-    const db = await openDb();
+function runTransaction(
+    stores: string[],
+    mode: IDBTransactionMode,
+    work: (tx: IDBTransaction) => void
+): Promise<void> {
+    return openDb().then(
+        db =>
+            new Promise<void>((resolve, reject) => {
+                const tx = db.transaction(stores, mode);
 
+                tx.oncomplete = () => {
+                    db.close();
+                    resolve();
+                };
+                tx.onerror = () => {
+                    db.close();
+                    reject(tx.error);
+                };
+                tx.onabort = () => {
+                    db.close();
+                    reject(tx.error);
+                };
+
+                work(tx);
+            })
+    );
+}
+
+export async function createChat(name = 'New Chat'): Promise<Chat> {
     const id = crypto.randomUUID();
     const now = Date.now();
 
     const meta: ChatMeta = { id, name, createdAt: now, updatedAt: now };
 
-    return new Promise((resolve, reject) => {
-        const tx = db.transaction(['chatMetas', 'chatMessages'], 'readwrite');
-
-        tx.oncomplete = () => {
-            db.close();
-            resolve({ ...meta, messages: [] });
-        };
-        tx.onerror = () => {
-            db.close();
-            reject(tx.error);
-        };
-        tx.onabort = () => {
-            db.close();
-            reject(tx.error);
-        };
-
+    await runTransaction(['chatMetas', 'chatMessages'], 'readwrite', tx => {
         tx.objectStore('chatMetas').add(meta);
         tx.objectStore('chatMessages').add({ id, messages: [] as Message[] });
     });
+
+    return { ...meta, messages: [] };
 }
 
 export async function getChat(id: string): Promise<Chat | null> {
@@ -65,10 +77,14 @@ export async function getChat(id: string): Promise<Chat | null> {
         let raw: { id: string; messages: Message[] } | undefined;
 
         const metaReq = tx.objectStore('chatMetas').get(id);
-        metaReq.onsuccess = () => { meta = metaReq.result; };
+        metaReq.onsuccess = () => {
+            meta = metaReq.result;
+        };
 
         const msgReq = tx.objectStore('chatMessages').get(id);
-        msgReq.onsuccess = () => { raw = msgReq.result; };
+        msgReq.onsuccess = () => {
+            raw = msgReq.result;
+        };
 
         tx.oncomplete = () => {
             db.close();
@@ -86,80 +102,17 @@ export async function getChat(id: string): Promise<Chat | null> {
     });
 }
 
-export async function getChatPreviews(): Promise<ChatMeta[]> {
-    const db = await openDb();
-
-    return new Promise((resolve, reject) => {
-        const tx = db.transaction('chatMetas', 'readonly');
-        const req = tx.objectStore('chatMetas').getAll();
-
-        let result: ChatMeta[] = [];
-
-        req.onsuccess = () => {
-            result = (req.result as ChatMeta[]).sort((a, b) => b.updatedAt - a.updatedAt);
-        };
-
-        tx.oncomplete = () => {
-            db.close();
-            resolve(result);
-        };
-        tx.onerror = () => {
-            db.close();
-            reject(tx.error);
-        };
-        tx.onabort = () => {
-            db.close();
-            reject(tx.error);
-        };
-    });
-}
-
 export async function saveChat(chat: Chat): Promise<void> {
-    const db = await openDb();
+    const meta: ChatMeta = {
+        id: chat.id,
+        name: chat.name,
+        createdAt: chat.createdAt,
+        updatedAt: Date.now(),
+    };
 
-    const now = Date.now();
-    const meta: ChatMeta = { id: chat.id, name: chat.name, createdAt: chat.createdAt, updatedAt: now };
-
-    return new Promise((resolve, reject) => {
-        const tx = db.transaction(['chatMetas', 'chatMessages'], 'readwrite');
-        tx.oncomplete = () => {
-            db.close();
-            resolve();
-        };
-        tx.onerror = () => {
-            db.close();
-            reject(tx.error);
-        };
-        tx.onabort = () => {
-            db.close();
-            reject(tx.error);
-        };
-
+    await runTransaction(['chatMetas', 'chatMessages'], 'readwrite', tx => {
         tx.objectStore('chatMetas').put(meta);
         tx.objectStore('chatMessages').put({ id: chat.id, messages: chat.messages });
-    });
-}
-
-export async function deleteChat(id: string): Promise<void> {
-    const db = await openDb();
-
-    return new Promise((resolve, reject) => {
-        const tx = db.transaction(['chatMetas', 'chatMessages'], 'readwrite');
-        tx.oncomplete = () => {
-            db.close();
-            resolve();
-        };
-        tx.onerror = () => {
-            db.close();
-            reject(tx.error);
-        };
-        tx.onabort = () => {
-            db.close();
-            reject(tx.error);
-        };
-
-        tx.objectStore('chatMetas').delete(id);
-        tx.objectStore('chatMessages').delete(id);
     });
 }
 
@@ -171,8 +124,4 @@ export function getCurrentChatId(): string | null {
 
 export function setCurrentChatId(id: string): void {
     localStorage.setItem(CURRENT_CHAT_KEY, id);
-}
-
-export function clearCurrentChatId(): void {
-    localStorage.removeItem(CURRENT_CHAT_KEY);
 }

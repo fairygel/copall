@@ -1,7 +1,7 @@
-# Tauri + React + Typescript
+# Copall + Electron + Typescript
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+AI chat app with Electron, React and Typescript in Vite.
 
 ## Recommended IDE Setup
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+- [VS Code](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)

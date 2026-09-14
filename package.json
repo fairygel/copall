@@ -3,27 +3,18 @@
     "private": true,
     "version": "0.1.2-beta3",
     "type": "module",
+    "main": "dist-electron/main/main.js",
     "scripts": {
-        "dev": "vite",
-        "build": "tsc && vite build",
-        "preview": "vite preview",
-        "tauri": "tauri",
+        "dev": "electron-vite dev --noSandbox",
+        "build": "tsc && electron-vite build",
+        "preview": "electron-vite preview --noSandbox",
+        "dist": "electron-builder --config electron/builder.json",
+        "dist-linux": "electron-builder --config electron/builder.json --linux",
         "catalog:sync": "tsx scripts/sync-catalog.ts",
-        "build:windows": "tauri build --target x86_64-pc-windows-gnu --no-bundle",
-        "build:linux": "tauri build --target x86_64-unknown-linux-gnu",
-        "build:macos": "tauri build --target universal-apple-darwin",
         "version:bump": "node scripts/bump-version.mjs"
     },
     "dependencies": {
-        "@tauri-apps/api": "^2.11.1",
-        "@tauri-apps/plugin-autostart": "^2.5.1",
-        "@tauri-apps/plugin-log": "^2.8.0",
-        "@tauri-apps/plugin-opener": "^2.5.4",
-        "@tauri-apps/plugin-os": "^2.3.2",
-        "@tauri-apps/plugin-process": "^2.3.1",
-        "@tauri-apps/plugin-updater": "^2.11.0",
         "dotenv": "^17.4.2",
-        "fs": "0.0.1-security",
         "js-tiktoken": "^1.0.21",
         "lucide-react": "^1.23.0",
         "react": "^19.2.7",
@@ -31,13 +22,19 @@
         "react-markdown": "^10.1.0"
     },
     "devDependencies": {
-        "@tauri-apps/cli": "^2.11.4",
         "@types/node": "^26.2.0",
         "@types/react": "^19.2.17",
         "@types/react-dom": "^19.2.3",
         "@vitejs/plugin-react": "^4.7.0",
+        "electron": "^44.3.0",
+        "electron-builder": "^26.15.3",
+        "electron-log": "^5.4.4",
+        "electron-updater": "^6.8.9",
+        "electron-vite": "^5.0.0",
         "tsx": "^4.23.12",
         "typescript": "~5.8.3",
         "vite": "^7.3.6"
-    }
+    },
+    "description": "Copall — AI chat app",
+    "author": "fairygel"
 }

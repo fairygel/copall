@@ -1,0 +1,100 @@
+.attachedBackdrop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--shadow-color);
+    backdrop-filter: blur(2px);
+    z-index: 1000;
+}
+
+.attachedContent {
+    background-color: var(--background-color);
+    padding: 16px 24px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    max-width: 600px;
+    width: 90%;
+}
+
+.attachedHeader {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    margin-bottom: 16px;
+    color: var(--font-color);
+}
+
+.attachedHeader > :first-child {
+    justify-self: start;
+}
+
+.attachedHeader > h4 {
+    justify-self: center;
+    margin: 0;
+    font-family: 'Andika', sans-serif;
+}
+
+.attachedHeader > :last-child {
+    justify-self: end;
+}
+
+.attachedGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.attachedItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 8px;
+    background-color: var(--container-color);
+    color: var(--inactive-font-color);
+    width: 96px;
+    height: 88px;
+    overflow: hidden;
+}
+
+.attachedThumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.attachedFallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.attachedFallback[hidden] {
+    display: none;
+}
+
+.attachedAdd {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    min-height: 88px;
+    border-radius: 8px;
+    border: 1px dashed var(--border-color);
+    background: transparent;
+    color: var(--inactive-font-color);
+}
+
+.attachedAdd:hover {
+    color: var(--font-color);
+    border-color: var(--inactive-font-color);
+}

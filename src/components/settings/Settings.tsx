@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react';
 import './Settings.css';
 import { CircleAlert, KeyRound, Pin, Power, SunMoon, X } from 'lucide-react';
-import { getCurrentWindow } from '@tauri-apps/api/window';
-import { enable, disable, isEnabled } from '@tauri-apps/plugin-autostart';
-import { type } from '@tauri-apps/plugin-os';
+import {
+    autostartIsEnabled,
+    autostartSet,
+    getOsTypeAsync,
+    isAlwaysOnTop,
+    setAlwaysOnTop as setAlwaysOnTopNative,
+} from '../../service/NativeBridge';
 import Select from '../select/Select';
-
-type Theme = 'dark' | 'light' | 'exclusive';
-
-const THEMES: Theme[] = ['dark', 'light', 'exclusive'];
-
-const THEME_LABEL: Record<Theme, string> = {
-    dark: 'Dark',
-    light: 'Light',
-    exclusive: 'Exclusive',
-};
+import {
+    applyTheme,
+    getSavedTheme,
+    themeFromLabel,
+    THEME_LABEL,
+    THEMES,
+    type Theme,
+} from '../../service/ThemeService';
 
 function Settings({
     onClose,
@@ -23,34 +25,30 @@ function Settings({
     onClose: () => void;
     onManageApiKeys: () => void;
 }) {
-    const appWindow = getCurrentWindow();
-    const osType = type();
+    const [isLinux, setIsLinux] = useState(false);
 
-    const isLinux = osType === 'linux';
-
-    const [theme, setTheme] = useState<Theme>(() => {
-        const saved = localStorage.getItem('theme') as Theme | null;
-        return saved && THEMES.includes(saved) ? saved : 'dark';
-    });
+    const [theme, setTheme] = useState<Theme>(getSavedTheme);
 
     const [alwaysOnTop, setAlwaysOnTop] = useState(false);
     const [openOnStartup, setOpenOnStartup] = useState(false);
     const [alwaysOnTopPending, setAlwaysOnTopPending] = useState(false);
     const [startupPending, setStartupPending] = useState(false);
 
-    const handleClose = () => {
-        onClose();
-    };
+    useEffect(() => {
+        getOsTypeAsync()
+            .then(platform => setIsLinux(platform === 'linux'))
+            .catch(() => setIsLinux(false));
+        isAlwaysOnTop()
+            .then(setAlwaysOnTop)
+            .catch(() => setAlwaysOnTop(false));
+        autostartIsEnabled()
+            .then(setOpenOnStartup)
+            .catch(() => setOpenOnStartup(false));
+    }, []);
 
     const setAppTheme = (next: Theme) => {
-        localStorage.setItem('theme', next);
+        applyTheme(next);
         setTheme(next);
-
-        if (next === 'dark') {
-            document.documentElement.removeAttribute('data-theme');
-        } else {
-            document.documentElement.setAttribute('data-theme', next);
-        }
     };
 
     const handleAlwaysOnTopToggle = async () => {
@@ -58,7 +56,7 @@ function Settings({
         const next = !alwaysOnTop;
         setAlwaysOnTopPending(true);
         try {
-            await appWindow.setAlwaysOnTop(next);
+            await setAlwaysOnTopNative(next);
             setAlwaysOnTop(next);
         } catch (e) {
             console.error('Failed to toggle always on top:', e);
@@ -72,7 +70,7 @@ function Settings({
         const next = !openOnStartup;
         setStartupPending(true);
         try {
-            next ? await enable() : await disable();
+            await autostartSet(next);
             setOpenOnStartup(next);
         } catch (e) {
             console.error('Failed to toggle autostart:', e);
@@ -81,18 +79,13 @@ function Settings({
         }
     };
 
-    useEffect(() => {
-        appWindow.isAlwaysOnTop().then(setAlwaysOnTop);
-        isEnabled().then(setOpenOnStartup);
-    }, []);
-
     return (
-        <div className="modalBackdrop" onClick={handleClose}>
+        <div className="modalBackdrop" onClick={onClose}>
             <div className="modalContent" onClick={e => e.stopPropagation()}>
                 <div className="modalHeader">
                     <div />
                     <h3>Settings</h3>
-                    <button className="clickable" onClick={handleClose}>
+                    <button className="clickable" onClick={onClose}>
                         <X size={14} />
                     </button>
                 </div>
@@ -107,12 +100,7 @@ function Settings({
                             <Select
                                 list={THEMES.map(t => THEME_LABEL[t])}
                                 defaultItem={THEME_LABEL[theme]}
-                                onSelect={label => {
-                                    const next = (Object.entries(THEME_LABEL).find(
-                                        ([, v]) => v === label
-                                    )?.[0] ?? 'dark') as Theme;
-                                    setAppTheme(next);
-                                }}
+                                onSelect={label => setAppTheme(themeFromLabel(label))}
                             />
                         </div>
                         <div className="settingItem">

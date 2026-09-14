@@ -3,7 +3,7 @@ import Message from '../../models/message';
 import './Chat.css';
 import { useEffect, useState } from 'react';
 import React from 'react';
-import { openUrl } from '@tauri-apps/plugin-opener';
+import { openUrl } from '../../service/NativeBridge';
 import { Check, Copy } from 'lucide-react';
 
 function Chat({ messages }: { messages: Message[] }) {
@@ -52,7 +52,7 @@ function Chat({ messages }: { messages: Message[] }) {
 
     return messages.length === 0 ? (
         <div className="emptyContainer">
-            <img src="/copall_nobg.svg" alt="Me .-." className="logo" />
+            <img src="./copall_nobg.svg" alt="Me .-." className="logo" />
             <p>Copall.</p>
         </div>
     ) : (
