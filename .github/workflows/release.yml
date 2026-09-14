@@ -56,6 +56,9 @@ jobs:
       - name: Install frontend dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build app
+        run: pnpm build
+
       - name: Build and upload
         run: pnpm exec electron-builder --config electron/builder.json ${{ matrix.args }} --publish always
         env:
