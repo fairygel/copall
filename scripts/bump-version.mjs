@@ -14,8 +14,8 @@ const USAGE = [
     '  <version>    explicit semver version, must be greater than the current one (leading v allowed)',
     '  major        bump major: 0.1.2 -> 1.0.0',
     '  minor        bump minor: 0.1.2 -> 0.2.0',
-    '  patch        bump patch: 0.1.2 -> 0.1.3, or strip prerelease: 0.1.3-beta2 -> 0.1.3',
-    '  prerelease   append auto-numbered beta suffix: 0.1.2 -> 0.1.2-beta1',
+    '  patch        bump patch: 0.1.2 -> 0.1.3, or finalize beta: 0.1.3-beta2 -> 0.1.3',
+    '  prerelease   start next beta: 0.1.2 -> 0.1.3-beta1, or bump beta: 0.1.3-beta1 -> 0.1.3-beta2',
     '',
     'Examples:',
     '  node scripts/bump-version.mjs 0.2.0',
@@ -105,8 +105,14 @@ function main() {
             ? `${current.major}.${current.minor}.${current.patch + 1}`
             : `${current.major}.${current.minor}.${current.patch}`;
     } else if (arg === 'prerelease') {
-        const base = `${current.major}.${current.minor}.${current.patch}`;
-        newVersion = `${base}-beta${nextPrereleaseNumber(base)}`;
+        if (current.prerelease === null) {
+            const nextPatch = current.patch + 1;
+            const base = `${current.major}.${current.minor}.${nextPatch}`;
+            newVersion = `${base}-beta${nextPrereleaseNumber(base)}`;
+        } else {
+            const base = `${current.major}.${current.minor}.${current.patch}`;
+            newVersion = `${base}-beta${nextPrereleaseNumber(base)}`;
+        }
     } else {
         const parsed = parseVersion(arg);
         if (!parsed) fail(`"${arg}" is not a version, major, minor, patch or prerelease.\n${USAGE}`);
