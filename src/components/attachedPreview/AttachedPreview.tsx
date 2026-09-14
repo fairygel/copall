@@ -5,10 +5,12 @@ import AttachedFile from '../../models/AttachedFile';
 function AttachedPreview({
     files,
     onAdd,
+    onRemove,
     onClose,
 }: {
     files: AttachedFile[];
     onAdd: () => void;
+    onRemove: (id: string) => void;
     onClose: () => void;
 }) {
     return (
@@ -35,6 +37,13 @@ function AttachedPreview({
                                     <Image size={32} />
                                 </span>
                             )}
+                            <button
+                                className="attachedRemove"
+                                aria-label={`Remove ${file.name}`}
+                                onClick={() => onRemove(file.id)}
+                            >
+                                <X size={12} />
+                            </button>
                         </div>
                     ))}
                     <button className="attachedAdd" aria-label="Add file" onClick={onAdd}>

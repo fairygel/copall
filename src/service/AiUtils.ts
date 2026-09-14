@@ -30,9 +30,7 @@ function extractChunks(text: string, extractor: (json: any) => string | undefine
             const content = extractor(JSON.parse(line.slice(6)));
 
             if (content) chunks.push(content);
-        } catch {
-            // Ignore parse errors for non-JSON stream lines
-        }
+        } catch {}
     }
 
     return chunks;

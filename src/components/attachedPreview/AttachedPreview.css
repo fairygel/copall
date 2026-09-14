@@ -50,6 +50,7 @@
 }
 
 .attachedItem {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -59,7 +60,7 @@
     color: var(--inactive-font-color);
     width: 96px;
     height: 88px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .attachedThumb {
@@ -67,6 +68,7 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    border-radius: 8px;
 }
 
 .attachedFallback {
@@ -79,6 +81,27 @@
 
 .attachedFallback[hidden] {
     display: none;
+}
+
+.attachedRemove {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background-color: var(--background-color);
+    color: var(--font-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.attachedRemove:hover {
+    background-color: var(--container-color);
 }
 
 .attachedAdd {

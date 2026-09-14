@@ -9,26 +9,49 @@ import { getModelFromCatalog } from './CatalogService';
 
 const enc = getEncoding('cl100k_base');
 
+const IMAGE_TOKEN_ESTIMATE = 1500;
+
+function countTokens(messages: Message[]): number {
+    const text = JSON.stringify(
+        messages.map(msg => ({
+            role: msg.sender,
+            content: msg.content,
+            images: msg.attachments?.length ?? 0,
+        }))
+    );
+
+    let tokens = enc.encode(text).length;
+
+    for (const msg of messages) {
+        tokens += (msg.attachments?.length ?? 0) * IMAGE_TOKEN_ESTIMATE;
+    }
+
+    return tokens;
+}
+
 const GENERATE_CHAT_NAME_SYSTEM_PROMPT =
     "Generate a concise chat title (max 40 chars) based on the user's message. " +
     "The title must be in the SAME LANGUAGE as the user's text. " +
-    'Be specific and descriptive. No quotes or formatting. Output title only.\n\n' +
-    'User: [message]\nTitle:';
+    'Be specific and descriptive. No quotes or formatting. Output title only.';
 
 export async function generateChatTitle(message: string, model: string) {
-    const prompt = GENERATE_CHAT_NAME_SYSTEM_PROMPT.replace('[message]', message);
-
     const systemMessage: Message = {
         id: crypto.randomUUID(),
-        content: prompt,
+        content: GENERATE_CHAT_NAME_SYSTEM_PROMPT,
         sender: 'system',
+    };
+
+    const userMessage: Message = {
+        id: crypto.randomUUID(),
+        content: message,
+        sender: 'user',
     };
 
     const { provider, modelId } = parseModel(model);
     const client = createClient(provider);
 
     try {
-        const title = await client.generateResponse([systemMessage], modelId);
+        const title = await client.generateResponse([systemMessage, userMessage], modelId);
         const cleanTitle = title.trim().replace(/^["']|["']$/g, '');
 
         return cleanTitle;
@@ -46,14 +69,17 @@ async function trimMessagesToFitContext(messages: Message[], model: string): Pro
         return resultMessages;
     }
 
-    let messageTokens = enc.encode(JSON.stringify(resultMessages)).length;
+    let messageTokens = countTokens(resultMessages);
 
-    // Reserve 10% of the context for safety
     let safeContextLimit = contextLimit - contextLimit * 0.1;
 
-    while (messageTokens > safeContextLimit && resultMessages.length > 1) {
-        resultMessages = resultMessages.slice(1);
-        messageTokens = enc.encode(JSON.stringify(resultMessages)).length;
+    while (messageTokens > safeContextLimit) {
+        const oldestNonSystem = resultMessages.findIndex(msg => msg.sender !== 'system');
+
+        if (oldestNonSystem === -1) break;
+
+        resultMessages.splice(oldestNonSystem, 1);
+        messageTokens = countTokens(resultMessages);
     }
 
     if (resultMessages.length === 0 || messageTokens > safeContextLimit) {
@@ -81,6 +107,7 @@ export async function generateAssistantResponse(
     setMessages(prev => [...prev, assistantMessage]);
 
     let messageContent = '';
+    let lastFlush = 0;
 
     try {
         const client = createClient(provider);
@@ -88,20 +115,39 @@ export async function generateAssistantResponse(
 
         for await (const chunk of stream) {
             messageContent += chunk;
+
+            const now = performance.now();
+
+            if (now - lastFlush < 120) continue;
+
+            lastFlush = now;
+
+            const snapshot = messageContent;
+
             setMessages(prev =>
                 prev.map(msg =>
-                    msg.id === assistantMessageId ? { ...msg, content: messageContent } : msg
+                    msg.id === assistantMessageId ? { ...msg, content: snapshot } : msg
                 )
             );
         }
 
+        const finalContent = messageContent;
+
+        setMessages(prev =>
+            prev.map(msg =>
+                msg.id === assistantMessageId ? { ...msg, content: finalContent } : msg
+            )
+        );
+
         return messageContent;
     } catch (error) {
         const errorMsg = (error as Error).message;
+        const failedContent = messageContent;
+
         setMessages(prev =>
             prev.map(msg =>
                 msg.id === assistantMessageId
-                    ? { ...msg, content: messageContent + '\n' + errorMsg }
+                    ? { ...msg, content: failedContent + '\n' + errorMsg }
                     : msg
             )
         );

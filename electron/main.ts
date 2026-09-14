@@ -2,7 +2,9 @@ import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, shell, Tray } f
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import path from 'node:path';
-import { readFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
+import { lookup } from 'node:dns/promises';
+import { isIP, isIPv4, isIPv6 } from 'node:net';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -13,6 +15,8 @@ const START_IN_TRAY = process.argv.includes('--tray');
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 
+const authorizedPaths = new Set<string>();
+
 app.setName('copall');
 
 if (process.platform === 'linux') {
@@ -22,6 +26,92 @@ if (process.platform === 'linux') {
 
 log.transports.file.level = 'debug';
 autoUpdater.logger = log;
+
+function parseHttpUrl(rawUrl: string): URL {
+    let parsed: URL;
+
+    try {
+        parsed = new URL(rawUrl);
+    } catch {
+        throw new Error('invalid URL');
+    }
+
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+        throw new Error(`refusing to open unsafe scheme: ${parsed.protocol}`);
+    }
+
+    return parsed;
+}
+
+function isLoopbackAddress(address: string): boolean {
+    if (isIPv4(address)) {
+        const first = Number(address.split('.')[0]);
+
+        return first === 127;
+    }
+
+    return address === '::1' || address.toLowerCase().startsWith('fe80:');
+}
+
+function isPrivateIPv4(address: string): boolean {
+    const parts = address.split('.').map(Number);
+
+    if (parts.length !== 4 || parts.some(n => !Number.isInteger(n) || n < 0 || n > 255)) {
+        return true;
+    }
+
+    const [a, b] = parts;
+
+    return (
+        a === 10 || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168) || (a === 169 && b === 254)
+    );
+}
+
+async function assertResolvesPublic(rawUrl: string): Promise<URL> {
+    const parsed = parseHttpUrl(rawUrl);
+
+    if (!parsed.hostname) throw new Error('URL has no hostname');
+
+    if (isIP(parsed.hostname)) {
+        if (isLoopbackAddress(parsed.hostname) || isIPv6(parsed.hostname)) {
+            throw new Error('refusing to fetch non-public address');
+        }
+
+        if (isIPv4(parsed.hostname) && isPrivateIPv4(parsed.hostname)) {
+            throw new Error('refusing to fetch non-public address');
+        }
+
+        return parsed;
+    }
+
+    const name = parsed.hostname.toLowerCase();
+
+    if (name === 'localhost' || name.endsWith('.localhost') || name.endsWith('.local')) {
+        throw new Error('refusing to fetch non-public host');
+    }
+
+    let records: string[];
+
+    try {
+        records = await lookup(parsed.hostname, { all: true }).then(r =>
+            r.map(entry => entry.address)
+        );
+    } catch {
+        throw new Error('could not resolve host');
+    }
+
+    for (const address of records) {
+        if (isLoopbackAddress(address)) {
+            throw new Error('host resolves to a non-public address');
+        }
+
+        if (isIPv6(address) || (isIPv4(address) && isPrivateIPv4(address))) {
+            throw new Error('host resolves to a non-public address');
+        }
+    }
+
+    return parsed;
+}
 
 function createWindow() {
     const windowIcon = isDev
@@ -71,7 +161,7 @@ function createWindow() {
 
 function createTray() {
     const iconPath = isDev
-        ? path.join(__dirname, 'tray-icon.png')
+        ? path.join(__dirname, '../../electron/tray-icon.png')
         : path.join(process.resourcesPath, 'tray-icon.png');
     const icon = nativeImage.createFromPath(iconPath);
 
@@ -120,7 +210,7 @@ function registerIpc() {
     });
 
     ipcMain.handle('shell:open-url', (_event, url: string) => {
-        return shell.openExternal(url);
+        return shell.openExternal(parseHttpUrl(url).toString());
     });
 
     ipcMain.handle('dialog:open-files', async () => {
@@ -134,17 +224,35 @@ function registerIpc() {
 
         if (result.canceled || result.filePaths.length === 0) return null;
 
+        for (const filePath of result.filePaths) authorizedPaths.add(path.resolve(filePath));
+
         return result.filePaths;
     });
 
     ipcMain.handle('fs:path-to-base64', async (_event, filePath: string) => {
-        const bytes = await readFile(filePath);
+        if (typeof filePath !== 'string' || filePath.length === 0) {
+            throw new Error('invalid file path');
+        }
+
+        const resolved = path.resolve(filePath);
+
+        if (!authorizedPaths.has(resolved)) {
+            throw new Error('file was not selected via the open dialog');
+        }
+
+        const fileStat = await stat(resolved);
+
+        if (!fileStat.isFile()) throw new Error('not a file');
+
+        const bytes = await readFile(resolved);
 
         return bytes.toString('base64');
     });
 
     ipcMain.handle('net:fetch-image', async (_event, url: string) => {
-        const response = await fetch(url, {
+        const parsed = await assertResolvesPublic(url);
+
+        const response = await fetch(parsed.toString(), {
             headers: {
                 'User-Agent':
                     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',

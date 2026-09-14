@@ -7,6 +7,7 @@ import MessageBox from './components/messageBox/MessageBox';
 import Chat from './components/chat/Chat';
 
 import AiModel from './models/AiModel';
+import AttachedFile from './models/AttachedFile';
 
 import { generateAssistantResponse, generateChatTitle } from './service/ChatService';
 
@@ -61,17 +62,24 @@ function App() {
         }
     };
 
-    const handleSendMessage = async (content: string, selectedModel: AiModel) => {
+    const handleSendMessage = async (
+        content: string,
+        selectedModel: AiModel,
+        files: AttachedFile[]
+    ) => {
         if (!selectedModel) return;
 
         setSendMessageDisabled(true);
 
         const isFirstMessage = messages.length === 0;
 
+        const liveFiles = files.filter(file => file.base64);
+
         const newMessage = {
             id: crypto.randomUUID(),
             content,
             sender: 'user' as const,
+            ...(liveFiles.length > 0 ? { attachments: liveFiles } : {}),
         };
 
         const updatedMessages = [...messages, newMessage];
@@ -128,7 +136,11 @@ function App() {
 
             <Chat messages={messages} />
 
-            <MessageBox onMessageSent={handleSendMessage} disabled={isSendMessageDisabled} />
+            <MessageBox
+                onMessageSent={handleSendMessage}
+                disabled={isSendMessageDisabled}
+                isSending={isSendMessageDisabled}
+            />
         </main>
     );
 }

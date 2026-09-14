@@ -1,10 +1,11 @@
 import { AiProvider } from './AiProvider';
 
 interface AiModel {
-    id: string; // provider/model-name
+    id: string;
     name: string;
     provider: AiProvider;
     context: number;
+    inputModalities: string[];
 }
 
 export default AiModel;

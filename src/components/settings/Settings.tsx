@@ -31,8 +31,8 @@ function Settings({
 
     const [alwaysOnTop, setAlwaysOnTop] = useState(false);
     const [openOnStartup, setOpenOnStartup] = useState(false);
-    const [alwaysOnTopPending, setAlwaysOnTopPending] = useState(false);
-    const [startupPending, setStartupPending] = useState(false);
+    const [alwaysOnTopPending, setAlwaysOnTopPending] = useState(true);
+    const [startupPending, setStartupPending] = useState(true);
 
     useEffect(() => {
         getOsTypeAsync()
@@ -40,10 +40,12 @@ function Settings({
             .catch(() => setIsLinux(false));
         isAlwaysOnTop()
             .then(setAlwaysOnTop)
-            .catch(() => setAlwaysOnTop(false));
+            .catch(() => setAlwaysOnTop(false))
+            .finally(() => setAlwaysOnTopPending(false));
         autostartIsEnabled()
             .then(setOpenOnStartup)
-            .catch(() => setOpenOnStartup(false));
+            .catch(() => setOpenOnStartup(false))
+            .finally(() => setStartupPending(false));
     }, []);
 
     const setAppTheme = (next: Theme) => {

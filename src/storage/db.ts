@@ -53,6 +53,22 @@ function runTransaction(
     );
 }
 
+function cleanNullAttachments(messages: Message[]): Message[] {
+    return messages.map(msg => {
+        if (!msg.attachments?.length) return msg;
+
+        const live = msg.attachments.filter(file => file.base64);
+
+        if (live.length === msg.attachments.length) return msg;
+
+        if (live.length === 0) {
+            return { id: msg.id, content: msg.content, sender: msg.sender };
+        }
+
+        return { ...msg, attachments: live };
+    });
+}
+
 export async function createChat(name = 'New Chat'): Promise<Chat> {
     const id = crypto.randomUUID();
     const now = Date.now();
@@ -89,7 +105,7 @@ export async function getChat(id: string): Promise<Chat | null> {
         tx.oncomplete = () => {
             db.close();
             if (!meta) resolve(null);
-            else resolve({ ...meta, messages: raw?.messages ?? [] });
+            else resolve({ ...meta, messages: cleanNullAttachments(raw?.messages ?? []) });
         };
         tx.onerror = () => {
             db.close();
@@ -112,7 +128,10 @@ export async function saveChat(chat: Chat): Promise<void> {
 
     await runTransaction(['chatMetas', 'chatMessages'], 'readwrite', tx => {
         tx.objectStore('chatMetas').put(meta);
-        tx.objectStore('chatMessages').put({ id: chat.id, messages: chat.messages });
+        tx.objectStore('chatMessages').put({
+            id: chat.id,
+            messages: cleanNullAttachments(chat.messages),
+        });
     });
 }
 

@@ -1,4 +1,5 @@
 import AttachedFile from '../models/AttachedFile';
+import { compressImage, dataUrlToCompressedJpeg } from './ImageService';
 import { openImageFiles, pathToBase64 } from './NativeBridge';
 
 const ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
@@ -30,8 +31,14 @@ export async function filePathToAttachedFile(path: string): Promise<AttachedFile
 
     try {
         const base64 = await pathToBase64(path);
+        const compressed = await dataUrlToCompressedJpeg(`data:${mime};base64,${base64}`);
 
-        return { id: crypto.randomUUID(), name: getFileName(path), base64, mime };
+        return {
+            id: crypto.randomUUID(),
+            name: getFileName(path),
+            base64: compressed.base64,
+            mime: compressed.mime,
+        };
     } catch {
         return null;
     }
@@ -56,17 +63,15 @@ export async function selectAttachedFiles(): Promise<AttachedFile[]> {
 export async function blobToAttachedFile(blob: Blob): Promise<AttachedFile | null> {
     if (!blob.type.startsWith('image/')) return null;
 
-    const base64 = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-
-        reader.onload = () => resolve((reader.result as string).split(',')[1]);
-        reader.onerror = () => reject(reader.error);
-        reader.readAsDataURL(blob);
-    });
-
     const name = blob instanceof File && blob.name ? blob.name : 'unknown';
 
-    return { id: crypto.randomUUID(), name, base64, mime: blob.type };
+    try {
+        const compressed = await compressImage(blob);
+
+        return { id: crypto.randomUUID(), name, base64: compressed.base64, mime: compressed.mime };
+    } catch {
+        return null;
+    }
 }
 
 export function imagePathsOf(text: string): string[] {
@@ -87,7 +92,12 @@ export function imagePathsOf(text: string): string[] {
             path = stripped;
         }
 
-        if (path.startsWith('/') && getMimeType(path) !== null) paths.add(path);
+        if (/^\/[A-Za-z]:[\\/]/.test(path)) path = path.slice(1);
+
+        const isPosix = path.startsWith('/');
+        const isWindows = /^[A-Za-z]:[\\/]/.test(path) || path.startsWith('\\\\');
+
+        if ((isPosix || isWindows) && getMimeType(path) !== null) paths.add(path);
     }
 
     return [...paths];

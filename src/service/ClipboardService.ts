@@ -1,5 +1,6 @@
 import AttachedFile from '../models/AttachedFile';
 import PasteSnapshot from '../models/PasteSnapshot';
+import { dataUrlToCompressedJpeg } from './ImageService';
 import { fetchImage } from './NativeBridge';
 import { blobToAttachedFile, filePathToAttachedFile, imagePathsOf } from './FileService';
 
@@ -101,7 +102,13 @@ export async function urlToAttachedFile(url: string): Promise<AttachedFile | nul
         console.error(e);
     }
 
-    return { id: crypto.randomUUID(), name, base64, mime };
+    try {
+        const compressed = await dataUrlToCompressedJpeg(`data:${mime};base64,${base64}`);
+
+        return { id: crypto.randomUUID(), name, base64: compressed.base64, mime: compressed.mime };
+    } catch {
+        return null;
+    }
 }
 
 export async function pastedToAttachedFiles(snapshot: PasteSnapshot): Promise<AttachedFile[]> {

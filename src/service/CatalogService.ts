@@ -5,6 +5,7 @@ type CatalogEntry = {
     id: string;
     name: string;
     context: number;
+    inputModalities?: string[];
 };
 
 type Catalog = Record<string, CatalogEntry[]>;
@@ -31,6 +32,7 @@ async function loadCatalog(): Promise<AiModel[]> {
                 id: e.id,
                 name: e.name,
                 context: e.context ?? 0,
+                inputModalities: e.inputModalities ?? ['text'],
                 provider,
             });
         }

@@ -1,4 +1,4 @@
-import { ArrowUp, Paperclip } from 'lucide-react';
+import { ArrowUp, LoaderCircle, Paperclip } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import './MessageBox.css';
 import AiModelSelect from '../select/AiModelSelect';
@@ -6,6 +6,7 @@ import AiModel from '../../models/AiModel';
 import { getModelsFromCatalog } from '../../service/CatalogService';
 import AttachedPreview from '../attachedPreview/AttachedPreview';
 import DropZone from '../dropZone/DropZone';
+import Toast from '../toast/Toast';
 import AttachedFile from '../../models/AttachedFile';
 import PasteSnapshot from '../../models/PasteSnapshot';
 import { selectAttachedFiles } from '../../service/FileService';
@@ -18,9 +19,11 @@ import {
 function MessageBox({
     onMessageSent,
     disabled,
+    isSending,
 }: {
-    onMessageSent: (msg: string, selectedModel: AiModel) => void;
+    onMessageSent: (msg: string, selectedModel: AiModel, files: AttachedFile[]) => void;
     disabled: boolean;
+    isSending: boolean;
 }) {
     const [inputValue, setInputValue] = useState('');
     const [defaultModel, setDefaultModel] = useState<AiModel | null>(null);
@@ -31,6 +34,7 @@ function MessageBox({
     const [attachedFiles, setAttachedFiles] = useState<AttachedFile[]>([]);
     const [pendingConversions, setPendingConversions] = useState(0);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+    const [toast, setToast] = useState<string | null>(null);
     const isConverting = pendingConversions > 0;
 
     useEffect(() => {
@@ -54,23 +58,36 @@ function MessageBox({
         setDefaultModel(model);
     }, [models]);
 
+    const canSend = Boolean(inputValue.trim() || attachedFiles.length > 0);
+    const modelSupportsImages =
+        !defaultModel || defaultModel.inputModalities.includes('image');
     const isDisabled =
-        disabled || inputValue.trim() === '' || isLoadingModels || !defaultModel || isConverting;
+        disabled ||
+        isSending ||
+        !canSend ||
+        isLoadingModels ||
+        !defaultModel ||
+        isConverting;
+
+    const sendMessage = () => {
+        if (isDisabled || !defaultModel) return;
+
+        if (attachedFiles.length > 0 && !defaultModel.inputModalities.includes('image')) {
+            setToast('Sent as text only — this model cannot see images');
+            onMessageSent(inputValue, defaultModel, []);
+            setInputValue('');
+            return;
+        }
+
+        onMessageSent(inputValue, defaultModel, attachedFiles);
+        setInputValue('');
+        setAttachedFiles([]);
+    };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            if (!isDisabled) {
-                onMessageSent(inputValue, defaultModel);
-                setInputValue('');
-            }
-        }
-    };
-
-    const handleSendClick = () => {
-        if (!isDisabled) {
-            setInputValue('');
-            onMessageSent(inputValue, defaultModel);
+            sendMessage();
         }
     };
 
@@ -129,7 +146,7 @@ function MessageBox({
                     );
 
                     if (rest.length > 0) {
-                        setAttachedFiles(prev => [...prev, ...rest]);
+                        setAttachedFiles(prev => [...prev, ...created.slice(1)]);
                     }
                 } else {
                     setAttachedFiles(prev => [...prev, ...created]);
@@ -149,18 +166,24 @@ function MessageBox({
     };
 
     const handlePaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-        e.preventDefault();
-
         const snapshot = snapshotPaste(e.clipboardData);
-        const target = e.currentTarget;
-        const start = target.selectionStart ?? inputValue.length;
-        const end = target.selectionEnd ?? start;
+
+        if (!snapshotHasImage(snapshot)) return;
+
+        e.preventDefault();
 
         const { placeholderId, hasImageHint } = applySnapshot(snapshot);
 
-        resolveSnapshot(snapshot, placeholderId, hasImageHint, text =>
-            setInputValue(prev => prev.slice(0, start) + text + prev.slice(end))
-        );
+        resolveSnapshot(snapshot, placeholderId, hasImageHint, text => {
+            const target = e.target as HTMLTextAreaElement;
+
+            setInputValue(prev => {
+                const start = target.selectionStart ?? prev.length;
+                const end = target.selectionEnd ?? start;
+
+                return prev.slice(0, start) + text + prev.slice(end);
+            });
+        });
     };
 
     const handleDrop = (data: DataTransfer) => {
@@ -187,6 +210,10 @@ function MessageBox({
         });
     };
 
+    const removeFile = (id: string) => {
+        setAttachedFiles(prev => prev.filter(file => file.id !== id));
+    };
+
     const attachFiles = () => {
         if (attachedFiles.length > 0) {
             setIsPreviewOpen(true);
@@ -199,6 +226,7 @@ function MessageBox({
     return (
         <div className="messageContainer">
             <DropZone onDrop={handleDrop} />
+            {toast && <Toast message={toast} onDone={() => setToast(null)} />}
             <textarea
                 className="inputArea"
                 autoFocus
@@ -230,16 +258,22 @@ function MessageBox({
                         defaultItem={defaultModel ?? undefined}
                         disabled={isLoadingModels || disabled}
                     />
+                    {attachedFiles.length > 0 && !modelSupportsImages && (
+                        <span className="visionWarning" title="This model cannot see images">
+                            No vision
+                        </span>
+                    )}
                 </div>
 
-                <button className="sendMessage" disabled={isDisabled} onClick={handleSendClick}>
-                    <ArrowUp size={20} />
+                <button className="sendMessage" disabled={isDisabled} onClick={sendMessage}>
+                    {isSending ? <LoaderCircle size={20} className="sendingSpinner" /> : <ArrowUp size={20} />}
                 </button>
             </div>
             {isPreviewOpen && (
                 <AttachedPreview
                     files={attachedFiles}
                     onAdd={addFiles}
+                    onRemove={removeFile}
                     onClose={() => setIsPreviewOpen(false)}
                 />
             )}
