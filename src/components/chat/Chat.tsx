@@ -4,7 +4,7 @@ import './Chat.css';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import { openUrl } from '../../service/NativeBridge';
-import { Check, Copy } from 'lucide-react';
+import { Check, Copy, Search } from 'lucide-react';
 
 function Chat({ messages }: { messages: Message[] }) {
     const bottomRef = React.useRef<HTMLDivElement>(null);
@@ -25,7 +25,31 @@ function Chat({ messages }: { messages: Message[] }) {
         }
     };
 
+    const extractText = (node: React.ReactNode): string => {
+            if (typeof node === 'string' || typeof node === 'number') return String(node);
+            if (Array.isArray(node)) return node.map(extractText).join('');
+            if (React.isValidElement(node)) {
+                const props = node.props as { children?: React.ReactNode };
+                return extractText(props.children);
+            }
+            return '';
+        };
+
     const components = {
+        blockquote: ({ children }: { children?: React.ReactNode }) => {
+            const searchMatch = /^\[search\]\s?(.*)$/s.exec(extractText(children).trim());
+
+            if (searchMatch) {
+                return (
+                    <span className="searchStatus">
+                        <Search size={14} />
+                        <span>{searchMatch[1].trim() || 'Searching the web'}</span>
+                    </span>
+                );
+            }
+
+            return <blockquote>{children}</blockquote>;
+        },
         a: ({ href, children }: { href?: string; children?: React.ReactNode }) => {
             if (
                 !href ||

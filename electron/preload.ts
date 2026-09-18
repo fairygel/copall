@@ -4,6 +4,18 @@ export interface PendingUpdate {
     version: string;
 }
 
+export interface WebSearchResult {
+    title: string;
+    url: string;
+    snippet: string;
+}
+
+export interface WebPageContent {
+    url: string;
+    title: string;
+    text: string;
+}
+
 const api = {
     hideWindow: (): Promise<void> => ipcRenderer.invoke('window:hide'),
     setAlwaysOnTop: (flag: boolean): Promise<void> =>
@@ -18,6 +30,12 @@ const api = {
         ipcRenderer.invoke('fs:path-to-base64', filePath),
 
     fetchImage: (url: string): Promise<string> => ipcRenderer.invoke('net:fetch-image', url),
+
+    searchWeb: (query: string, apiKey: string): Promise<WebSearchResult[]> =>
+        ipcRenderer.invoke('net:search-web', query, apiKey),
+
+    fetchPageContent: (url: string): Promise<WebPageContent> =>
+        ipcRenderer.invoke('net:fetch-page', url),
 
     osType: (): Promise<string> => ipcRenderer.invoke('os:type'),
 

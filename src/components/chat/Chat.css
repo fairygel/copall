@@ -109,6 +109,15 @@
     outline-offset: 2px;
 }
 
+.searchStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--inactive-font-color);
+    font-size: 13px;
+    font-style: italic;
+}
+
 .messageAttachments {
     display: flex;
     flex-wrap: wrap;

@@ -2,6 +2,18 @@ interface PendingUpdate {
     version: string;
 }
 
+interface WebSearchResult {
+    title: string;
+    url: string;
+    snippet: string;
+}
+
+interface WebPageContent {
+    url: string;
+    title: string;
+    text: string;
+}
+
 interface CopallApi {
     hideWindow: () => Promise<void>;
     setAlwaysOnTop: (flag: boolean) => Promise<void>;
@@ -14,6 +26,9 @@ interface CopallApi {
     pathToBase64: (filePath: string) => Promise<string>;
 
     fetchImage: (url: string) => Promise<string>;
+
+    searchWeb: (query: string, apiKey: string) => Promise<WebSearchResult[]>;
+    fetchPageContent: (url: string) => Promise<WebPageContent>;
 
     osType: () => Promise<string>;
 

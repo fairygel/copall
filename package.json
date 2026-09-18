@@ -14,14 +14,17 @@
         "version:bump": "node scripts/bump-version.mjs"
     },
     "dependencies": {
+        "@mozilla/readability": "^0.6.0",
         "dotenv": "^17.4.2",
         "js-tiktoken": "^1.0.21",
+        "jsdom": "^30.1.0",
         "lucide-react": "^1.23.0",
         "react": "^19.2.7",
         "react-dom": "^19.2.7",
         "react-markdown": "^10.1.0"
     },
     "devDependencies": {
+        "@types/jsdom": "^30.0.0",
         "@types/node": "^26.2.0",
         "@types/react": "^19.2.17",
         "@types/react-dom": "^19.2.3",

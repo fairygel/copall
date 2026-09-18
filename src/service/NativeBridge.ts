@@ -39,6 +39,26 @@ export async function fetchImage(url: string): Promise<string> {
     return requireCopall().fetchImage(url);
 }
 
+export interface WebSearchResult {
+    title: string;
+    url: string;
+    snippet: string;
+}
+
+export interface WebPageContent {
+    url: string;
+    title: string;
+    text: string;
+}
+
+export async function searchWeb(query: string, apiKey: string): Promise<WebSearchResult[]> {
+    return requireCopall().searchWeb(query, apiKey);
+}
+
+export async function fetchPageContent(url: string): Promise<WebPageContent> {
+    return requireCopall().fetchPageContent(url);
+}
+
 export async function getOsTypeAsync(): Promise<string> {
     const platform = await requireCopall().osType();
 
