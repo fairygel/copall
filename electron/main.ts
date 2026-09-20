@@ -288,8 +288,6 @@ function registerIpc() {
         const trimmed = query.trim().slice(0, 400);
 
         try {
-            log.info(`[search] request: query=${JSON.stringify(trimmed)} count=5`);
-
             const response = await fetch(`${LANGSEARCH_BASE_URL}/web-search`, {
                 method: 'POST',
                 headers: {
@@ -301,8 +299,6 @@ function registerIpc() {
                     count: 5,
                 }),
             });
-
-            log.info(`[search] HTTP ${response.status} for query=${JSON.stringify(trimmed)}`);
 
             if (response.status === 401 || response.status === 403) {
                 throw new Error('LangSearch API key is invalid or has no access (check settings)');

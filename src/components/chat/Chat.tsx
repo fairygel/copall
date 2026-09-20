@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import { openUrl } from '../../service/NativeBridge';
 import { Check, Copy, Search } from 'lucide-react';
+import ChatScroll from './ChatScroll';
 
 function Chat({ messages }: { messages: Message[] }) {
     const bottomRef = React.useRef<HTMLDivElement>(null);
@@ -78,7 +79,7 @@ function Chat({ messages }: { messages: Message[] }) {
             <p>Copall.</p>
         </div>
     ) : (
-        <div className="chatContainer">
+        <ChatScroll>
             {messages.map(message => (
                 <div key={message.id} className="messageWrapper">
                     {message.attachments && message.attachments.length > 0 && (
@@ -110,7 +111,7 @@ function Chat({ messages }: { messages: Message[] }) {
                 </div>
             ))}
             <div ref={bottomRef}></div>
-        </div>
+        </ChatScroll>
     );
 }
 

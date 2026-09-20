@@ -43,7 +43,8 @@ type ChatMsg = { role: string; content?: unknown; [key: string]: unknown };
 
 type ToolAction =
     | { kind: 'search'; callId: string; query: string }
-    | { kind: 'page'; callId: string; url: string };
+    | { kind: 'page'; callId: string; url: string }
+    | { kind: 'unknown'; callId: string; toolName: string };
 
 interface StreamSummary {
     assistantMsg: ChatMsg | null;
@@ -87,6 +88,15 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
                             'Wait for the other result, then ' +
                             're-issue this call alone if still needed.',
                     });
+                }
+
+                if (first.kind === 'unknown') {
+                    history.push({
+                        role: 'tool',
+                        tool_call_id: first.callId,
+                        content: `Unknown tool "${first.toolName}" is not available. Answer from your own knowledge.`,
+                    });
+                    continue;
                 }
 
                 if (first.kind === 'search') {
@@ -300,11 +310,7 @@ async function* readOpenAiSse(response: Response): AsyncGenerator<string, Stream
             slot.name !== SEARCH_TOOL_NAME &&
             slot.name !== PAGE_TOOL_NAME
         ) {
-            actions.push({
-                kind: 'search',
-                callId: slot.id,
-                query: `Unknown tool "${slot.name}" is not available. Answer from your own knowledge.`,
-            });
+            actions.push({ kind: 'unknown', callId: slot.id, toolName: slot.name });
             continue;
         }
 

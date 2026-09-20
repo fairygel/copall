@@ -5,6 +5,7 @@ import { AVAILABLE_PROVIDERS, getApiKey, setApiKey } from '../../config/AiProvid
 import {
     getSearchApiKey,
     setSearchApiKey,
+    SEARCH_API_KEY_ICON,
     SEARCH_API_KEY_LABEL,
     SEARCH_API_KEY_PLACEHOLDER,
     SEARCH_API_KEY_STORAGE_KEY,
@@ -113,6 +114,12 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
                     <div className="settingsSection">
                         <div className="settingItem">
                             <div className="settingLabel">
+                                <img
+                                    src={`./${SEARCH_API_KEY_ICON}`}
+                                    alt={SEARCH_API_KEY_LABEL}
+                                    width={18}
+                                    height={18}
+                                />
                                 <span>{SEARCH_API_KEY_LABEL}</span>
                             </div>
                             <input
