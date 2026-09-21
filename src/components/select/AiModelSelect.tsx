@@ -103,6 +103,15 @@ function AiModelSelect({
     }, [list, searchQuery]);
 
     useEffect(() => {
+        if (searchQuery.trim()) return;
+        const names = Object.keys(filteredGroups);
+        if (names.length === 1) {
+            const sole = names[0];
+            setExpandedProviders(prev => (prev[sole] ? prev : { ...prev, [sole]: true }));
+        }
+    }, [filteredGroups, searchQuery]);
+
+    useEffect(() => {
         if (searchQuery.trim()) {
             const allExpanded: Record<string, boolean> = {};
             Object.keys(filteredGroups).forEach(provider => {
