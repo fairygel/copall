@@ -91,6 +91,10 @@ export async function relaunchAfterUpdate(): Promise<void> {
     await requireCopall().relaunch();
 }
 
+export async function getAppVersion(): Promise<string> {
+    return requireCopall().appVersion();
+}
+
 export function onUpdaterDownloaded(callback: () => void): () => void {
     return requireCopall().onUpdaterDownloaded(callback);
 }

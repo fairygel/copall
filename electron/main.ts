@@ -616,6 +616,10 @@ function registerIpc() {
         autoUpdater.quitAndInstall();
     });
 
+    ipcMain.handle('app:version', () => {
+        return app.getVersion();
+    });
+
     ipcMain.handle('updater:check', async () => {
         if (isDev) return null;
 

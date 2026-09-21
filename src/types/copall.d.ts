@@ -37,6 +37,8 @@ interface CopallApi {
 
     relaunch: () => Promise<void>;
 
+    appVersion: () => Promise<string>;
+
     updaterCheck: () => Promise<PendingUpdate | null>;
     updaterDownloadAndInstall: () => Promise<void>;
     onUpdaterDownloaded: (callback: () => void) => () => void;

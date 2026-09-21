@@ -45,6 +45,8 @@ const api = {
 
     relaunch: (): Promise<void> => ipcRenderer.invoke('app:relaunch'),
 
+    appVersion: (): Promise<string> => ipcRenderer.invoke('app:version'),
+
     updaterCheck: (): Promise<PendingUpdate | null> => ipcRenderer.invoke('updater:check'),
     updaterDownloadAndInstall: (): Promise<void> =>
         ipcRenderer.invoke('updater:download-and-install'),
