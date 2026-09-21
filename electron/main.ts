@@ -26,6 +26,7 @@ if (process.platform === 'linux') {
 
 log.transports.file.level = 'debug';
 autoUpdater.logger = log;
+autoUpdater.autoDownload = false;
 
 function parseHttpUrl(rawUrl: string): URL {
     let parsed: URL;
@@ -635,6 +636,10 @@ function registerIpc() {
 
     ipcMain.handle('updater:download-and-install', async () => {
         await autoUpdater.downloadUpdate();
+    });
+
+    autoUpdater.on('download-progress', info => {
+        mainWindow?.webContents.send('updater:download-progress', { percent: info.percent });
     });
 
     autoUpdater.on('update-downloaded', () => {

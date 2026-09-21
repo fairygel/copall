@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import {
     checkForUpdate,
     onUpdaterDownloaded,
+    onUpdaterDownloadProgress,
     relaunchAfterUpdate,
     type NativePendingUpdate,
 } from './service/NativeBridge';
@@ -25,6 +26,10 @@ function App() {
     const [settingsView, setSettingsView] = useState<'settings' | 'apiKeys' | null>(null);
     const [isSendMessageDisabled, setSendMessageDisabled] = useState(false);
     const [pendingUpdate, setPendingUpdate] = useState<NativePendingUpdate | null>(null);
+    const [updateDownloadState, setUpdateDownloadState] = useState<
+        'idle' | 'downloading' | 'downloaded'
+    >('idle');
+    const [updateDownloadPercent, setUpdateDownloadPercent] = useState(0);
 
     useEffect(() => {
         (async () => {
@@ -36,19 +41,38 @@ function App() {
             }
         })();
 
-        return onUpdaterDownloaded(() => {
+        const offProgress = onUpdaterDownloadProgress(percent => {
+            setUpdateDownloadState('downloading');
+            setUpdateDownloadPercent(Math.round(percent));
+        });
+
+        const offDownloaded = onUpdaterDownloaded(() => {
+            setUpdateDownloadState('downloaded');
             relaunchAfterUpdate().catch(console.error);
         });
+
+        return () => {
+            offProgress();
+            offDownloaded();
+        };
     }, []);
 
     const handleUpdate = async () => {
-        if (!pendingUpdate) return;
+        if (!pendingUpdate || updateDownloadState !== 'idle') return;
+        setUpdateDownloadState('downloading');
         try {
             await pendingUpdate.downloadAndInstall();
         } catch (e) {
             console.error('update install failed:', e);
             setPendingUpdate(null);
+            setUpdateDownloadState('idle');
         }
+    };
+
+    const handleUpdateLater = () => {
+        setPendingUpdate(null);
+        setUpdateDownloadState('idle');
+        setUpdateDownloadPercent(0);
     };
 
     const { messages, chatName, setMessages, setChatName, createNewChat } = useChat();
@@ -112,8 +136,10 @@ function App() {
             {pendingUpdate && (
                 <UpdateDialog
                     version={pendingUpdate.version}
+                    downloadState={updateDownloadState}
+                    downloadPercent={updateDownloadPercent}
                     onUpdate={handleUpdate}
-                    onLater={() => setPendingUpdate(null)}
+                    onLater={handleUpdateLater}
                 />
             )}
             {settingsView === 'settings' && (

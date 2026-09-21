@@ -94,3 +94,7 @@ export async function relaunchAfterUpdate(): Promise<void> {
 export function onUpdaterDownloaded(callback: () => void): () => void {
     return requireCopall().onUpdaterDownloaded(callback);
 }
+
+export function onUpdaterDownloadProgress(callback: (percent: number) => void): () => void {
+    return requireCopall().onUpdaterDownloadProgress(callback);
+}

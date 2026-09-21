@@ -15,6 +15,32 @@
     justify-content: center;
 }
 
+.updateButton:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+.updateProgress {
+    height: 8px;
+    margin: 0 0 12px;
+    border-radius: 4px;
+    background-color: var(--container-color);
+    overflow: hidden;
+}
+
+.updateProgressBar {
+    height: 100%;
+    border-radius: 4px;
+    background-color: var(--accent-color);
+    transition: width 0.3s ease;
+}
+
+.updateStatus {
+    margin: 0 0 16px !important;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
 .updateButton {
     cursor: pointer;
     padding: 8px 28px;

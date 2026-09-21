@@ -55,6 +55,14 @@ const api = {
 
         return () => ipcRenderer.removeListener('updater:downloaded', listener);
     },
+    onUpdaterDownloadProgress: (callback: (percent: number) => void): (() => void) => {
+        const listener = (_event: unknown, payload: { percent: number }) =>
+            callback(payload.percent);
+
+        ipcRenderer.on('updater:download-progress', listener);
+
+        return () => ipcRenderer.removeListener('updater:download-progress', listener);
+    },
 };
 
 export type CopallApi = typeof api;
