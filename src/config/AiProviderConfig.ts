@@ -38,3 +38,14 @@ export function getApiKey(provider: AiProvider): string {
 export function setApiKey(provider: AiProvider, apiKey: string) {
     localStorage.setItem(provider.id + 'ApiKey', apiKey);
 }
+
+export const SHOW_ONLY_AVAILABLE_PROVIDERS_KEY = 'showOnlyAvailableProviders';
+
+export function getShowOnlyAvailableProviders(): boolean {
+    const raw = localStorage.getItem(SHOW_ONLY_AVAILABLE_PROVIDERS_KEY);
+    return raw === null ? true : raw === 'true';
+}
+
+export function setShowOnlyAvailableProviders(value: boolean) {
+    localStorage.setItem(SHOW_ONLY_AVAILABLE_PROVIDERS_KEY, String(value));
+}

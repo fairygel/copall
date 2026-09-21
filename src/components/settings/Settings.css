@@ -192,6 +192,14 @@ h4,
     filter: invert(var(--is-dark-mode));
 }
 
+.settingEmptyState {
+    color: var(--inactive-font-color);
+    font-family: 'Andika', sans-serif;
+    font-size: 13px;
+    text-align: center;
+    padding: 4px 0;
+}
+
 .textSwitch {
     display: flex;
     flex-direction: row;

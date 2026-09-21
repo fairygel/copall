@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import './Settings.css';
-import { X } from 'lucide-react';
-import { AVAILABLE_PROVIDERS, getApiKey, setApiKey } from '../../config/AiProviderConfig';
+import { CircleAlert, X } from 'lucide-react';
+import {
+    AVAILABLE_PROVIDERS,
+    getApiKey,
+    getShowOnlyAvailableProviders,
+    setApiKey,
+    setShowOnlyAvailableProviders,
+} from '../../config/AiProviderConfig';
 import {
     getSearchApiKey,
     setSearchApiKey,
@@ -24,6 +30,21 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
     const [apiKeys, setApiKeys] = useState<Record<string, string>>(readStoredKeys);
     const [initialApiKeys, setInitialApiKeys] =
         useState<Record<string, string>>(readStoredKeys);
+    const [showOnlyAvailable, setShowOnlyAvailable] = useState(
+        getShowOnlyAvailableProviders
+    );
+
+    const handleShowOnlyAvailableToggle = () => {
+        const next = !showOnlyAvailable;
+        setShowOnlyAvailable(next);
+        setShowOnlyAvailableProviders(next);
+    };
+
+    const visibleProviders = showOnlyAvailable
+        ? AVAILABLE_PROVIDERS.filter(
+              provider => (apiKeys[provider.id] ?? '').trim() !== ''
+          )
+        : AVAILABLE_PROVIDERS;
 
     const handleKeyBlur = (providerId: string) => {
         if (providerId === SEARCH_API_KEY_STORAGE_KEY) {
@@ -84,7 +105,37 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
                 <div className="modalBody">
                     <h4>Api Keys</h4>
                     <div className="settingsSection">
-                        {AVAILABLE_PROVIDERS.map(provider => (
+                        <div className="settingItem">
+                            <div className="settingLabel">
+                                <span>Show Only Available Providers</span>
+                                <button
+                                    type="button"
+                                    className="settingTooltipTrigger"
+                                    aria-label="Only providers with an API key entered are shown in this list"
+                                >
+                                    <CircleAlert size={14} />
+                                    <span className="settingTooltipBubble" role="tooltip">
+                                        Only providers with an API key entered are shown in this
+                                        list
+                                    </span>
+                                </button>
+                            </div>
+                            <button
+                                type="button"
+                                className={`toggleSwitch ${showOnlyAvailable ? 'active' : ''}`}
+                                aria-pressed={showOnlyAvailable}
+                                onClick={handleShowOnlyAvailableToggle}
+                            >
+                                <span className="toggleThumb" />
+                            </button>
+                        </div>
+                        {visibleProviders.length === 0 && (
+                            <div className="settingEmptyState">
+                                No providers with API keys. Turn off the filter above to
+                                add keys.
+                            </div>
+                        )}
+                        {visibleProviders.map(provider => (
                             <div key={provider.id} className="settingItem">
                                 <div className="settingLabel">
                                     <img
