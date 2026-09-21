@@ -196,6 +196,28 @@ function createTray() {
     });
 }
 
+function isNewerVersion(latest: string, current: string) {
+    const parse = (v: string) =>
+        v.split('.').map(part => {
+            const match = /^(\d+)(.*)$/.exec(part.trim());
+            return { num: match ? Number(match[1]) : 0, suffix: match ? match[2] : part };
+        });
+    const a = parse(latest);
+    const b = parse(current);
+    const len = Math.max(a.length, b.length);
+    for (let i = 0; i < len; i++) {
+        const x = a[i] ?? { num: 0, suffix: '' };
+        const y = b[i] ?? { num: 0, suffix: '' };
+        if (x.num !== y.num) return x.num > y.num;
+        if (x.suffix !== y.suffix) {
+            if (!x.suffix) return true;
+            if (!y.suffix) return false;
+            return x.suffix > y.suffix;
+        }
+    }
+    return false;
+}
+
 function registerIpc() {
     ipcMain.handle('window:hide', () => {
         mainWindow?.hide();
@@ -601,6 +623,8 @@ function registerIpc() {
 
             if (!result?.updateInfo) return null;
 
+            if (!isNewerVersion(result.updateInfo.version, app.getVersion())) return null;
+
             return { version: result.updateInfo.version };
         } catch (e) {
             log.error('update check failed:', e);
@@ -641,10 +665,6 @@ if (!registerSingleInstance()) {
         registerIpc();
         createWindow();
         createTray();
-
-        if (!isDev) {
-            autoUpdater.checkForUpdatesAndNotify().catch(e => log.error('updater error:', e));
-        }
     });
 
     app.on('window-all-closed', () => {
