@@ -72,8 +72,8 @@ export async function autostartIsEnabled(): Promise<boolean> {
     return requireCopall().autostartIsEnabled();
 }
 
-export async function autostartSet(enabled: boolean): Promise<void> {
-    await requireCopall().autostartSet(enabled);
+export async function autostartSet(enabled: boolean): Promise<boolean> {
+    return requireCopall().autostartSet(enabled);
 }
 
 export async function checkForUpdate(): Promise<NativePendingUpdate | null> {

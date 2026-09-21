@@ -33,7 +33,7 @@ interface CopallApi {
     osType: () => Promise<string>;
 
     autostartIsEnabled: () => Promise<boolean>;
-    autostartSet: (enabled: boolean) => Promise<void>;
+    autostartSet: (enabled: boolean) => Promise<boolean>;
 
     relaunch: () => Promise<void>;
 

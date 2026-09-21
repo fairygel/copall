@@ -72,8 +72,8 @@ function Settings({
         const next = !openOnStartup;
         setStartupPending(true);
         try {
-            await autostartSet(next);
-            setOpenOnStartup(next);
+            const actual = await autostartSet(next);
+            setOpenOnStartup(actual);
         } catch (e) {
             console.error('Failed to toggle autostart:', e);
         } finally {

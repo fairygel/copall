@@ -40,7 +40,7 @@ const api = {
     osType: (): Promise<string> => ipcRenderer.invoke('os:type'),
 
     autostartIsEnabled: (): Promise<boolean> => ipcRenderer.invoke('autostart:is-enabled'),
-    autostartSet: (enabled: boolean): Promise<void> =>
+    autostartSet: (enabled: boolean): Promise<boolean> =>
         ipcRenderer.invoke('autostart:set', enabled),
 
     relaunch: (): Promise<void> => ipcRenderer.invoke('app:relaunch'),

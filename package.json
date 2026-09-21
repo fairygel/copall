@@ -4,6 +4,7 @@
     "version": "0.3.4",
     "type": "module",
     "main": "dist-electron/main/main.js",
+    "desktopName": "me.fairygel.copall.desktop",
     "scripts": {
         "dev": "electron-vite dev --noSandbox",
         "build": "tsc && electron-vite build",

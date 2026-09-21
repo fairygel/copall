@@ -2,7 +2,7 @@ import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, shell, Tray } f
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import path from 'node:path';
-import { readFile, stat } from 'node:fs/promises';
+import { mkdir, readFile, stat, unlink, writeFile } from 'node:fs/promises';
 import { lookup } from 'node:dns/promises';
 import { isIP, isIPv4, isIPv6 } from 'node:net';
 import { fileURLToPath } from 'node:url';
@@ -531,15 +531,62 @@ function registerIpc() {
         return process.platform;
     });
 
+    const AUTOSTART_ARGS = ['--tray'];
+    const AUTOSTART_DESKTOP_FILE = 'copall.desktop';
+
+    function getAutostartDesktopPath() {
+        return path.join(app.getPath('home'), '.config', 'autostart', AUTOSTART_DESKTOP_FILE);
+    }
+
+    async function isLinuxAutostartEnabled() {
+        try {
+            await stat(getAutostartDesktopPath());
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    async function setLinuxAutostart(enabled: boolean) {
+        const desktopPath = getAutostartDesktopPath();
+        if (!enabled) {
+            try {
+                await unlink(desktopPath);
+            } catch (e: unknown) {
+                if ((e as NodeJS.ErrnoException).code !== 'ENOENT') throw e;
+            }
+            return false;
+        }
+        const execPath = process.env.APPIMAGE ?? process.execPath;
+        const entry = [
+            '[Desktop Entry]',
+            'Type=Application',
+            'Version=1.0',
+            'Name=copall',
+            `Exec="${execPath}" --tray`,
+            'Terminal=false',
+            'X-GNOME-Autostart-enabled=true',
+            'NoDisplay=false',
+            '',
+        ].join('\n');
+        await mkdir(path.dirname(desktopPath), { recursive: true });
+        await writeFile(desktopPath, entry);
+        return true;
+    }
+
     ipcMain.handle('autostart:is-enabled', () => {
-        return app.getLoginItemSettings().openAtLogin;
+        if (process.platform === 'linux') return isLinuxAutostartEnabled();
+        return app.getLoginItemSettings({ args: AUTOSTART_ARGS }).openAtLogin;
     });
 
     ipcMain.handle('autostart:set', (_event, enabled: boolean) => {
+        if (process.platform === 'linux') return setLinuxAutostart(enabled);
         app.setLoginItemSettings({
             openAtLogin: enabled,
-            args: enabled ? ['--tray'] : [],
+            args: AUTOSTART_ARGS,
         });
+
+        return app.getLoginItemSettings({ args: AUTOSTART_ARGS }).openAtLogin;
     });
 
     ipcMain.handle('app:relaunch', () => {
