@@ -40,12 +40,6 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
         setShowOnlyAvailableProviders(next);
     };
 
-    const visibleProviders = showOnlyAvailable
-        ? AVAILABLE_PROVIDERS.filter(
-              provider => (apiKeys[provider.id] ?? '').trim() !== ''
-          )
-        : AVAILABLE_PROVIDERS;
-
     const handleKeyBlur = (providerId: string) => {
         if (providerId === SEARCH_API_KEY_STORAGE_KEY) {
             const value = apiKeys[providerId] ?? '';
@@ -111,12 +105,11 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
                                 <button
                                     type="button"
                                     className="settingTooltipTrigger"
-                                    aria-label="Only providers with an API key entered are shown in this list"
+                                    aria-label="When enabled, the model picker only shows providers with an API key. All providers are still listed here."
                                 >
                                     <CircleAlert size={14} />
                                     <span className="settingTooltipBubble" role="tooltip">
-                                        Only providers with an API key entered are shown in this
-                                        list
+                                        Model picker shows only providers with an API key
                                     </span>
                                 </button>
                             </div>
@@ -129,13 +122,7 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
                                 <span className="toggleThumb" />
                             </button>
                         </div>
-                        {visibleProviders.length === 0 && (
-                            <div className="settingEmptyState">
-                                No providers with API keys. Turn off the filter above to
-                                add keys.
-                            </div>
-                        )}
-                        {visibleProviders.map(provider => (
+                        {AVAILABLE_PROVIDERS.map(provider => (
                             <div key={provider.id} className="settingItem">
                                 <div className="settingLabel">
                                     <img
