@@ -2,6 +2,7 @@ import Message from '../models/message';
 import { parseModel } from './AiUtils';
 
 import { createClient } from './ClientProviderFactory';
+import type { ChatOptions } from './ai-client/BaseClient';
 
 import { Dispatch, SetStateAction } from 'react';
 import { getEncoding } from 'js-tiktoken';
@@ -94,7 +95,8 @@ async function trimMessagesToFitContext(messages: Message[], model: string): Pro
 export async function generateAssistantResponse(
     messages: Message[],
     model: string,
-    setMessages: Dispatch<SetStateAction<Message[]>>
+    setMessages: Dispatch<SetStateAction<Message[]>>,
+    options?: ChatOptions
 ): Promise<string> {
     const { provider, modelId } = parseModel(model);
     const contextTrimmedMessages = await trimMessagesToFitContext(messages, model);
@@ -114,7 +116,7 @@ export async function generateAssistantResponse(
 
     try {
         const client = createClient(provider);
-        const stream = client.generateStream(contextTrimmedMessages, modelId);
+        const stream = client.generateStream(contextTrimmedMessages, modelId, options);
 
         for await (const chunk of stream) {
             messageContent += chunk;

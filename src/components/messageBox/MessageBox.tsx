@@ -2,8 +2,9 @@ import { ArrowUp, Lightbulb, LoaderCircle, Paperclip } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import './MessageBox.css';
 import AiModelSelect from '../select/AiModelSelect';
-import ReasoningSelect, { ReasoningChoice, ReasoningSelectHandle } from '../reasoning/ReasoningSelect';
+import ReasoningSelect, { ReasoningSelectHandle } from '../reasoning/ReasoningSelect';
 import AiModel from '../../models/AiModel';
+import type { ReasoningChoice } from '../../service/ai-client/BaseClient';
 import { getModelsFromCatalog } from '../../service/CatalogService';
 import {
     API_KEYS_CHANGED_EVENT,
@@ -27,7 +28,12 @@ function MessageBox({
     disabled,
     isSending,
 }: {
-    onMessageSent: (msg: string, selectedModel: AiModel, files: AttachedFile[]) => void;
+    onMessageSent: (
+        msg: string,
+        selectedModel: AiModel,
+        files: AttachedFile[],
+        reasoning: ReasoningChoice
+    ) => void;
     disabled: boolean;
     isSending: boolean;
 }) {
@@ -104,7 +110,7 @@ function MessageBox({
     const [reasoningLevel, setReasoningLevel] = useState<ReasoningChoice>('default');
     const reasoningSelectRef = useRef<ReasoningSelectHandle>(null);
     const reasoningActive =
-        modelSupportsReasoning && reasoningLevel !== 'none' && reasoningLevel !== 'default';
+        modelSupportsReasoning && reasoningLevel !== 'default';
     const isDisabled =
         disabled ||
         isSending ||
@@ -116,14 +122,17 @@ function MessageBox({
     const sendMessage = () => {
         if (isDisabled || !defaultModel) return;
 
+        const effectiveReasoning: ReasoningChoice =
+            modelSupportsReasoning && reasoningLevel !== 'default' ? reasoningLevel : 'default';
+
         if (attachedFiles.length > 0 && !defaultModel.inputModalities.includes('image')) {
             setToast('Sent as text only — this model cannot see images');
-            onMessageSent(inputValue, defaultModel, []);
+            onMessageSent(inputValue, defaultModel, [], effectiveReasoning);
             setInputValue('');
             return;
         }
 
-        onMessageSent(inputValue, defaultModel, attachedFiles);
+        onMessageSent(inputValue, defaultModel, attachedFiles, effectiveReasoning);
         setInputValue('');
         setAttachedFiles([]);
     };

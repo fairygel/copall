@@ -58,11 +58,7 @@ function ReasoningSelect(
         onSelect(level);
     };
 
-    const options: ReasoningChoice[] = [
-        ...levels.filter(level => level !== 'none').reverse(),
-        'none',
-        'default',
-    ];
+    const options: ReasoningChoice[] = [...levels.slice().reverse(), 'default'];
 
     return (
         <div

@@ -1,8 +1,19 @@
 import Message from '../../models/message';
+import type { ReasoningLevel } from '../../models/AiModel';
+
+export type ReasoningChoice = ReasoningLevel | 'default';
+
+export interface ChatOptions {
+    reasoning?: ReasoningChoice;
+}
 
 export interface BaseClient {
-    generateResponse(messages: Message[], model: string): Promise<string>;
-    generateStream(messages: Message[], model: string): AsyncGenerator<string>;
+    generateResponse(messages: Message[], model: string, options?: ChatOptions): Promise<string>;
+    generateStream(
+        messages: Message[],
+        model: string,
+        options?: ChatOptions
+    ): AsyncGenerator<string>;
 }
 
 export const MAX_SEARCHES = 2;

@@ -9,6 +9,7 @@ import Chat from './components/chat/Chat';
 
 import AiModel from './models/AiModel';
 import AttachedFile from './models/AttachedFile';
+import type { ReasoningChoice } from './service/ai-client/BaseClient';
 
 import { generateAssistantResponse, generateChatTitle } from './service/ChatService';
 
@@ -92,7 +93,8 @@ function App() {
     const handleSendMessage = async (
         content: string,
         selectedModel: AiModel,
-        files: AttachedFile[]
+        files: AttachedFile[],
+        reasoning: ReasoningChoice
     ) => {
         if (!selectedModel) return;
 
@@ -117,7 +119,8 @@ function App() {
             const response = await generateAssistantResponse(
                 updatedMessages,
                 selectedModel.id,
-                setMessages
+                setMessages,
+                { reasoning }
             );
 
             if (isFirstMessage && response) {

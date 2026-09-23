@@ -3,6 +3,7 @@ import Message from '../../models/message';
 import { getApiKey } from '../../config/AiProviderConfig';
 import {
     BaseClient,
+    ChatOptions,
     MAX_SEARCHES,
     MAX_TOOL_ROUNDS,
     PAGE_TOOL_DESCRIPTION,
@@ -53,8 +54,17 @@ interface StreamSummary {
 
 export function createOpenAIClient(provider: AiProvider): BaseClient {
     return {
-        async generateResponse(messages: Message[], model: string): Promise<string> {
-            const response = await fetchChatRequest(toChatFormat(messages), model, false);
+        async generateResponse(
+            messages: Message[],
+            model: string,
+            options?: ChatOptions
+        ): Promise<string> {
+            const response = await fetchChatRequest(
+                toChatFormat(messages),
+                model,
+                false,
+                options?.reasoning
+            );
 
             await checkErrorResponse(response);
 
@@ -62,12 +72,17 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
             return data.choices?.[0]?.message?.content || '';
         },
 
-        async *generateStream(messages: Message[], model: string): AsyncGenerator<string> {
+        async *generateStream(
+            messages: Message[],
+            model: string,
+            options?: ChatOptions
+        ): AsyncGenerator<string> {
             const history: ChatMsg[] = withSearchPrompt(toChatFormat(messages));
+            const reasoning = options?.reasoning;
             let searchesUsed = 0;
 
             for (let round = 0; round <= MAX_TOOL_ROUNDS; round++) {
-                const response = await fetchChatRequest(history, model, true);
+                const response = await fetchChatRequest(history, model, true, reasoning);
 
                 await checkErrorResponse(response);
 
@@ -179,7 +194,8 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
     async function fetchChatRequest(
         history: ChatMsg[],
         model: string,
-        streaming: boolean
+        streaming: boolean,
+        reasoning?: ChatOptions['reasoning']
     ): Promise<Response> {
         const apiKey = getApiKey(provider);
         if (!apiKey) throw new Error(`For chatting, ${provider.name}ApiKey is required.`);
@@ -191,10 +207,13 @@ export function createOpenAIClient(provider: AiProvider): BaseClient {
                 Authorization: `Bearer ${apiKey}`,
             },
             body: JSON.stringify({
-                model: model,
+                model,
                 messages: history,
                 stream: streaming,
                 ...(streaming ? { tools: [SEARCH_TOOL, PAGE_TOOL], tool_choice: 'auto' } : {}),
+                ...(reasoning && reasoning !== 'default'
+                    ? { reasoning_effort: reasoning }
+                    : {}),
             }),
         });
 

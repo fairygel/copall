@@ -10,6 +10,7 @@ import {
 import { parseSsePayload, readSseLines } from '../AiUtils';
 import {
     BaseClient,
+    ChatOptions,
     MAX_SEARCHES,
     MAX_TOOL_ROUNDS,
     PAGE_TOOL_DESCRIPTION,
@@ -59,13 +60,18 @@ interface InteractionSummary {
 
 export function createGeminiService(provider: AiProvider): BaseClient {
     return {
-        async generateResponse(messages: Message[], model: string): Promise<string> {
+        async generateResponse(
+            messages: Message[],
+            model: string,
+            options?: ChatOptions
+        ): Promise<string> {
             const systemInstruction = toGeminiSystemInstruction(messages);
 
             const response = await fetchInteraction(
                 {
                     model,
                     ...(systemInstruction ? { system_instruction: systemInstruction } : {}),
+                    ...generationConfig(options?.reasoning),
                     input: toInteractionInput(messages),
                 },
                 false
@@ -77,10 +83,15 @@ export function createGeminiService(provider: AiProvider): BaseClient {
             return parseInteraction(data).text;
         },
 
-        async *generateStream(messages: Message[], model: string): AsyncGenerator<string> {
+        async *generateStream(
+            messages: Message[],
+            model: string,
+            options?: ChatOptions
+        ): AsyncGenerator<string> {
             const systemText = [SEARCH_SYSTEM_PROMPT, ...systemMessages(messages)]
                 .filter(Boolean)
                 .join('\n');
+            const config = generationConfig(options?.reasoning);
             let searchesUsed = 0;
 
             let prevId: string | null = null;
@@ -93,6 +104,7 @@ export function createGeminiService(provider: AiProvider): BaseClient {
                         ...(prevId ? { previous_interaction_id: prevId } : {}),
                         system_instruction: systemText,
                         tools: TOOL_DECLARATIONS,
+                        ...config,
                         input,
                     },
                     true
@@ -259,6 +271,14 @@ function toAction(call: { name: string; args: Record<string, unknown> }): ToolAc
     const query =
         typeof call.args.query === 'string' ? call.args.query.trim().slice(0, 400) : '';
     return { kind: 'search', query };
+}
+
+function generationConfig(reasoning?: ChatOptions['reasoning']): {
+    generation_config: { thinking_level: string };
+} | Record<string, never> {
+    if (!reasoning || reasoning === 'default') return {};
+    if (reasoning === 'none') return {};
+    return { generation_config: { thinking_level: reasoning } };
 }
 
 function toInteractionInput(messages: Message[]): InputStep[] {
