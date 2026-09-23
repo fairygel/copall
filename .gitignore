@@ -17,6 +17,9 @@ dist-ssr
 .vscode
 .idea
 
+# TypeScript build info
+*.tsbuildinfo
+
 # Electron
 dist-electron
 release
