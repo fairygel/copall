@@ -1,0 +1,53 @@
+.customScroll-host {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.customScroll-viewport {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.customScroll-viewport::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.customScroll-bar {
+    position: absolute;
+    top: var(--customScroll-top, 24px);
+    bottom: var(--customScroll-bottom, 24px);
+    right: 0;
+    width: 16px;
+    border-radius: 8px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    cursor: pointer;
+}
+
+.customScroll-host.scroll-visible .customScroll-bar {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.customScroll-thumb {
+    position: absolute;
+    left: 5px;
+    right: 5px;
+    border-radius: 8px;
+    background-color: var(--inactive-font-color);
+    transition: background-color 0.2s ease;
+}
+
+.customScroll-thumb:hover {
+    background-color: var(--font-color);
+}
