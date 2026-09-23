@@ -106,6 +106,7 @@ function App() {
             id: crypto.randomUUID(),
             content,
             sender: 'user' as const,
+            createdAt: Date.now(),
             ...(liveFiles.length > 0 ? { attachments: liveFiles } : {}),
         };
 
@@ -131,6 +132,7 @@ function App() {
 
     const handleNewChat = async () => {
         await createNewChat();
+        setIsSidebarOpen(false);
         setSendMessageDisabled(false);
     };
 

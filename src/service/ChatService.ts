@@ -39,12 +39,14 @@ export async function generateChatTitle(message: string, model: string) {
         id: crypto.randomUUID(),
         content: GENERATE_CHAT_NAME_SYSTEM_PROMPT,
         sender: 'system',
+        createdAt: Date.now(),
     };
 
     const userMessage: Message = {
         id: crypto.randomUUID(),
         content: message,
         sender: 'user',
+        createdAt: Date.now(),
     };
 
     const { provider, modelId } = parseModel(model);
@@ -102,6 +104,7 @@ export async function generateAssistantResponse(
         id: assistantMessageId,
         content: 'working...',
         sender: 'assistant',
+        createdAt: Date.now(),
     };
 
     setMessages(prev => [...prev, assistantMessage]);

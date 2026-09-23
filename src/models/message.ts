@@ -6,6 +6,7 @@ interface Message {
     id: string;
     content: string;
     sender: Role;
+    createdAt: number;
     attachments?: AttachedFile[];
 }
 

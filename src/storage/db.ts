@@ -62,25 +62,48 @@ function cleanNullAttachments(messages: Message[]): Message[] {
         if (live.length === msg.attachments.length) return msg;
 
         if (live.length === 0) {
-            return { id: msg.id, content: msg.content, sender: msg.sender };
+            const { attachments, ...rest } = msg;
+            void attachments;
+            return rest;
         }
 
         return { ...msg, attachments: live };
     });
 }
 
-export async function createChat(name = 'New Chat'): Promise<Chat> {
-    const id = crypto.randomUUID();
-    const now = Date.now();
+function lastMessageAtOf(messages: Message[]): number | undefined {
+    let latest: number | undefined;
+    for (const msg of messages) {
+        const at = msg.createdAt;
+        if (typeof at !== 'number') continue;
+        if (latest === undefined || at > latest) latest = at;
+    }
+    return latest;
+}
 
-    const meta: ChatMeta = { id, name, createdAt: now, updatedAt: now };
-
-    await runTransaction(['chatMetas', 'chatMessages'], 'readwrite', tx => {
-        tx.objectStore('chatMetas').add(meta);
-        tx.objectStore('chatMessages').add({ id, messages: [] as Message[] });
+export function sortChatMetas<T extends Pick<ChatMeta, 'lastMessageAt' | 'createdAt'>>(
+    metas: T[]
+): T[] {
+    return metas.slice().sort((a, b) => {
+        const aKey = a.lastMessageAt ?? Number.NEGATIVE_INFINITY;
+        const bKey = b.lastMessageAt ?? Number.NEGATIVE_INFINITY;
+        if (bKey !== aKey) return bKey - aKey;
+        return b.createdAt - a.createdAt;
     });
+}
 
-    return { ...meta, messages: [] };
+export function deleteChat(id: string): Promise<void> {
+    return runTransaction(['chatMetas', 'chatMessages'], 'readwrite', tx => {
+        tx.objectStore('chatMetas').delete(id);
+        tx.objectStore('chatMessages').delete(id);
+    });
+}
+
+export function createEphemeralChat(name = 'New Chat'): Chat {
+    const now = Date.now();
+    const id = crypto.randomUUID();
+
+    return { id, name, createdAt: now, updatedAt: now, messages: [] };
 }
 
 export async function getChat(id: string): Promise<Chat | null> {
@@ -119,18 +142,21 @@ export async function getChat(id: string): Promise<Chat | null> {
 }
 
 export async function saveChat(chat: Chat): Promise<void> {
+    const messages = cleanNullAttachments(chat.messages);
+    const lastMessageAt = lastMessageAtOf(messages);
     const meta: ChatMeta = {
         id: chat.id,
         name: chat.name,
         createdAt: chat.createdAt,
         updatedAt: Date.now(),
+        ...(lastMessageAt !== undefined ? { lastMessageAt } : {}),
     };
 
     await runTransaction(['chatMetas', 'chatMessages'], 'readwrite', tx => {
         tx.objectStore('chatMetas').put(meta);
         tx.objectStore('chatMessages').put({
             id: chat.id,
-            messages: cleanNullAttachments(chat.messages),
+            messages,
         });
     });
 }
@@ -143,9 +169,7 @@ export async function getAllChatMetas(): Promise<ChatMeta[]> {
         const req = tx.objectStore('chatMetas').getAll();
 
         req.onsuccess = () => {
-            const metas = ((req.result ?? []) as ChatMeta[]).slice();
-            metas.sort((a, b) => b.updatedAt - a.updatedAt);
-            resolve(metas);
+            resolve(sortChatMetas((req.result ?? []) as ChatMeta[]));
         };
         req.onerror = () => reject(req.error);
 

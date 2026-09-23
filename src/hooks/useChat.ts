@@ -1,7 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import Chat from '../models/Chat';
 import Message from '../models/message';
-import { createChat, getChat, saveChat, getCurrentChatId, setCurrentChatId } from '../storage/db';
+import {
+    createEphemeralChat,
+    deleteChat,
+    getChat,
+    saveChat,
+    getCurrentChatId,
+    setCurrentChatId,
+} from '../storage/db';
 
 export function useChat() {
     const [chat, setChat] = useState<Chat | null>(null);
@@ -16,13 +23,14 @@ export function useChat() {
             if (id) {
                 const existing = await getChat(id);
                 if (existing) {
+                    persistedIds.current.add(existing.id);
                     setChat(existing);
                     setIsLoaded(true);
                     return;
                 }
             }
 
-            const fresh = await createChat();
+            const fresh = createEphemeralChat();
             setCurrentChatId(fresh.id);
             setChat(fresh);
             setIsLoaded(true);
@@ -36,6 +44,19 @@ export function useChat() {
 
     const saveTimeout = useRef<number | null>(null);
     const chatRef = useRef<Chat | null>(null);
+    const persistedIds = useRef<Set<string>>(new Set());
+    const dirtyRef = useRef(false);
+
+    const isPersisted = (id: string) => persistedIds.current.has(id);
+
+    const saveIfPersisted = (chatToSave: Chat): Promise<void> => {
+        if (!isPersisted(chatToSave.id)) return Promise.resolve();
+        return saveChat(chatToSave).catch(e => console.error('Failed to save chat:', e));
+    };
+
+    useEffect(() => {
+        if (chat && chat.messages.length > 0) persistedIds.current.add(chat.id);
+    }, [chat]);
 
     useEffect(() => {
         chatRef.current = chat;
@@ -43,12 +64,15 @@ export function useChat() {
 
     useEffect(() => {
         if (!isLoaded || !chat) return;
+        if (!dirtyRef.current) return;
 
         if (saveTimeout.current) window.clearTimeout(saveTimeout.current);
 
         const chatToSave = chat;
         saveTimeout.current = window.setTimeout(() => {
-            saveChat(chatToSave).catch(e => console.error('Failed to save chat:', e));
+            saveTimeout.current = null;
+            dirtyRef.current = false;
+            saveIfPersisted(chatToSave);
         }, 300);
 
         return () => {
@@ -61,13 +85,15 @@ export function useChat() {
 
     useEffect(() => {
         return () => {
-            if (chatRef.current) {
-                saveChat(chatRef.current).catch(e => console.error('Failed to flush chat on unmount:', e));
+            if (chatRef.current && dirtyRef.current) {
+                dirtyRef.current = false;
+                saveIfPersisted(chatRef.current);
             }
         };
     }, []);
 
     const setMessages = (updater: Message[] | ((prev: Message[]) => Message[])) => {
+        dirtyRef.current = true;
         setChat(prevChatState => {
             if (!prevChatState) return prevChatState;
 
@@ -81,18 +107,42 @@ export function useChat() {
     };
 
     const setChatName = (name: string) => {
+        dirtyRef.current = true;
         setChat(prevChatState => (prevChatState ? { ...prevChatState, name } : prevChatState));
     };
 
     useEffect(() => {
         const handleBeforeUnload = () => {
-            if (chatRef.current) {
-                saveChat(chatRef.current).catch(() => {});
+            if (chatRef.current && dirtyRef.current) {
+                dirtyRef.current = false;
+                saveIfPersisted(chatRef.current);
             }
         };
         window.addEventListener('beforeunload', handleBeforeUnload);
         return () => window.removeEventListener('beforeunload', handleBeforeUnload);
     }, []);
+
+    const flushCurrent = async (reason: string) => {
+        const current = chatRef.current;
+        if (!current || !dirtyRef.current) return;
+        dirtyRef.current = false;
+        if (current.messages.length === 0) {
+            if (isPersisted(current.id)) {
+                try {
+                    await deleteChat(current.id);
+                } catch (e) {
+                    console.error(`Failed to drop empty chat on ${reason}:`, e);
+                }
+                persistedIds.current.delete(current.id);
+            }
+            return;
+        }
+        try {
+            await saveChat(current);
+        } catch (e) {
+            console.error(`Failed to flush chat before ${reason}:`, e);
+        }
+    };
 
     const createNewChat = async () => {
         await initPromise.current;
@@ -100,15 +150,8 @@ export function useChat() {
             window.clearTimeout(saveTimeout.current);
             saveTimeout.current = null;
         }
-        const current = chatRef.current;
-        if (current) {
-            try {
-                await saveChat(current);
-            } catch (e) {
-                console.error('Failed to flush chat before creating new chat:', e);
-            }
-        }
-        const fresh = await createChat();
+        await flushCurrent('creating new chat');
+        const fresh = createEphemeralChat();
         setCurrentChatId(fresh.id);
         setChat(fresh);
     };
@@ -120,19 +163,13 @@ export function useChat() {
             window.clearTimeout(saveTimeout.current);
             saveTimeout.current = null;
         }
-        const current = chatRef.current;
-        if (current) {
-            try {
-                await saveChat(current);
-            } catch (e) {
-                console.error('Failed to flush chat before opening another chat:', e);
-            }
-        }
+        await flushCurrent('opening another chat');
         const existing = await getChat(id);
         if (!existing) {
             console.error('Failed to open chat: not found');
             return;
         }
+        persistedIds.current.add(existing.id);
         setCurrentChatId(existing.id);
         setChat(existing);
     };

@@ -6,6 +6,7 @@ export default interface Chat {
     messages: Message[];
     createdAt: number;
     updatedAt: number;
+    lastMessageAt?: number;
 }
 
 export interface ChatMeta {
@@ -13,5 +14,6 @@ export interface ChatMeta {
     name: string;
     createdAt: number;
     updatedAt: number;
+    lastMessageAt?: number;
 }
 
