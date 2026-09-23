@@ -36,7 +36,7 @@
 }
 
 .deleteChatPrimary {
-    background-color: #c0392b;
-    border-color: #c0392b;
-    color: #ffffff;
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--background-color);
 }

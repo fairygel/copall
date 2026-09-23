@@ -11,12 +11,91 @@ interface Model {
     outputModalities: string[];
     inputPricing: string;
     outputPricing: string;
+    reasoning: {
+        supported: boolean;
+        levels: ReasoningLevel[];
+    };
+}
+
+type ReasoningLevel = 'none' | 'minimal' | 'low' | 'medium' | 'high' | 'xhigh' | 'max';
+
+const REASONING_LEVELS: ReasoningLevel[] = [
+    'none',
+    'minimal',
+    'low',
+    'medium',
+    'high',
+    'xhigh',
+    'max',
+];
+
+const NO_REASONING = { supported: false, levels: [] as ReasoningLevel[] };
+
+function normalizeReasoningLevels(values: unknown): ReasoningLevel[] {
+    if (!Array.isArray(values)) return [];
+    const out: ReasoningLevel[] = [];
+    for (const v of values) {
+        if (typeof v !== 'string') continue;
+        const level = v.toLowerCase() as ReasoningLevel;
+        if (REASONING_LEVELS.includes(level) && !out.includes(level)) out.push(level);
+    }
+    return out.sort((a, b) => REASONING_LEVELS.indexOf(a) - REASONING_LEVELS.indexOf(b));
+}
+
+function reasoningFromOpenRouter(entry: {
+    reasoning?: { supported_efforts?: unknown } | null;
+    supported_parameters?: unknown;
+}): { supported: boolean; levels: ReasoningLevel[] } {
+    const params = entry.supported_parameters;
+    const hasReasoningParam = Array.isArray(params) && params.includes('reasoning');
+    const levels = normalizeReasoningLevels(entry.reasoning?.supported_efforts);
+    if (!hasReasoningParam && levels.length === 0) return NO_REASONING;
+    return {
+        supported: true,
+        levels: levels.length > 0 ? levels : ['low', 'medium', 'high'],
+    };
+}
+
+function reasoningFromVercel(entry: {
+    supported_parameters?: unknown;
+    reasoning_options?: unknown;
+}): { supported: boolean; levels: ReasoningLevel[] } {
+    const params = entry.supported_parameters;
+    const hasReasoningParam = Array.isArray(params) && params.includes('reasoning');
+    const options = entry.reasoning_options;
+    const levels = normalizeReasoningLevels(
+        Array.isArray(options)
+            ? options.flatMap(o =>
+                  typeof o === 'object' && o !== null && 'values' in o
+                      ? ((o as { values: unknown }).values as unknown[])
+                      : []
+              )
+            : []
+    );
+    if (!hasReasoningParam && levels.length === 0) return NO_REASONING;
+    return {
+        supported: true,
+        levels: levels.length > 0 ? levels : ['low', 'medium', 'high'],
+    };
+}
+
+function reasoningFromMistral(entry: {
+    capabilities?: { reasoning?: unknown } | null;
+}): { supported: boolean; levels: ReasoningLevel[] } {
+    if (entry.capabilities?.reasoning !== true) return NO_REASONING;
+    return { supported: true, levels: ['low', 'medium', 'high'] };
 }
 
 const allowedProviders = new Set(AVAILABLE_PROVIDERS.map(p => p.id));
 
-async function fetchAllowedModels(): Promise<Set<string>> {
+async function fetchAllowedModels(): Promise<{
+    ids: Set<string>;
+    mistralReasoning: Map<string, { supported: boolean; levels: ReasoningLevel[] }>;
+    geminiIds: Set<string>;
+}> {
     const allowedModels = new Set<string>();
+    const mistralReasoning = new Map<string, { supported: boolean; levels: ReasoningLevel[] }>();
+    const geminiIds = new Set<string>();
 
     const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
     const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY;
@@ -33,7 +112,10 @@ async function fetchAllowedModels(): Promise<Set<string>> {
 
             for (const model of json.models ?? []) {
                 const segment = model.name?.split('/')?.[1];
-                if (segment) allowedModels.add(segment);
+                if (segment) {
+                    allowedModels.add(segment);
+                    geminiIds.add(segment);
+                }
             }
         } catch (e) {
             console.error('Gemini error:', e);
@@ -53,6 +135,7 @@ async function fetchAllowedModels(): Promise<Set<string>> {
 
             for (const model of json.data ?? []) {
                 allowedModels.add(model.id);
+                mistralReasoning.set(model.id, reasoningFromMistral(model));
             }
         } catch (e) {
             console.error('Mistral error:', e)
@@ -64,7 +147,7 @@ async function fetchAllowedModels(): Promise<Set<string>> {
         console.warn('No GEMINI_API_KEY or MISTRAL_API_KEY set — per-provider catalog entries will be empty');
     }
 
-    return allowedModels;
+    return { ids: allowedModels, mistralReasoning, geminiIds };
 }
 
 
@@ -96,9 +179,10 @@ async function buildCatalog() {
             outputModalities: model.architecture.output_modalities,
             inputPricing: model.pricing.prompt,
             outputPricing: model.pricing.completion,
+            reasoning: reasoningFromOpenRouter(model),
         };
 
-        if (allowedProviders.has(providerId) && allowedModels.has(modelName)) {
+        if (allowedProviders.has(providerId) && allowedModels.ids.has(modelName)) {
             const providerModelEntry: Model = {
                 id: model.id,
                 name: model.name.split(': ')[1] ?? model.name,
@@ -108,6 +192,10 @@ async function buildCatalog() {
                 outputModalities: model.architecture.output_modalities,
                 inputPricing: model.pricing.prompt,
                 outputPricing: model.pricing.completion,
+                reasoning:
+                    providerId === 'mistralai'
+                        ? (allowedModels.mistralReasoning.get(modelName) ?? NO_REASONING)
+                        : reasoningFromOpenRouter(model),
             };
 
             if (!catalog[providerId]) {
@@ -142,6 +230,7 @@ async function buildCatalog() {
                 outputModalities: outputMods,
                 inputPricing: model.pricing?.input ?? '0',
                 outputPricing: model.pricing?.output ?? '0',
+                reasoning: reasoningFromVercel(model),
             });
         }
     } catch (e) {

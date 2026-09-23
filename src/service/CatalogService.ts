@@ -1,11 +1,12 @@
 import { AVAILABLE_PROVIDERS } from '../config/AiProviderConfig';
-import AiModel from '../models/AiModel';
+import AiModel, { ReasoningLevel, REASONING_LEVELS } from '../models/AiModel';
 
 type CatalogEntry = {
     id: string;
     name: string;
     context: number;
     inputModalities?: string[];
+    reasoning?: { supported: boolean; levels: string[] };
 };
 
 type Catalog = Record<string, CatalogEntry[]>;
@@ -34,6 +35,13 @@ async function loadCatalog(): Promise<AiModel[]> {
                 context: e.context ?? 0,
                 inputModalities: e.inputModalities ?? ['text'],
                 provider,
+                reasoning: {
+                    supported: e.reasoning?.supported ?? false,
+                    levels: (e.reasoning?.levels ?? []).filter(
+                        (l): l is ReasoningLevel =>
+                            (REASONING_LEVELS as readonly string[]).includes(l)
+                    ),
+                },
             });
         }
     }
