@@ -1,0 +1,28 @@
+.reasoningSelect {
+    z-index: 100;
+}
+
+.reasoningDropdown {
+    position: static;
+    margin-bottom: 0;
+}
+
+.reasoningItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-right: 22px;
+    text-transform: capitalize;
+}
+
+.reasoningItemCheck {
+    display: inline-flex;
+    width: 14px;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-color);
+}
+
+.reasoningItem.selected {
+    color: var(--accent-color);
+}

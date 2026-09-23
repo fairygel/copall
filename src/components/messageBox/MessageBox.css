@@ -70,6 +70,7 @@ textarea::-webkit-scrollbar {
     justify-content: center;
     gap: 8px;
     margin-right: 12px;
+    position: relative;
 }
 
 .reasoningIndicator {
@@ -87,11 +88,14 @@ textarea::-webkit-scrollbar {
 }
 
 .reasoningIndicator.active {
-    color: var(--font-color);
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--background-color);
 }
 
 .reasoningIndicator.active:hover {
-    background-color: var(--border-color);
+    background-color: var(--accent-color);
+    opacity: 0.85;
 }
 
 .left-tooltip {

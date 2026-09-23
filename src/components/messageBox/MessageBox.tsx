@@ -1,7 +1,8 @@
 import { ArrowUp, Lightbulb, LoaderCircle, Paperclip } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import './MessageBox.css';
 import AiModelSelect from '../select/AiModelSelect';
+import ReasoningSelect, { ReasoningChoice, ReasoningSelectHandle } from '../reasoning/ReasoningSelect';
 import AiModel from '../../models/AiModel';
 import { getModelsFromCatalog } from '../../service/CatalogService';
 import {
@@ -99,6 +100,11 @@ function MessageBox({
     const modelSupportsImages =
         !defaultModel || defaultModel.inputModalities.includes('image');
     const modelSupportsReasoning = Boolean(defaultModel?.reasoning.supported);
+    const reasoningLevels = defaultModel?.reasoning.levels ?? [];
+    const [reasoningLevel, setReasoningLevel] = useState<ReasoningChoice>('default');
+    const reasoningSelectRef = useRef<ReasoningSelectHandle>(null);
+    const reasoningActive =
+        modelSupportsReasoning && reasoningLevel !== 'none' && reasoningLevel !== 'default';
     const isDisabled =
         disabled ||
         isSending ||
@@ -136,6 +142,11 @@ function MessageBox({
             localStorage.removeItem('selectedModel');
         }
         setDefaultModel(model);
+        setReasoningLevel('default');
+    };
+
+    const handleReasoningSelect = (level: ReasoningChoice) => {
+        setReasoningLevel(level);
     };
 
     const runWithCounter = (task: () => Promise<void>) => {
@@ -304,14 +315,24 @@ function MessageBox({
                 </div>
 
                 <div className="right-tooltip">
+                    <ReasoningSelect
+                        ref={reasoningSelectRef}
+                        levels={reasoningLevels}
+                        value={reasoningLevel}
+                        onSelect={handleReasoningSelect}
+                        disabled={!modelSupportsReasoning}
+                    />
                     <button
                         type="button"
-                        className={`reasoningIndicator${modelSupportsReasoning ? ' active' : ''}`}
+                        className={`reasoningIndicator${reasoningActive ? ' active' : ''}`}
                         title={
-                            modelSupportsReasoning
-                                ? undefined
-                                : 'This model does not support reasoning'
+                            reasoningActive
+                                ? `Reasoning: ${reasoningLevel}`
+                                : modelSupportsReasoning
+                                  ? undefined
+                                  : 'This model does not support reasoning'
                         }
+                        onClick={() => reasoningSelectRef.current?.toggle()}
                     >
                         <Lightbulb size={18} />
                     </button>
