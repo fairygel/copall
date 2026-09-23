@@ -63,6 +63,37 @@ textarea::-webkit-scrollbar {
     box-shadow: 0 2px 4px var(--inactive-font-color);
 }
 
+.right-tooltip {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-right: 12px;
+}
+
+.reasoningIndicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    color: var(--inactive-font-color);
+}
+
+.reasoningIndicator.active {
+    color: var(--font-color);
+}
+
+.reasoningIndicator.active:hover {
+    background-color: var(--border-color);
+}
+
 .left-tooltip {
     display: flex;
     flex-direction: row;

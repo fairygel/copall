@@ -1,4 +1,4 @@
-import { ArrowUp, LoaderCircle, Paperclip } from 'lucide-react';
+import { ArrowUp, Lightbulb, LoaderCircle, Paperclip } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import './MessageBox.css';
 import AiModelSelect from '../select/AiModelSelect';
@@ -98,6 +98,7 @@ function MessageBox({
     const canSend = Boolean(inputValue.trim() || attachedFiles.length > 0);
     const modelSupportsImages =
         !defaultModel || defaultModel.inputModalities.includes('image');
+    const modelSupportsReasoning = Boolean(defaultModel?.reasoning.supported);
     const isDisabled =
         disabled ||
         isSending ||
@@ -302,9 +303,22 @@ function MessageBox({
                     )}
                 </div>
 
-                <button className="sendMessage" disabled={isDisabled} onClick={sendMessage}>
-                    {isSending ? <LoaderCircle size={20} className="sendingSpinner" /> : <ArrowUp size={20} />}
-                </button>
+                <div className="right-tooltip">
+                    <button
+                        type="button"
+                        className={`reasoningIndicator${modelSupportsReasoning ? ' active' : ''}`}
+                        title={
+                            modelSupportsReasoning
+                                ? undefined
+                                : 'This model does not support reasoning'
+                        }
+                    >
+                        <Lightbulb size={18} />
+                    </button>
+                    <button className="sendMessage" disabled={isDisabled} onClick={sendMessage}>
+                        {isSending ? <LoaderCircle size={20} className="sendingSpinner" /> : <ArrowUp size={20} />}
+                    </button>
+                </div>
             </div>
             {isPreviewOpen && (
                 <AttachedPreview
