@@ -254,3 +254,11 @@ h4,
 .backButton:hover {
     opacity: 0.85;
 }
+
+.settingsVersion {
+    margin-top: 4px;
+    text-align: end;
+    font-family: 'Andika', sans-serif;
+    font-size: 12px;
+    color: var(--inactive-font-color);
+}

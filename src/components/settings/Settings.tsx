@@ -4,6 +4,7 @@ import { CircleAlert, KeyRound, Pin, Power, SunMoon, X } from 'lucide-react';
 import {
     autostartIsEnabled,
     autostartSet,
+    getAppVersion,
     getOsTypeAsync,
     isAlwaysOnTop,
     setAlwaysOnTop as setAlwaysOnTopNative,
@@ -33,8 +34,12 @@ function Settings({
     const [openOnStartup, setOpenOnStartup] = useState(false);
     const [alwaysOnTopPending, setAlwaysOnTopPending] = useState(true);
     const [startupPending, setStartupPending] = useState(true);
+    const [appVersion, setAppVersion] = useState('');
 
     useEffect(() => {
+        getAppVersion()
+            .then(setAppVersion)
+            .catch(() => setAppVersion(''));
         getOsTypeAsync()
             .then(platform => setIsLinux(platform === 'linux'))
             .catch(() => setIsLinux(false));
@@ -72,8 +77,8 @@ function Settings({
         const next = !openOnStartup;
         setStartupPending(true);
         try {
-            await autostartSet(next);
-            setOpenOnStartup(next);
+            const actual = await autostartSet(next);
+            setOpenOnStartup(actual);
         } catch (e) {
             console.error('Failed to toggle autostart:', e);
         } finally {
@@ -160,6 +165,9 @@ function Settings({
                             <span className="manageLink">Manage &gt;</span>
                         </button>
                     </div>
+                    {appVersion && (
+                        <div className="settingsVersion">copall v{appVersion}</div>
+                    )}
                 </div>
             </div>
         </div>

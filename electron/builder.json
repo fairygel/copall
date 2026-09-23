@@ -28,12 +28,7 @@
         "category": "Utility",
         "icon": "electron/icon.png",
         "executableName": "copall",
-        "desktop": {
-            "entry": {
-                "Name": "copall",
-                "StartupWMClass": "copall"
-            }
-        },
+        "syncDesktopName": true,
         "publish": [
             {
                 "provider": "github",

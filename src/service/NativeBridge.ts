@@ -39,6 +39,26 @@ export async function fetchImage(url: string): Promise<string> {
     return requireCopall().fetchImage(url);
 }
 
+export interface WebSearchResult {
+    title: string;
+    url: string;
+    snippet: string;
+}
+
+export interface WebPageContent {
+    url: string;
+    title: string;
+    text: string;
+}
+
+export async function searchWeb(query: string, apiKey: string): Promise<WebSearchResult[]> {
+    return requireCopall().searchWeb(query, apiKey);
+}
+
+export async function fetchPageContent(url: string): Promise<WebPageContent> {
+    return requireCopall().fetchPageContent(url);
+}
+
 export async function getOsTypeAsync(): Promise<string> {
     const platform = await requireCopall().osType();
 
@@ -52,8 +72,8 @@ export async function autostartIsEnabled(): Promise<boolean> {
     return requireCopall().autostartIsEnabled();
 }
 
-export async function autostartSet(enabled: boolean): Promise<void> {
-    await requireCopall().autostartSet(enabled);
+export async function autostartSet(enabled: boolean): Promise<boolean> {
+    return requireCopall().autostartSet(enabled);
 }
 
 export async function checkForUpdate(): Promise<NativePendingUpdate | null> {
@@ -71,6 +91,14 @@ export async function relaunchAfterUpdate(): Promise<void> {
     await requireCopall().relaunch();
 }
 
+export async function getAppVersion(): Promise<string> {
+    return requireCopall().appVersion();
+}
+
 export function onUpdaterDownloaded(callback: () => void): () => void {
     return requireCopall().onUpdaterDownloaded(callback);
+}
+
+export function onUpdaterDownloadProgress(callback: (percent: number) => void): () => void {
+    return requireCopall().onUpdaterDownloadProgress(callback);
 }

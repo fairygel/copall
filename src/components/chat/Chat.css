@@ -1,12 +1,15 @@
 .chatContainer {
     flex: 1;
     overflow-y: auto;
-    margin: 0 18px;
     display: flex;
     flex-direction: column;
     gap: 24px;
     padding-top: 24px;
     padding-bottom: 140px;
+}
+
+.chatContainer:not(.chatScroll-viewport) {
+    margin: 0 18px;
 }
 
 .message {
@@ -107,6 +110,15 @@
 .copyButton:focus-visible {
     outline: 2px solid var(--accent-color);
     outline-offset: 2px;
+}
+
+.searchStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--inactive-font-color);
+    font-size: 13px;
+    font-style: italic;
 }
 
 .messageAttachments {

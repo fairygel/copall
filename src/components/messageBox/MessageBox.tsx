@@ -1,9 +1,14 @@
 import { ArrowUp, LoaderCircle, Paperclip } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import './MessageBox.css';
 import AiModelSelect from '../select/AiModelSelect';
 import AiModel from '../../models/AiModel';
 import { getModelsFromCatalog } from '../../service/CatalogService';
+import {
+    API_KEYS_CHANGED_EVENT,
+    getAvailableProviderIds,
+    getShowOnlyAvailableProviders,
+} from '../../config/AiProviderConfig';
 import AttachedPreview from '../attachedPreview/AttachedPreview';
 import DropZone from '../dropZone/DropZone';
 import Toast from '../toast/Toast';
@@ -30,6 +35,12 @@ function MessageBox({
 
     const [models, setModels] = useState<AiModel[]>([]);
     const [isLoadingModels, setIsLoadingModels] = useState(true);
+    const [showOnlyAvailable, setShowOnlyAvailable] = useState(() =>
+        getShowOnlyAvailableProviders()
+    );
+    const [availableProviders, setAvailableProviders] = useState<string[]>(() =>
+        getAvailableProviderIds()
+    );
 
     const [attachedFiles, setAttachedFiles] = useState<AttachedFile[]>([]);
     const [pendingConversions, setPendingConversions] = useState(0);
@@ -45,18 +56,44 @@ function MessageBox({
     }, []);
 
     useEffect(() => {
-        if (models.length === 0) return;
+        const refresh = () => {
+            setAvailableProviders(getAvailableProviderIds());
+            setShowOnlyAvailable(getShowOnlyAvailableProviders());
+        };
+        window.addEventListener(API_KEYS_CHANGED_EVENT, refresh);
+        window.addEventListener('storage', refresh);
+        return () => {
+            window.removeEventListener(API_KEYS_CHANGED_EVENT, refresh);
+            window.removeEventListener('storage', refresh);
+        };
+    }, []);
+
+    const visibleModels = useMemo(
+        () =>
+            showOnlyAvailable
+                ? models.filter(m => availableProviders.includes(m.provider.id))
+                : models,
+        [models, availableProviders, showOnlyAvailable]
+    );
+
+    useEffect(() => {
+        if (visibleModels.length === 0) {
+            setDefaultModel(null);
+            return;
+        }
 
         const savedModelId = localStorage.getItem('selectedModel');
-        const savedModel = savedModelId ? (models.find(m => m.id === savedModelId) ?? null) : null;
-        const model = savedModel || models[0] || null;
+        const savedModel = savedModelId
+            ? (visibleModels.find(m => m.id === savedModelId) ?? null)
+            : null;
+        const model = savedModel || visibleModels[0] || null;
 
         if (model && !savedModel) {
             localStorage.setItem('selectedModel', model.id);
         }
 
         setDefaultModel(model);
-    }, [models]);
+    }, [visibleModels]);
 
     const canSend = Boolean(inputValue.trim() || attachedFiles.length > 0);
     const modelSupportsImages =
@@ -253,7 +290,7 @@ function MessageBox({
                         )}
                     </button>
                     <AiModelSelect
-                        list={models}
+                        list={visibleModels}
                         onSelect={handleModelSelect}
                         defaultItem={defaultModel ?? undefined}
                         disabled={isLoadingModels || disabled}

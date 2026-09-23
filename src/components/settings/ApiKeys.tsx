@@ -1,7 +1,21 @@
 import { useState } from 'react';
 import './Settings.css';
-import { X } from 'lucide-react';
-import { AVAILABLE_PROVIDERS, getApiKey, setApiKey } from '../../config/AiProviderConfig';
+import { CircleAlert, X } from 'lucide-react';
+import {
+    AVAILABLE_PROVIDERS,
+    getApiKey,
+    getShowOnlyAvailableProviders,
+    setApiKey,
+    setShowOnlyAvailableProviders,
+} from '../../config/AiProviderConfig';
+import {
+    getSearchApiKey,
+    setSearchApiKey,
+    SEARCH_API_KEY_ICON,
+    SEARCH_API_KEY_LABEL,
+    SEARCH_API_KEY_PLACEHOLDER,
+    SEARCH_API_KEY_STORAGE_KEY,
+} from '../../config/SearchConfig';
 
 function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void }) {
     const readStoredKeys = () => {
@@ -9,14 +23,31 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
         for (const provider of AVAILABLE_PROVIDERS) {
             initial[provider.id] = getApiKey(provider);
         }
+        initial[SEARCH_API_KEY_STORAGE_KEY] = getSearchApiKey();
         return initial;
     };
 
     const [apiKeys, setApiKeys] = useState<Record<string, string>>(readStoredKeys);
     const [initialApiKeys, setInitialApiKeys] =
         useState<Record<string, string>>(readStoredKeys);
+    const [showOnlyAvailable, setShowOnlyAvailable] = useState(
+        getShowOnlyAvailableProviders
+    );
+
+    const handleShowOnlyAvailableToggle = () => {
+        const next = !showOnlyAvailable;
+        setShowOnlyAvailable(next);
+        setShowOnlyAvailableProviders(next);
+    };
 
     const handleKeyBlur = (providerId: string) => {
+        if (providerId === SEARCH_API_KEY_STORAGE_KEY) {
+            const value = apiKeys[providerId] ?? '';
+            setSearchApiKey(value);
+            setInitialApiKeys(prev => ({ ...prev, [providerId]: value }));
+            return;
+        }
+
         const provider = AVAILABLE_PROVIDERS.find(p => p.id === providerId);
         if (!provider) return;
 
@@ -33,6 +64,13 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
             if (newValue !== oldValue) {
                 setApiKey(provider, newValue);
             }
+        }
+
+        const searchValue = apiKeys[SEARCH_API_KEY_STORAGE_KEY] ?? '';
+        const searchOld = initialApiKeys[SEARCH_API_KEY_STORAGE_KEY] ?? '';
+
+        if (searchValue !== searchOld) {
+            setSearchApiKey(searchValue);
         }
     };
 
@@ -61,6 +99,29 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
                 <div className="modalBody">
                     <h4>Api Keys</h4>
                     <div className="settingsSection">
+                        <div className="settingItem">
+                            <div className="settingLabel">
+                                <span>Show Only Available Providers</span>
+                                <button
+                                    type="button"
+                                    className="settingTooltipTrigger"
+                                    aria-label="When enabled, the model picker only shows providers with an API key. All providers are still listed here."
+                                >
+                                    <CircleAlert size={14} />
+                                    <span className="settingTooltipBubble" role="tooltip">
+                                        Model picker shows only providers with an API key
+                                    </span>
+                                </button>
+                            </div>
+                            <button
+                                type="button"
+                                className={`toggleSwitch ${showOnlyAvailable ? 'active' : ''}`}
+                                aria-pressed={showOnlyAvailable}
+                                onClick={handleShowOnlyAvailableToggle}
+                            >
+                                <span className="toggleThumb" />
+                            </button>
+                        </div>
                         {AVAILABLE_PROVIDERS.map(provider => (
                             <div key={provider.id} className="settingItem">
                                 <div className="settingLabel">
@@ -86,6 +147,32 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
                                 />
                             </div>
                         ))}
+                    </div>
+                    <h4>Web Search</h4>
+                    <div className="settingsSection">
+                        <div className="settingItem">
+                            <div className="settingLabel">
+                                <img
+                                    src={`./${SEARCH_API_KEY_ICON}`}
+                                    alt={SEARCH_API_KEY_LABEL}
+                                    width={18}
+                                    height={18}
+                                />
+                                <span>{SEARCH_API_KEY_LABEL}</span>
+                            </div>
+                            <input
+                                type="password"
+                                placeholder={SEARCH_API_KEY_PLACEHOLDER}
+                                value={apiKeys[SEARCH_API_KEY_STORAGE_KEY] ?? ''}
+                                onChange={e =>
+                                    setApiKeys(prev => ({
+                                        ...prev,
+                                        [SEARCH_API_KEY_STORAGE_KEY]: e.target.value,
+                                    }))
+                                }
+                                onBlur={() => handleKeyBlur(SEARCH_API_KEY_STORAGE_KEY)}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

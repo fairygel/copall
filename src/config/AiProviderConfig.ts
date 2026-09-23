@@ -37,4 +37,31 @@ export function getApiKey(provider: AiProvider): string {
 
 export function setApiKey(provider: AiProvider, apiKey: string) {
     localStorage.setItem(provider.id + 'ApiKey', apiKey);
+    notifyApiKeysChanged();
+}
+
+export function hasApiKey(provider: AiProvider): boolean {
+    return getApiKey(provider).trim() !== '';
+}
+
+export function getAvailableProviderIds(): string[] {
+    return AVAILABLE_PROVIDERS.filter(hasApiKey).map(p => p.id);
+}
+
+export const API_KEYS_CHANGED_EVENT = 'copall:api-keys-changed';
+
+function notifyApiKeysChanged() {
+    window.dispatchEvent(new Event(API_KEYS_CHANGED_EVENT));
+}
+
+export const SHOW_ONLY_AVAILABLE_PROVIDERS_KEY = 'showOnlyAvailableProviders';
+
+export function getShowOnlyAvailableProviders(): boolean {
+    const raw = localStorage.getItem(SHOW_ONLY_AVAILABLE_PROVIDERS_KEY);
+    return raw === null ? true : raw === 'true';
+}
+
+export function setShowOnlyAvailableProviders(value: boolean) {
+    localStorage.setItem(SHOW_ONLY_AVAILABLE_PROVIDERS_KEY, String(value));
+    window.dispatchEvent(new Event(API_KEYS_CHANGED_EVENT));
 }

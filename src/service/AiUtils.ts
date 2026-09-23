@@ -19,27 +19,7 @@ export function parseModel(model: string): { provider: AiProvider; modelId: stri
     return { provider, modelId };
 }
 
-function extractChunks(text: string, extractor: (json: any) => string | undefined | null): string[] {
-    const chunks: string[] = [];
-
-    for (const raw of text.split('\n')) {
-        const line = raw.trim();
-        if (!line || line === 'data: [DONE]' || !line.startsWith('data: ')) continue;
-
-        try {
-            const content = extractor(JSON.parse(line.slice(6)));
-
-            if (content) chunks.push(content);
-        } catch {}
-    }
-
-    return chunks;
-}
-
-export async function* parseStreamResponse(
-    response: Response,
-    extractor: (json: any) => string | undefined | null
-): AsyncGenerator<string> {
+export async function* readSseLines(response: Response): AsyncGenerator<string> {
     const reader = response.body?.getReader();
     if (!reader) throw new Error('No response body');
 
@@ -55,14 +35,21 @@ export async function* parseStreamResponse(
         const lines = buffer.split('\n');
         buffer = lines.pop() ?? '';
 
-        for (const chunk of extractChunks(lines.join('\n'), extractor)) {
-            yield chunk;
-        }
+        for (const line of lines) yield line;
     }
 
     buffer += decoder.decode();
 
-    for (const chunk of extractChunks(buffer, extractor)) {
-        yield chunk;
+    for (const line of buffer.split('\n')) yield line;
+}
+
+export function parseSsePayload(line: string): unknown | null {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed === 'data: [DONE]' || !trimmed.startsWith('data: ')) return null;
+
+    try {
+        return JSON.parse(trimmed.slice(6));
+    } catch {
+        return null;
     }
 }
