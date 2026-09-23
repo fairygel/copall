@@ -174,6 +174,30 @@ export function useChat() {
         setChat(existing);
     };
 
+    const removeChat = async (id: string) => {
+        await initPromise.current;
+        const isCurrent = chatRef.current?.id === id;
+        if (isCurrent) {
+            if (saveTimeout.current) {
+                window.clearTimeout(saveTimeout.current);
+                saveTimeout.current = null;
+            }
+            dirtyRef.current = false;
+        }
+        try {
+            await deleteChat(id);
+        } catch (e) {
+            console.error('Failed to delete chat:', e);
+            throw e;
+        }
+        persistedIds.current.delete(id);
+        if (isCurrent) {
+            const fresh = createEphemeralChat();
+            setCurrentChatId(fresh.id);
+            setChat(fresh);
+        }
+    };
+
     return {
         chatId: chat?.id ?? null,
         messages: chat?.messages ?? [],
@@ -182,5 +206,6 @@ export function useChat() {
         setChatName,
         createNewChat,
         openChat,
+        removeChat,
     };
 }

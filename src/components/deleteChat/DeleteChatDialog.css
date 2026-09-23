@@ -1,0 +1,42 @@
+.deleteChatBackdrop {
+    z-index: 1600;
+}
+
+.deleteChatDialog {
+    max-width: 380px;
+    text-align: center;
+}
+
+.deleteChatDialog p {
+    margin: 0 0 20px;
+    font-family: 'Andika', sans-serif;
+    color: var(--font-color);
+    overflow-wrap: break-word;
+}
+
+.deleteChatActions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.deleteChatButton {
+    cursor: pointer;
+    padding: 8px 28px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--container-color);
+    color: var(--font-color);
+    font-family: 'Andika', sans-serif;
+    font-size: inherit;
+}
+
+.deleteChatButton:hover {
+    opacity: 0.85;
+}
+
+.deleteChatPrimary {
+    background-color: #c0392b;
+    border-color: #c0392b;
+    color: #ffffff;
+}

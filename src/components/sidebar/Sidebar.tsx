@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Settings, X } from 'lucide-react';
+import { Settings, Trash2, X } from 'lucide-react';
 import type { ChatMeta } from '../../models/Chat';
 import { getAllChatMetas } from '../../storage/db';
 import CustomScroll from '../scroll/CustomScroll';
+import DeleteChatDialog from '../deleteChat/DeleteChatDialog';
 import './Sidebar.css';
 
 function Sidebar({
@@ -10,15 +11,18 @@ function Sidebar({
     currentChatId,
     onClose,
     onChatSelect,
+    onChatDelete,
     onSettingsClick,
 }: {
     isOpen: boolean;
     currentChatId: string | null;
     onClose: () => void;
     onChatSelect: (id: string) => void;
+    onChatDelete: (id: string) => Promise<void>;
     onSettingsClick: () => void;
 }) {
     const [chats, setChats] = useState<ChatMeta[]>([]);
+    const [pendingDelete, setPendingDelete] = useState<ChatMeta | null>(null);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -43,15 +47,28 @@ function Sidebar({
                     viewportClassName="sidebarChatList"
                 >
                     {chats.map(chat => (
-                        <button
+                        <div
                             key={chat.id}
-                            type="button"
-                            className={`sidebarChatItem${chat.id === currentChatId ? ' active' : ''}`}
-                            title={chat.name}
-                            onClick={() => onChatSelect(chat.id)}
+                            className={`sidebarChatRow${chat.id === currentChatId ? ' active' : ''}`}
                         >
-                            {chat.name}
-                        </button>
+                            <button
+                                type="button"
+                                className="sidebarChatItem"
+                                title={chat.name}
+                                onClick={() => onChatSelect(chat.id)}
+                            >
+                                {chat.name}
+                            </button>
+                            <button
+                                type="button"
+                                aria-label={`Delete ${chat.name}`}
+                                title="Delete chat"
+                                className="sidebarDeleteButton"
+                                onClick={() => setPendingDelete(chat)}
+                            >
+                                <Trash2 size={14} />
+                            </button>
+                        </div>
                     ))}
                     {chats.length === 0 && <div className="sidebarEmpty">No chats yet</div>}
                 </CustomScroll>
@@ -62,6 +79,26 @@ function Sidebar({
                     </button>
                 </div>
             </aside>
+            {pendingDelete && (
+                <DeleteChatDialog
+                    chatName={pendingDelete.name}
+                    onCancel={() => setPendingDelete(null)}
+                    onConfirm={async () => {
+                        const target = pendingDelete;
+                        setPendingDelete(null);
+                        try {
+                            await onChatDelete(target.id);
+                            setChats(prev => prev.filter(chat => chat.id !== target.id));
+                        } catch {
+                            setChats(prev =>
+                                prev.some(chat => chat.id === target.id)
+                                    ? prev
+                                    : [...prev, target]
+                            );
+                        }
+                    }}
+                />
+            )}
         </div>
     );
 }
