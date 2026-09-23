@@ -135,6 +135,32 @@ export async function saveChat(chat: Chat): Promise<void> {
     });
 }
 
+export async function getAllChatMetas(): Promise<ChatMeta[]> {
+    const db = await openDb();
+
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(['chatMetas'], 'readonly');
+        const req = tx.objectStore('chatMetas').getAll();
+
+        req.onsuccess = () => {
+            const metas = ((req.result ?? []) as ChatMeta[]).slice();
+            metas.sort((a, b) => b.updatedAt - a.updatedAt);
+            resolve(metas);
+        };
+        req.onerror = () => reject(req.error);
+
+        tx.oncomplete = () => db.close();
+        tx.onerror = () => {
+            db.close();
+            reject(tx.error);
+        };
+        tx.onabort = () => {
+            db.close();
+            reject(tx.error);
+        };
+    });
+}
+
 const CURRENT_CHAT_KEY = 'currentChatId';
 
 export function getCurrentChatId(): string | null {

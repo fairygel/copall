@@ -114,3 +114,12 @@ main {
     border: 1px solid var(--border-color);
     overflow: hidden;
 }
+
+.appContent {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    z-index: 0;
+}

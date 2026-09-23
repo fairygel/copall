@@ -1,6 +1,7 @@
 import './App.css';
 
 import Header from './components/header/Header';
+import Sidebar from './components/sidebar/Sidebar';
 import Settings from './components/settings/Settings';
 import ApiKeys from './components/settings/ApiKeys';
 import MessageBox from './components/messageBox/MessageBox';
@@ -24,6 +25,7 @@ import UpdateDialog from './components/update/UpdateDialog';
 
 function App() {
     const [settingsView, setSettingsView] = useState<'settings' | 'apiKeys' | null>(null);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isSendMessageDisabled, setSendMessageDisabled] = useState(false);
     const [pendingUpdate, setPendingUpdate] = useState<NativePendingUpdate | null>(null);
     const [updateDownloadState, setUpdateDownloadState] = useState<
@@ -75,7 +77,7 @@ function App() {
         setUpdateDownloadPercent(0);
     };
 
-    const { messages, chatName, setMessages, setChatName, createNewChat } = useChat();
+    const { chatId, messages, chatName, setMessages, setChatName, createNewChat } = useChat();
 
     const generateTitle = async (message: string, model: AiModel) => {
         if (!message || !model) return;
@@ -154,18 +156,29 @@ function App() {
                     onClose={() => setSettingsView(null)}
                 />
             )}
-            <Header
-                chatName={chatName}
-                onSettingsClick={() => setSettingsView('settings')}
-                onNewChatClick={handleNewChat}
-            />
+            <div className="appContent">
+                <Header
+                    chatName={chatName}
+                    onMenuClick={() => setIsSidebarOpen(true)}
+                    onNewChatClick={handleNewChat}
+                />
 
-            <Chat messages={messages} />
+                <Chat messages={messages} />
 
-            <MessageBox
-                onMessageSent={handleSendMessage}
-                disabled={isSendMessageDisabled}
-                isSending={isSendMessageDisabled}
+                <MessageBox
+                    onMessageSent={handleSendMessage}
+                    disabled={isSendMessageDisabled}
+                    isSending={isSendMessageDisabled}
+                />
+            </div>
+            <Sidebar
+                isOpen={isSidebarOpen}
+                currentChatId={chatId}
+                onClose={() => setIsSidebarOpen(false)}
+                onSettingsClick={() => {
+                    setIsSidebarOpen(false);
+                    setSettingsView('settings');
+                }}
             />
         </main>
     );

@@ -114,6 +114,7 @@ export function useChat() {
     };
 
     return {
+        chatId: chat?.id ?? null,
         messages: chat?.messages ?? [],
         chatName: chat?.name ?? '',
         setMessages,

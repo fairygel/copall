@@ -1,13 +1,13 @@
-import { MessageCirclePlus, Settings, X } from 'lucide-react';
+import { Menu, MessageCirclePlus, X } from 'lucide-react';
 import './Header.css';
 import { hideWindow } from '../../service/NativeBridge';
 
 function Header({
-    onSettingsClick,
+    onMenuClick,
     onNewChatClick,
     chatName,
 }: {
-    onSettingsClick: () => void;
+    onMenuClick: () => void;
     onNewChatClick: () => void;
     chatName: string;
 }) {
@@ -18,8 +18,8 @@ function Header({
     return (
         <div data-drag-region className="header">
             <div data-drag-region className="icons">
-                <button aria-label="Open settings" className="clickable" onClick={onSettingsClick}>
-                    <Settings size={20} />
+                <button aria-label="Open menu" className="clickable" onClick={onMenuClick}>
+                    <Menu size={20} />
                 </button>
                 <button aria-label="Create new chat" className="clickable" onClick={onNewChatClick}>
                     <MessageCirclePlus size={20} />
