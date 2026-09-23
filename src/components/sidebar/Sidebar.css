@@ -38,6 +38,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-shrink: 0;
     margin-bottom: 12px;
 }
 
@@ -45,21 +46,33 @@
     font-size: 16px;
 }
 
+.sidebarChatListHost {
+    --customScroll-top: 0;
+    --customScroll-bottom: 0;
+    margin-right: -8px;
+    padding-right: 8px;
+}
+
 .sidebarChatList {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
     gap: 4px;
 }
 
 .sidebarChatItem {
+    flex-shrink: 0;
+    width: 100%;
+    min-width: 0;
     padding: 8px 12px;
+    border: none;
     border-radius: 10px;
+    background: transparent;
+    color: var(--font-color);
+    font-family: 'Andika', sans-serif;
     font-size: 14px;
+    text-align: left;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
 }
@@ -80,6 +93,7 @@
 
 .sidebarFooter {
     border-top: 1px solid var(--border-color);
+    flex-shrink: 0;
     padding-top: 12px;
     margin-top: 12px;
 }

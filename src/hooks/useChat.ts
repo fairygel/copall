@@ -113,6 +113,30 @@ export function useChat() {
         setChat(fresh);
     };
 
+    const openChat = async (id: string) => {
+        await initPromise.current;
+        if (chatRef.current?.id === id) return;
+        if (saveTimeout.current) {
+            window.clearTimeout(saveTimeout.current);
+            saveTimeout.current = null;
+        }
+        const current = chatRef.current;
+        if (current) {
+            try {
+                await saveChat(current);
+            } catch (e) {
+                console.error('Failed to flush chat before opening another chat:', e);
+            }
+        }
+        const existing = await getChat(id);
+        if (!existing) {
+            console.error('Failed to open chat: not found');
+            return;
+        }
+        setCurrentChatId(existing.id);
+        setChat(existing);
+    };
+
     return {
         chatId: chat?.id ?? null,
         messages: chat?.messages ?? [],
@@ -120,5 +144,6 @@ export function useChat() {
         setMessages,
         setChatName,
         createNewChat,
+        openChat,
     };
 }

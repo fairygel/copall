@@ -77,7 +77,8 @@ function App() {
         setUpdateDownloadPercent(0);
     };
 
-    const { chatId, messages, chatName, setMessages, setChatName, createNewChat } = useChat();
+    const { chatId, messages, chatName, setMessages, setChatName, createNewChat, openChat } =
+        useChat();
 
     const generateTitle = async (message: string, model: AiModel) => {
         if (!message || !model) return;
@@ -133,6 +134,12 @@ function App() {
         setSendMessageDisabled(false);
     };
 
+    const handleOpenChat = async (id: string) => {
+        await openChat(id);
+        setIsSidebarOpen(false);
+        setSendMessageDisabled(false);
+    };
+
     return (
         <main>
             {pendingUpdate && (
@@ -175,6 +182,7 @@ function App() {
                 isOpen={isSidebarOpen}
                 currentChatId={chatId}
                 onClose={() => setIsSidebarOpen(false)}
+                onChatSelect={handleOpenChat}
                 onSettingsClick={() => {
                     setIsSidebarOpen(false);
                     setSettingsView('settings');
