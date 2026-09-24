@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import './MessageBox.css';
 import AiModelSelect from '../select/AiModelSelect';
 import ReasoningSelect, { ReasoningSelectHandle } from '../reasoning/ReasoningSelect';
-import AiModel from '../../models/AiModel';
+import AiModel, { REASONING_LEVELS, type ReasoningLevel } from '../../models/AiModel';
 import type { ReasoningChoice } from '../../service/ai-client/BaseClient';
 import { getModelsFromCatalog } from '../../service/CatalogService';
 import {
@@ -22,6 +22,15 @@ import {
     snapshotHasImage,
     snapshotPaste,
 } from '../../service/ClipboardService';
+
+function readSavedReasoningLevel(): ReasoningChoice {
+    const saved = localStorage.getItem('reasoningLevel');
+    if (saved === 'default') return 'default';
+    if (saved !== null && (REASONING_LEVELS as readonly string[]).includes(saved)) {
+        return saved as ReasoningLevel;
+    }
+    return 'default';
+}
 
 function MessageBox({
     onMessageSent,
@@ -107,7 +116,9 @@ function MessageBox({
         !defaultModel || defaultModel.inputModalities.includes('image');
     const modelSupportsReasoning = Boolean(defaultModel?.reasoning.supported);
     const reasoningLevels = defaultModel?.reasoning.levels ?? [];
-    const [reasoningLevel, setReasoningLevel] = useState<ReasoningChoice>('default');
+    const [reasoningLevel, setReasoningLevel] = useState<ReasoningChoice>(() =>
+        readSavedReasoningLevel()
+    );
     const reasoningSelectRef = useRef<ReasoningSelectHandle>(null);
     const reasoningActive =
         modelSupportsReasoning && reasoningLevel !== 'default';
@@ -151,10 +162,25 @@ function MessageBox({
             localStorage.removeItem('selectedModel');
         }
         setDefaultModel(model);
+        if (
+            model?.reasoning.supported &&
+            reasoningLevel !== 'default' &&
+            model.reasoning.levels.includes(reasoningLevel)
+        ) {
+            return;
+        }
+        if (model && model.reasoning.supported) {
+            const saved = readSavedReasoningLevel();
+            if (saved !== 'default' && model.reasoning.levels.includes(saved)) {
+                setReasoningLevel(saved);
+                return;
+            }
+        }
         setReasoningLevel('default');
     };
 
     const handleReasoningSelect = (level: ReasoningChoice) => {
+        localStorage.setItem('reasoningLevel', level);
         setReasoningLevel(level);
     };
 

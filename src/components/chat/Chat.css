@@ -23,6 +23,7 @@
 .userMessage {
     margin-left: auto;
     max-width: 75%;
+    padding: 10px 16px;
     background-color: var(--container-color);
     box-shadow: 0 2px 4px var(--shadow-color);
     border-radius: 20px;
@@ -126,6 +127,132 @@
     flex-wrap: wrap;
     gap: 8px;
     margin: 0 4px;
+}
+
+@keyframes animTypewriter {
+    0% { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.style-typewriter .word-unit {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.style-typewriter .reveal-unit {
+    display: inline-block;
+    opacity: 0;
+    backface-visibility: hidden;
+    animation: animTypewriter 0.18s ease-out forwards;
+    will-change: transform, opacity;
+}
+
+.message p {
+    margin: 0.75em 0;
+}
+
+.message h1,
+.message h2,
+.message h3,
+.message h4,
+.message h5,
+.message h6 {
+    margin: 0.9em 0 0.45em;
+    line-height: 1.3;
+}
+
+.message > :first-child {
+    margin-top: 0;
+}
+
+.message > :last-child {
+    margin-bottom: 0;
+}
+
+.message ul,
+.message ol,
+.tail-list {
+    margin: 0.75em 0;
+    padding-left: 24px;
+}
+
+.message li {
+    margin: 0.25em 0;
+}
+
+.message pre,
+.tail-pre {
+    margin: 0.75em 0;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background-color: var(--container-color);
+    overflow-x: auto;
+    white-space: pre;
+    font-family: 'Geist', monospace;
+}
+
+.message pre code {
+    background: none;
+    padding: 0;
+}
+
+.message blockquote,
+.tail-quote {
+    margin: 0.75em 0;
+    padding-left: 12px;
+    border-left: 2px solid var(--border-color);
+    color: var(--inactive-font-color);
+}
+
+.message code,
+.tail-inline-code {
+    font-family: 'Geist', monospace;
+    background-color: var(--container-color);
+    border-radius: 6px;
+    padding: 1px 5px;
+}
+
+.message img,
+.tail-image {
+    display: block;
+    max-width: 100%;
+    max-height: 320px;
+    border-radius: 12px;
+    margin: 8px 0;
+}
+
+.tail-code-char {
+    font-family: 'Geist', monospace;
+    white-space: pre;
+}
+
+.tail-link {
+    color: var(--accent-color);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
+.tail-link:hover {
+    opacity: 0.85;
+}
+
+.tail-image {
+    display: block;
+    max-width: 100%;
+    max-height: 320px;
+    border-radius: 12px;
+    margin: 8px 0;
+}
+
+.tail-image-link {
+    margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .style-typewriter .reveal-unit {
+        animation: none;
+    }
 }
 
 .messageAttachmentThumb {

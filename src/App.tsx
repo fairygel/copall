@@ -180,7 +180,7 @@ function App() {
                     onNewChatClick={handleNewChat}
                 />
 
-                <Chat messages={messages} />
+                <Chat messages={messages} isGenerating={isSendMessageDisabled} />
 
                 <MessageBox
                     onMessageSent={handleSendMessage}
