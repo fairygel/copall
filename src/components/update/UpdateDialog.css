@@ -41,6 +41,12 @@
     opacity: 0.8;
 }
 
+.updateError {
+    margin: 0 0 16px !important;
+    font-size: 0.9em;
+    color: #e0655f;
+}
+
 .updateButton {
     cursor: pointer;
     padding: 8px 28px;

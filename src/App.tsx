@@ -33,6 +33,8 @@ function App() {
         'idle' | 'downloading' | 'downloaded'
     >('idle');
     const [updateDownloadPercent, setUpdateDownloadPercent] = useState(0);
+    const [isRestarting, setIsRestarting] = useState(false);
+    const [restartError, setRestartError] = useState<string | null>(null);
 
     const [updateCheckState, setUpdateCheckState] = useState<
         'idle' | 'checking' | 'upToDate' | 'error'
@@ -65,7 +67,7 @@ function App() {
 
         const offDownloaded = onUpdaterDownloaded(() => {
             setUpdateDownloadState('downloaded');
-            relaunchAfterUpdate().catch(console.error);
+            setUpdateDownloadPercent(100);
         });
 
         return () => {
@@ -90,6 +92,22 @@ function App() {
         setPendingUpdate(null);
         setUpdateDownloadState('idle');
         setUpdateDownloadPercent(0);
+        setIsRestarting(false);
+        setRestartError(null);
+    };
+
+    const handleRestartNow = async () => {
+        if (updateDownloadState !== 'downloaded' || isRestarting) return;
+        setIsRestarting(true);
+        setRestartError(null);
+        try {
+            await relaunchAfterUpdate();
+        } catch (e) {
+            setIsRestarting(false);
+            setRestartError(
+                e instanceof Error && e.message ? e.message : 'Restart failed, try again later.'
+            );
+        }
     };
 
     const { chatId, messages, chatName, setMessages, setChatName, createNewChat, openChat, removeChat } =
@@ -171,8 +189,11 @@ function App() {
                     version={pendingUpdate.version}
                     downloadState={updateDownloadState}
                     downloadPercent={updateDownloadPercent}
+                    isRestarting={isRestarting}
+                    restartError={restartError}
                     onUpdate={handleUpdate}
                     onLater={handleUpdateLater}
+                    onRestartNow={handleRestartNow}
                 />
             )}
             {settingsView === 'settings' && (

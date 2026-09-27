@@ -4,22 +4,28 @@ function UpdateDialog({
     version,
     downloadState,
     downloadPercent,
+    isRestarting,
+    restartError,
     onUpdate,
     onLater,
+    onRestartNow,
 }: {
     version: string;
     downloadState: 'idle' | 'downloading' | 'downloaded';
     downloadPercent: number;
+    isRestarting: boolean;
+    restartError: string | null;
     onUpdate: () => void;
     onLater: () => void;
+    onRestartNow: () => void;
 }) {
-    const isDownloading = downloadState !== 'idle';
-    const statusText =
-        downloadState === 'downloaded'
-            ? 'Update downloaded, restarting…'
-            : `Downloading… ${downloadPercent}%`;
+    const isDownloading = downloadState === 'downloading';
+    const isDownloaded = downloadState === 'downloaded';
+    const statusText = isDownloaded
+        ? 'Update downloaded and ready to install.'
+        : `Downloading… ${downloadPercent}%`;
     return (
-        <div className="modalBackdrop" onClick={isDownloading ? undefined : onLater}>
+        <div className="modalBackdrop" onClick={isDownloading || isRestarting ? undefined : onLater}>
             <div className="modalContent updateDialog" onClick={e => e.stopPropagation()}>
                 <div className="modalHeader">
                     <div />
@@ -28,31 +34,43 @@ function UpdateDialog({
                 </div>
                 <div className="modalBody">
                     <p>
-                        A new version {version} is available. Update now?
+                        A new version {version} is available.{' '}
+                        {isDownloaded ? 'Restart the app to install it?' : 'Update now?'}
                     </p>
-                    {isDownloading && (
+                    {(isDownloading || isDownloaded) && (
                         <div className="updateProgress">
                             <div
                                 className="updateProgressBar"
-                                style={{ width: `${downloadState === 'downloaded' ? 100 : downloadPercent}%` }}
+                                style={{ width: `${isDownloaded ? 100 : downloadPercent}%` }}
                             />
                         </div>
                     )}
-                    {isDownloading && <p className="updateStatus">{statusText}</p>}
+                    {(isDownloading || isDownloaded) && <p className="updateStatus">{statusText}</p>}
+                    {restartError && <p className="updateError">{restartError}</p>}
                     <div className="updateActions">
-                        <button
-                            className="updateButton updatePrimary"
-                            onClick={onUpdate}
-                            disabled={isDownloading}
-                        >
-                            {isDownloading ? 'Downloading…' : 'Update'}
-                        </button>
+                        {isDownloaded ? (
+                            <button
+                                className="updateButton updatePrimary"
+                                onClick={onRestartNow}
+                                disabled={isRestarting}
+                            >
+                                {isRestarting ? 'Restarting…' : 'Restart now'}
+                            </button>
+                        ) : (
+                            <button
+                                className="updateButton updatePrimary"
+                                onClick={onUpdate}
+                                disabled={isDownloading}
+                            >
+                                {isDownloading ? 'Downloading…' : 'Update'}
+                            </button>
+                        )}
                         <button
                             className="updateButton"
                             onClick={onLater}
-                            disabled={isDownloading}
+                            disabled={isDownloading || isRestarting}
                         >
-                            Later
+                            {isDownloaded ? 'Later' : 'Later'}
                         </button>
                     </div>
                 </div>

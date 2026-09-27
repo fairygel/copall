@@ -270,6 +270,17 @@
     white-space: pre;
 }
 
+.message a {
+    color: var(--accent-color);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
+.message a:hover {
+    opacity: 0.85;
+}
+
 .tail-link {
     color: var(--accent-color);
     text-decoration: underline;
