@@ -262,3 +262,32 @@ h4,
     font-size: 12px;
     color: var(--inactive-font-color);
 }
+
+.updateCheckRow {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--font-color);
+    font-family: 'Andika', sans-serif;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+.updateCheckRow:hover:not(:disabled) {
+    opacity: 0.85;
+}
+
+.updateCheckRow:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+.updateCheckSpinner {
+    animation: update-check-spin 0.9s linear infinite;
+}
+
+@keyframes update-check-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

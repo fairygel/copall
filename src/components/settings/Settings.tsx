@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './Settings.css';
-import { CircleAlert, KeyRound, Pin, Power, SunMoon, X } from 'lucide-react';
+import { CircleAlert, KeyRound, Pin, Power, RefreshCw, SunMoon, X } from 'lucide-react';
 import {
     autostartIsEnabled,
     autostartSet,
@@ -22,9 +22,15 @@ import {
 function Settings({
     onClose,
     onManageApiKeys,
+    updateCheckState,
+    updateDownloadState,
+    onCheckForUpdates,
 }: {
     onClose: () => void;
     onManageApiKeys: () => void;
+    updateCheckState: 'idle' | 'checking' | 'upToDate' | 'error';
+    updateDownloadState: 'idle' | 'downloading' | 'downloaded';
+    onCheckForUpdates: () => void;
 }) {
     const [isLinux, setIsLinux] = useState(false);
 
@@ -150,6 +156,36 @@ function Settings({
                                 <span className="toggleThumb" />
                             </button>
                         </div>
+                        <button
+                            type="button"
+                            className="settingItem settingLinkItem updateCheckRow"
+                            onClick={onCheckForUpdates}
+                            disabled={
+                                updateCheckState === 'checking' ||
+                                updateDownloadState !== 'idle'
+                            }
+                        >
+                            <div className="settingLabel">
+                                <RefreshCw
+                                    size={18}
+                                    className={
+                                        updateCheckState === 'checking'
+                                            ? 'updateCheckSpinner'
+                                            : undefined
+                                    }
+                                />
+                                <span>Check for updates</span>
+                            </div>
+                            <span className="manageLink">
+                                {updateCheckState === 'checking'
+                                    ? 'Checking…'
+                                    : updateCheckState === 'upToDate'
+                                      ? 'Up to date'
+                                      : updateCheckState === 'error'
+                                        ? 'Failed, try again'
+                                        : 'Check'}
+                            </span>
+                        </button>
                     </div>
                     <h4>Providers</h4>
                     <div className="settingsSection">

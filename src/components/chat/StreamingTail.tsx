@@ -1,6 +1,7 @@
 import React from 'react';
 import { Search } from 'lucide-react';
 import { openUrl } from '../../service/NativeBridge';
+import HScroll from '../scroll/HScroll';
 
 export function isExternalUrl(url: string): boolean {
     return url.startsWith('http://') || url.startsWith('https://');
@@ -515,7 +516,45 @@ export type TailLine =
     | { kind: 'search'; text: string; globalKey: number; prefix: number }
     | { kind: 'quote'; text: string; globalKey: number; prefix: number }
     | { kind: 'code'; text: string; globalKey: number; prefix: number }
+    | { kind: 'table-row'; cells: string[]; header: boolean; globalKey: number }
     | { kind: 'para'; text: string; globalKey: number; prefix: number };
+
+function splitTableRow(line: string): string[] | null {
+    const trimmed = line.trim();
+    if (!trimmed.includes('|')) return null;
+    let body = trimmed;
+    if (body.startsWith('|')) body = body.slice(1);
+    if (body.endsWith('|')) body = body.slice(0, -1);
+    const cells: string[] = [];
+    let current = '';
+    let escaped = false;
+    for (const ch of body) {
+        if (escaped) {
+            current += ch;
+            escaped = false;
+        } else if (ch === '\\') {
+            escaped = true;
+        } else if (ch === '|') {
+            cells.push(current.trim());
+            current = '';
+        } else {
+            current += ch;
+        }
+    }
+    if (escaped) current += '\\';
+    cells.push(current.trim());
+    return cells;
+}
+
+function isDelimiterRow(line: string): boolean {
+    const cells = splitTableRow(line);
+    if (!cells || cells.length === 0) return false;
+    return cells.every(cell => /^:?-{1,}:?$/.test(cell));
+}
+
+function isDelimiterRowCells(cells: string[]): boolean {
+    return cells.length > 0 && cells.every(cell => /^:?-{1,}:?$/.test(cell));
+}
 
 export function parseTailLines(tail: string, fenceOpen: boolean, baseOffset: number): TailLine[] {
     const lines: TailLine[] = [];
@@ -573,6 +612,49 @@ export function parseTailLines(tail: string, fenceOpen: boolean, baseOffset: num
                 prefix: list[1].length,
             });
             return;
+        }
+
+        const cells = splitTableRow(line);
+        if (cells && cells.length > 1) {
+            const prev = lines[lines.length - 1];
+            if (isDelimiterRow(line)) {
+                if (isTableRow(prev)) {
+                    if (prev.header) {
+                        lines.push({ kind: 'table-row', cells, header: false, globalKey: key });
+                        return;
+                    }
+                } else {
+                    const before = lines[lines.length - 2];
+                    if (before && before.kind === 'para') {
+                        const headerCells = splitTableRow(before.text);
+                        if (
+                            headerCells &&
+                            headerCells.length > 1 &&
+                            cells.length === headerCells.length
+                        ) {
+                            lines[lines.length - 1] = {
+                                kind: 'table-row',
+                                cells: headerCells,
+                                header: true,
+                                globalKey: before.globalKey,
+                            };
+                            lines.push({ kind: 'table-row', cells, header: false, globalKey: key });
+                            return;
+                        }
+                    }
+                }
+            } else if (isTableRow(prev)) {
+                lines.push({ kind: 'table-row', cells, header: false, globalKey: key });
+                return;
+            } else {
+                const nextRaw = raw[index + 1];
+                const nextLine =
+                    nextRaw !== undefined && nextRaw.endsWith('\r') ? nextRaw.slice(0, -1) : nextRaw;
+                if (nextLine !== undefined && isDelimiterRow(nextLine)) {
+                    lines.push({ kind: 'table-row', cells, header: true, globalKey: key });
+                    return;
+                }
+            }
         }
 
         lines.push({ kind: 'para', text: line, globalKey: key, prefix: 0 });
@@ -808,8 +890,17 @@ function AnimatedCode({ text, keyBase }: { text: string; keyBase: number }) {
     );
 }
 
+function isTableRow(line: TailLine | undefined): line is Extract<TailLine, { kind: 'table-row' }> {
+    return line !== undefined && line.kind === 'table-row';
+}
+
 function sameLine(a: TailLine, b: TailLine): boolean {
     if (a.kind !== b.kind) return false;
+    if (a.kind === 'table-row' && b.kind === 'table-row') {
+        if (a.header !== b.header || a.cells.length !== b.cells.length) return false;
+        return a.cells.every((cell, index) => cell === b.cells[index]);
+    }
+    if (a.kind === 'table-row' || b.kind === 'table-row') return false;
     if (a.prefix !== b.prefix) return false;
     switch (a.kind) {
         case 'header':
@@ -827,8 +918,103 @@ function sameLine(a: TailLine, b: TailLine): boolean {
     }
 }
 
+function TailCellContent({ text, keyBase }: { text: string; keyBase: number }) {
+    const { tokens, links } = parseInline(text, keyBase);
+    if (tokens.length === 0) return null;
+
+    const segments: CharToken[][] = [];
+    for (const token of tokens) {
+        const current = segments[segments.length - 1];
+        const prev = current?.[current.length - 1];
+        if (
+            prev &&
+            prev.bold === token.bold &&
+            prev.italic === token.italic &&
+            prev.code === token.code &&
+            prev.link === token.link
+        ) {
+            current.push(token);
+        } else {
+            segments.push([token]);
+        }
+    }
+
+    return (
+        <>
+            {segments.map(segment => {
+                const first = segment[0];
+                const content = segment.map(token => token.ch).join('');
+                let node: React.ReactNode = content;
+                if (first.code) node = <code className="tail-inline-code">{node}</code>;
+                if (first.italic) node = <em>{node}</em>;
+                if (first.bold) node = <strong>{node}</strong>;
+                const span = first.link === -1 ? undefined : links[first.link];
+                return (
+                    <React.Fragment key={first.key}>
+                        {linkWrap(text, span, node, first.key)}
+                    </React.Fragment>
+                );
+            })}
+        </>
+    );
+}
+
+const TableRowContent = React.memo(
+    function TableRowContent({
+        cells,
+        header,
+        lineKey,
+        growing,
+        cellKeyBase,
+    }: {
+        cells: string[];
+        header: boolean;
+        lineKey: number;
+        growing: boolean;
+        cellKeyBase: number;
+    }) {
+        return (
+            <tr>
+                {cells.map((cell, index) => {
+                    const key = `${lineKey}:${index}`;
+                    const keyBase = cellKeyBase + index * 100000;
+                    if (growing && index === cells.length - 1 && cell !== '') {
+                        return header ? (
+                            <th key={key}>
+                                <AnimatedContent text={cell} keyBase={keyBase} />
+                            </th>
+                        ) : (
+                            <td key={key}>
+                                <AnimatedContent text={cell} keyBase={keyBase} />
+                            </td>
+                        );
+                    }
+                    if (cell === '') return header ? <th key={key} /> : <td key={key} />;
+                    return header ? (
+                        <th key={key}>
+                            <TailCellContent text={cell} keyBase={keyBase} />
+                        </th>
+                    ) : (
+                        <td key={key}>
+                            <TailCellContent text={cell} keyBase={keyBase} />
+                        </td>
+                    );
+                })}
+            </tr>
+        );
+    },
+    (prev, next) =>
+        prev.lineKey === next.lineKey &&
+        prev.header === next.header &&
+        prev.growing === next.growing &&
+        prev.cellKeyBase === next.cellKeyBase &&
+        prev.cells.length === next.cells.length &&
+        prev.cells.every((cell, index) => cell === next.cells[index])
+);
+
 const TailBlock = React.memo(
     function TailBlock({ line, last }: { line: TailLine; last: boolean }) {
+        if (isTableRow(line)) return null;
         const content =
             line.text === '' ? null : last ? (
                 <AnimatedContent text={line.text} keyBase={line.prefix} />
@@ -929,18 +1115,78 @@ export function StreamingTail({
                 j++;
             }
             out.push(
-                <pre key={line.globalKey} className="tail-pre">
-                    <code>
-                        {group.map(item => (
-                            <CodeLine
-                                key={item.globalKey}
-                                lineKey={item.globalKey}
-                                text={item.text}
-                                last={item.globalKey === lastKey}
-                            />
-                        ))}
-                    </code>
-                </pre>
+                <HScroll key={line.globalKey} className="tail-codeScroll">
+                    <pre className="tail-pre">
+                        <code>
+                            {group.map(item => (
+                                <CodeLine
+                                    key={item.globalKey}
+                                    lineKey={item.globalKey}
+                                    text={item.text}
+                                    last={item.globalKey === lastKey}
+                                />
+                            ))}
+                        </code>
+                    </pre>
+                </HScroll>
+            );
+            i = j;
+            continue;
+        }
+
+        if (isTableRow(line)) {
+            const group: Extract<TailLine, { kind: 'table-row' }>[] = [line];
+            let j = i + 1;
+            while (j < lines.length && isTableRow(lines[j])) {
+                group.push(lines[j] as Extract<TailLine, { kind: 'table-row' }>);
+                j++;
+            }
+            const rows = group.filter(row => !isDelimiterRowCells(row.cells));
+            if (rows.length === 0) {
+                i = j;
+                continue;
+            }
+            const head = rows.find(row => row.header) ?? rows[0];
+            const body = rows.filter(row => row !== head);
+            const showHead = group.some(row => !row.header && isDelimiterRowCells(row.cells));
+            const tableKeyBase = line.globalKey * 1000000;
+            out.push(
+                <HScroll key={`table:${line.globalKey}`} className="tail-tableScroll">
+                    <table className="md-table">
+                        {showHead && head && (
+                            <thead>
+                                <TableRowContent
+                                    cells={head.cells}
+                                    header
+                                    lineKey={head.globalKey}
+                                    cellKeyBase={tableKeyBase}
+                                    growing={head.globalKey === lastKey}
+                                />
+                            </thead>
+                        )}
+                        <tbody>
+                            {!showHead && head && (
+                                <TableRowContent
+                                    cells={head.cells}
+                                    header={false}
+                                    lineKey={head.globalKey}
+                                    cellKeyBase={tableKeyBase}
+                                    growing={head.globalKey === lastKey}
+                                />
+                            )}
+                            {body.map(row => (
+                                <TableRowContent
+                                    key={row.globalKey}
+                                    cells={row.cells}
+                                    header={false}
+                                    lineKey={row.globalKey}
+                                    cellKeyBase={tableKeyBase}
+                                    growing={row.globalKey === lastKey}
+                                />
+                            ))}
+                        </tbody>
+                    </table>
+                </HScroll>
             );
             i = j;
             continue;

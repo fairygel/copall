@@ -13,7 +13,7 @@ import type { ReasoningChoice } from './service/ai-client/BaseClient';
 
 import { generateAssistantResponse, generateChatTitle } from './service/ChatService';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
     checkForUpdate,
     onUpdaterDownloaded,
@@ -34,15 +34,29 @@ function App() {
     >('idle');
     const [updateDownloadPercent, setUpdateDownloadPercent] = useState(0);
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const update = await checkForUpdate();
-                if (update) setPendingUpdate(update);
-            } catch (e) {
-                console.error('update check failed:', e);
+    const [updateCheckState, setUpdateCheckState] = useState<
+        'idle' | 'checking' | 'upToDate' | 'error'
+    >('idle');
+
+    const checkForUpdatesNow = useCallback(async () => {
+        if (updateDownloadState !== 'idle') return;
+        setUpdateCheckState('checking');
+        try {
+            const update = await checkForUpdate();
+            if (update) {
+                setPendingUpdate(update);
+                setUpdateCheckState('idle');
+            } else {
+                setUpdateCheckState('upToDate');
             }
-        })();
+        } catch (e) {
+            console.error('update check failed:', e);
+            setUpdateCheckState('error');
+        }
+    }, [updateDownloadState]);
+
+    useEffect(() => {
+        checkForUpdatesNow();
 
         const offProgress = onUpdaterDownloadProgress(percent => {
             setUpdateDownloadState('downloading');
@@ -58,7 +72,7 @@ function App() {
             offProgress();
             offDownloaded();
         };
-    }, []);
+    }, [checkForUpdatesNow]);
 
     const handleUpdate = async () => {
         if (!pendingUpdate || updateDownloadState !== 'idle') return;
@@ -165,6 +179,9 @@ function App() {
                 <Settings
                     onClose={() => setSettingsView(null)}
                     onManageApiKeys={() => setSettingsView('apiKeys')}
+                    updateCheckState={updateCheckState}
+                    updateDownloadState={updateDownloadState}
+                    onCheckForUpdates={checkForUpdatesNow}
                 />
             )}
             {settingsView === 'apiKeys' && (
@@ -180,7 +197,7 @@ function App() {
                     onNewChatClick={handleNewChat}
                 />
 
-                <Chat messages={messages} isGenerating={isSendMessageDisabled} />
+                <Chat messages={messages} isGenerating={isSendMessageDisabled} chatId={chatId} />
 
                 <MessageBox
                     onMessageSent={handleSendMessage}

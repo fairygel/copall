@@ -1,4 +1,5 @@
-import ReactMarkdown, { type Components } from 'react-markdown';
+import ReactMarkdown, { type Components, type ExtraProps } from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import Message from '../../models/message';
 import './Chat.css';
 import { useCallback, useEffect, useState } from 'react';
@@ -6,6 +7,7 @@ import React from 'react';
 import { openUrl } from '../../service/NativeBridge';
 import { Check, Copy, Search } from 'lucide-react';
 import ChatScroll from './ChatScroll';
+import HScroll from '../scroll/HScroll';
 import { StreamingTail } from './StreamingTail';
 
 const TAIL_CAP_CHARS = 900;
@@ -58,6 +60,24 @@ const baseComponents: Components = {
         return <blockquote>{children}</blockquote>;
     },
     a: MarkdownLink,
+    pre: function CodeScroll({ children }: React.JSX.IntrinsicElements['pre'] & ExtraProps) {
+        return (
+            <HScroll className="md-codeScroll">
+                <pre className="md-codePre">
+                    {children}
+                </pre>
+            </HScroll>
+        );
+    },
+    table: function TableScroll({ children }: React.JSX.IntrinsicElements['table'] & ExtraProps) {
+        return (
+            <HScroll className="md-tableScroll">
+                <table className="md-table">
+                    {children}
+                </table>
+            </HScroll>
+        );
+    },
 };
 
 function countFences(text: string): number {
@@ -103,7 +123,11 @@ function splitStableTail(content: string): { head: string; tail: string; tailOff
 }
 
 const StableMarkdown = React.memo(function StableMarkdown({ content }: { content: string }) {
-    return <ReactMarkdown components={baseComponents}>{content}</ReactMarkdown>;
+    return (
+        <ReactMarkdown remarkPlugins={[remarkGfm]} components={baseComponents}>
+            {content}
+        </ReactMarkdown>
+    );
 });
 
 function StreamingMarkdown({ content }: { content: string }) {
@@ -153,7 +177,9 @@ const MessageItem = React.memo(function MessageItem({
                 {isStreaming ? (
                     <StreamingMarkdown content={message.content} />
                 ) : (
-                    <ReactMarkdown components={baseComponents}>{message.content}</ReactMarkdown>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={baseComponents}>
+                        {message.content}
+                    </ReactMarkdown>
                 )}
             </div>
 
@@ -168,24 +194,64 @@ const MessageItem = React.memo(function MessageItem({
     );
 });
 
-function Chat({ messages, isGenerating }: { messages: Message[]; isGenerating?: boolean }) {
+function Chat({
+    messages,
+    isGenerating,
+    chatId,
+}: {
+    messages: Message[];
+    isGenerating?: boolean;
+    chatId?: string | null;
+}) {
     const bottomRef = React.useRef<HTMLDivElement>(null);
+    const pinnedRef = React.useRef(true);
 
-    useEffect(() => {
+    const scrollToBottom = useCallback((behavior: 'auto' | 'smooth') => {
         const anchor = bottomRef.current;
         if (!anchor) return;
         const viewport = anchor.closest('.customScroll-viewport') as HTMLElement | null;
+        if (viewport) {
+            viewport.scrollTo({ top: viewport.scrollHeight, behavior });
+        } else {
+            anchor.scrollIntoView({ behavior, block: 'end' });
+        }
+    }, []);
 
-        if (isGenerating && viewport) {
+    useEffect(() => {
+        if (messages.length === 0) return;
+        const viewport =
+            (bottomRef.current?.closest('.customScroll-viewport') as HTMLElement | null) ??
+            (document.querySelector('.chatScroll-viewport') as HTMLElement | null);
+        if (!viewport) return;
+        const onScroll = () => {
             const distanceToBottom =
                 viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight;
-            if (distanceToBottom > 140) return;
-            anchor.scrollIntoView({ behavior: 'auto', block: 'end' });
+            pinnedRef.current = distanceToBottom <= 80;
+        };
+        viewport.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        return () => viewport.removeEventListener('scroll', onScroll);
+    }, [chatId, messages.length]);
+
+    useEffect(() => {
+        if (messages.length === 0) return;
+        pinnedRef.current = true;
+        const frame = requestAnimationFrame(() => scrollToBottom('auto'));
+        return () => cancelAnimationFrame(frame);
+    }, [chatId, scrollToBottom]);
+
+    useEffect(() => {
+        if (messages.length === 0) return;
+        const last = messages[messages.length - 1];
+        if (last.sender === 'user') {
+            pinnedRef.current = true;
+            scrollToBottom('auto');
             return;
         }
-
-        anchor.scrollIntoView({ behavior: isGenerating ? 'auto' : 'smooth' });
-    }, [messages, isGenerating]);
+        if (pinnedRef.current) {
+            scrollToBottom(isGenerating ? 'auto' : 'smooth');
+        }
+    }, [messages, isGenerating, scrollToBottom]);
 
     const [copiedId, setCopiedId] = useState<string | null>(null);
 
