@@ -1,6 +1,100 @@
 {
     "open-router": [
         {
+            "id": "open-router/typesafe/jev-router",
+            "name": "TypeSafe: Jev Router",
+            "context": 1000000,
+            "created": 1790363560,
+            "inputModalities": [
+                "audio",
+                "file",
+                "image",
+                "text",
+                "video"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "-1",
+            "outputPricing": "-1",
+            "reasoning": {
+                "supported": false,
+                "levels": []
+            }
+        },
+        {
+            "id": "open-router/perceptron/perceptron-mk1.5",
+            "name": "Perceptron: Perceptron Mk1.5",
+            "context": 36864,
+            "created": 1790352661,
+            "inputModalities": [
+                "text",
+                "image",
+                "video",
+                "audio"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000015",
+            "outputPricing": "0.0000015",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "none",
+                    "minimal",
+                    "low",
+                    "medium",
+                    "high"
+                ]
+            }
+        },
+        {
+            "id": "open-router/fireworks/ember-1",
+            "name": "Fireworks: Ember-1",
+            "context": 1048576,
+            "created": 1790208461,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000003",
+            "outputPricing": "0.000015",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "high",
+                    "max"
+                ]
+            }
+        },
+        {
+            "id": "open-router/z-ai/glm-5.3-prime",
+            "name": "Z.ai: GLM 5.3 Prime",
+            "context": 1000000,
+            "created": 1790199651,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000028",
+            "outputPricing": "0.0000088",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "high",
+                    "max"
+                ]
+            }
+        },
+        {
             "id": "open-router/qwen/qwen3.8-max-prime",
             "name": "Qwen: Qwen3.8 Max Prime",
             "context": 1000000,
@@ -466,7 +560,7 @@
         {
             "id": "open-router/xiaomi/mimo-v2.6-pro",
             "name": "Xiaomi: MiMo-V2.6-Pro",
-            "context": 1048576,
+            "context": 1050000,
             "created": 1790021259,
             "inputModalities": [
                 "text",
@@ -614,8 +708,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000039336",
-            "outputPricing": "0.00000118008",
+            "inputPricing": "0.00000022592",
+            "outputPricing": "0.0000019584",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -637,8 +731,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000001",
-            "outputPricing": "0.0000005",
+            "inputPricing": "0.000000014",
+            "outputPricing": "0.0000004",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -852,8 +946,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000006",
-            "outputPricing": "0.00000018",
+            "inputPricing": "0.000000021",
+            "outputPricing": "0.0000000616",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -875,8 +969,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000001",
-            "outputPricing": "0.0000005",
+            "inputPricing": "0.000000014",
+            "outputPricing": "0.0000004",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -927,98 +1021,6 @@
                 "levels": [
                     "none",
                     "low",
-                    "medium",
-                    "high"
-                ]
-            }
-        },
-        {
-            "id": "open-router/nex-agi/nex-n2.5-mini",
-            "name": "Nex AGI: Nex-N2.5-Mini",
-            "context": 262144,
-            "created": 1788890061,
-            "inputModalities": [
-                "text",
-                "image"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.000000025",
-            "outputPricing": "0.0000001",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "none",
-                    "medium",
-                    "high"
-                ]
-            }
-        },
-        {
-            "id": "open-router/nex-agi/nex-n2.5-mini:free",
-            "name": "Nex AGI: Nex-N2.5-Mini (free)",
-            "context": 262144,
-            "created": 1788890061,
-            "inputModalities": [
-                "text",
-                "image"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "none",
-                    "medium",
-                    "high"
-                ]
-            }
-        },
-        {
-            "id": "open-router/nex-agi/nex-n2.5-pro",
-            "name": "Nex AGI: Nex-N2.5-Pro",
-            "context": 262144,
-            "created": 1788890050,
-            "inputModalities": [
-                "text",
-                "image"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.000000075",
-            "outputPricing": "0.00000025",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "none",
-                    "medium",
-                    "high"
-                ]
-            }
-        },
-        {
-            "id": "open-router/nex-agi/nex-n2.5-pro:free",
-            "name": "Nex AGI: Nex-N2.5-Pro (free)",
-            "context": 262144,
-            "created": 1788890050,
-            "inputModalities": [
-                "text",
-                "image"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "none",
                     "medium",
                     "high"
                 ]
@@ -1185,8 +1187,7 @@
                 "text",
                 "image",
                 "video",
-                "file",
-                "audio"
+                "file"
             ],
             "outputModalities": [
                 "text"
@@ -1214,8 +1215,7 @@
                 "text",
                 "image",
                 "video",
-                "file",
-                "audio"
+                "file"
             ],
             "outputModalities": [
                 "text"
@@ -1439,8 +1439,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000075",
-            "outputPricing": "0.00000025",
+            "inputPricing": "0.000000045",
+            "outputPricing": "0.00000014",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -1531,8 +1531,7 @@
                 "text",
                 "image",
                 "video",
-                "file",
-                "audio"
+                "file"
             ],
             "outputModalities": [
                 "text"
@@ -1562,8 +1561,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000022",
-            "outputPricing": "0.00000066",
+            "inputPricing": "0.00000044",
+            "outputPricing": "0.00000132",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -1620,8 +1619,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000005614",
-            "outputPricing": "0.0000017644",
+            "inputPricing": "0.0000001785",
+            "outputPricing": "0.000002805",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -1660,8 +1659,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000084",
-            "outputPricing": "0.00000264",
+            "inputPricing": "0.0000014",
+            "outputPricing": "0.0000044",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -1897,8 +1896,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000462",
-            "outputPricing": "0.000001386",
+            "inputPricing": "0.0000003995",
+            "outputPricing": "0.0000042",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -1958,7 +1957,7 @@
         {
             "id": "open-router/nvidia/nemotron-3.5-lightning",
             "name": "NVIDIA: Nemotron 3.5 Lightning",
-            "context": 262144,
+            "context": 1000000,
             "created": 1786452751,
             "inputModalities": [
                 "text"
@@ -2081,8 +2080,7 @@
                 "text",
                 "image",
                 "video",
-                "file",
-                "audio"
+                "file"
             ],
             "outputModalities": [
                 "text"
@@ -2111,8 +2109,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000038",
-            "outputPricing": "0.00000055",
+            "inputPricing": "0.000000021",
+            "outputPricing": "0.00000032",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -2133,8 +2131,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000004",
-            "outputPricing": "0.00000064",
+            "inputPricing": "0.000000021",
+            "outputPricing": "0.00000032",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -2147,7 +2145,7 @@
         {
             "id": "open-router/thinkingmachines/inkling-small",
             "name": "Thinking Machines: Inkling Small",
-            "context": 1048576,
+            "context": 524288,
             "created": 1785443117,
             "inputModalities": [
                 "text",
@@ -2473,7 +2471,7 @@
         {
             "id": "open-router/thinkingmachines/inkling",
             "name": "Thinking Machines: Inkling",
-            "context": 1048576,
+            "context": 524288,
             "created": 1784325956,
             "inputModalities": [
                 "text",
@@ -2608,8 +2606,7 @@
                 "text",
                 "image",
                 "video",
-                "file",
-                "audio"
+                "file"
             ],
             "outputModalities": [
                 "text"
@@ -3073,8 +3070,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000000825",
-            "outputPricing": "0.00000033",
+            "inputPricing": "0.000000132",
+            "outputPricing": "0.000000528",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -3317,27 +3314,6 @@
             }
         },
         {
-            "id": "open-router/z-ai/glm-5.2:free",
-            "name": "Z.ai: GLM 5.2 (free)",
-            "context": 32768,
-            "created": 1781631930,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "high",
-                    "xhigh"
-                ]
-            }
-        },
-        {
             "id": "open-router/openrouter/fusion",
             "name": "OpenRouter: Fusion",
             "context": 1000000,
@@ -3367,7 +3343,7 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000007062",
+            "inputPricing": "0.0000006562",
             "outputPricing": "0.0000033",
             "reasoning": {
                 "supported": true,
@@ -4075,8 +4051,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000014989",
-            "outputPricing": "0.000010758",
+            "inputPricing": "0.000001",
+            "outputPricing": "0.000009",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -4246,7 +4222,7 @@
                 "text"
             ],
             "inputPricing": "0.00000032",
-            "outputPricing": "0.0000027",
+            "outputPricing": "0.0000032",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -4367,8 +4343,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000946386",
-            "outputPricing": "0.000001892772",
+            "inputPricing": "0.000000948126",
+            "outputPricing": "0.000001896252",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -4388,8 +4364,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000007784",
-            "outputPricing": "0.00000015568",
+            "inputPricing": "0.00000008386",
+            "outputPricing": "0.00000016772",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -4550,8 +4526,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000095",
-            "outputPricing": "0.000004",
+            "inputPricing": "0.00000065",
+            "outputPricing": "0.00000341",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -4624,8 +4600,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000966",
-            "outputPricing": "0.000003036",
+            "inputPricing": "0.0000009646",
+            "outputPricing": "0.0000030316",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -5404,8 +5380,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000003125",
-            "outputPricing": "0.00000125",
+            "inputPricing": "0.0000001625",
+            "outputPricing": "0.0000013",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -6140,8 +6116,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000004",
-            "outputPricing": "0.00000175",
+            "inputPricing": "0.0000006",
+            "outputPricing": "0.0000022",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -6348,6 +6324,25 @@
             }
         },
         {
+            "id": "open-router/mistralai/devstral-2512",
+            "name": "Mistral: Devstral 2 2512",
+            "context": 262144,
+            "created": 1765285419,
+            "inputModalities": [
+                "text",
+                "file"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000004",
+            "outputPricing": "0.000002",
+            "reasoning": {
+                "supported": false,
+                "levels": []
+            }
+        },
+        {
             "id": "open-router/relace/relace-search",
             "name": "Relace: Relace Search",
             "context": 256000,
@@ -6533,6 +6528,26 @@
             }
         },
         {
+            "id": "open-router/mistralai/mistral-large-2512",
+            "name": "Mistral: Mistral Large 3 2512",
+            "context": 262144,
+            "created": 1764624472,
+            "inputModalities": [
+                "text",
+                "image",
+                "file"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000005",
+            "outputPricing": "0.0000015",
+            "reasoning": {
+                "supported": false,
+                "levels": []
+            }
+        },
+        {
             "id": "open-router/mistralai/mistral-large-2512:batch",
             "name": "Mistral: Mistral Large 3 2512 (batch)",
             "context": 262144,
@@ -6563,8 +6578,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000269",
-            "outputPricing": "0.0000004",
+            "inputPricing": "0.00000028",
+            "outputPricing": "0.00000042",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -6859,8 +6874,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000255",
-            "outputPricing": "0.00000102",
+            "inputPricing": "0.0000003",
+            "outputPricing": "0.0000012",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -7102,8 +7117,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000013",
-            "outputPricing": "0.00000052",
+            "inputPricing": "0.00000015",
+            "outputPricing": "0.0000006",
             "reasoning": {
                 "supported": false,
                 "levels": []
@@ -7432,7 +7447,7 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000009",
+            "inputPricing": "0.0000001",
             "outputPricing": "0.0000011",
             "reasoning": {
                 "supported": false,
@@ -7777,6 +7792,28 @@
             }
         },
         {
+            "id": "open-router/openai/gpt-oss-120b:batch",
+            "name": "OpenAI: gpt-oss-120b (batch)",
+            "context": 131072,
+            "created": 1754414231,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000000296",
+            "outputPricing": "0.000000136",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high"
+                ]
+            }
+        },
+        {
             "id": "open-router/openai/gpt-oss-20b",
             "name": "OpenAI: gpt-oss-20b",
             "context": 131072,
@@ -7935,8 +7972,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000004815",
-            "outputPricing": "0.00000019305",
+            "inputPricing": "0.0000001",
+            "outputPricing": "0.0000003",
             "reasoning": {
                 "supported": false,
                 "levels": []
@@ -8908,8 +8945,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000025",
-            "outputPricing": "0.000001",
+            "inputPricing": "0.00000029",
+            "outputPricing": "0.00000114",
             "reasoning": {
                 "supported": false,
                 "levels": []
@@ -9407,8 +9444,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000032",
-            "outputPricing": "0.00000089",
+            "inputPricing": "0.0000002574",
+            "outputPricing": "0.0000010287",
             "reasoning": {
                 "supported": false,
                 "levels": []
@@ -10109,25 +10146,6 @@
             }
         },
         {
-            "id": "open-router/anthropic/claude-3-haiku",
-            "name": "Anthropic: Claude 3 Haiku",
-            "context": 200000,
-            "created": 1710288000,
-            "inputModalities": [
-                "text",
-                "image"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000025",
-            "outputPricing": "0.00000125",
-            "reasoning": {
-                "supported": false,
-                "levels": []
-            }
-        },
-        {
             "id": "open-router/mistralai/mistral-large",
             "name": "Mistral Large",
             "context": 128000,
@@ -10808,7 +10826,7 @@
                 "text"
             ],
             "inputPricing": "0.0000004",
-            "outputPricing": "0.0000025",
+            "outputPricing": "0.0000024",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -11077,6 +11095,29 @@
             }
         },
         {
+            "id": "vercel/alibaba/qwen3.8-max-prime",
+            "name": "Qwen 3.8 Max Prime",
+            "context": 1000000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000004",
+            "outputPricing": "0.000012",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "xhigh"
+                ]
+            }
+        },
+        {
             "id": "vercel/alibaba/qwen3.8-omni-flash",
             "name": "Qwen 3.8 Omni Flash",
             "context": 1000000,
@@ -11241,7 +11282,8 @@
                     "low",
                     "medium",
                     "high",
-                    "xhigh"
+                    "xhigh",
+                    "max"
                 ]
             }
         },
@@ -11267,7 +11309,8 @@
                     "low",
                     "medium",
                     "high",
-                    "xhigh"
+                    "xhigh",
+                    "max"
                 ]
             }
         },
@@ -11392,7 +11435,8 @@
                     "low",
                     "medium",
                     "high",
-                    "xhigh"
+                    "xhigh",
+                    "max"
                 ]
             }
         },
@@ -11418,7 +11462,8 @@
                     "low",
                     "medium",
                     "high",
-                    "xhigh"
+                    "xhigh",
+                    "max"
                 ]
             }
         },
@@ -11444,7 +11489,8 @@
                     "low",
                     "medium",
                     "high",
-                    "xhigh"
+                    "xhigh",
+                    "max"
                 ]
             }
         },
@@ -11470,7 +11516,8 @@
                     "low",
                     "medium",
                     "high",
-                    "xhigh"
+                    "xhigh",
+                    "max"
                 ]
             }
         },
@@ -11496,7 +11543,8 @@
                     "low",
                     "medium",
                     "high",
-                    "xhigh"
+                    "xhigh",
+                    "max"
                 ]
             }
         },
@@ -11648,7 +11696,8 @@
                     "low",
                     "medium",
                     "high",
-                    "xhigh"
+                    "xhigh",
+                    "max"
                 ]
             }
         },
@@ -12010,8 +12059,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000022",
-            "outputPricing": "0.00000066",
+            "inputPricing": "0.0000002156",
+            "outputPricing": "0.0000006468",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -12086,6 +12135,29 @@
                     "none",
                     "high",
                     "max"
+                ]
+            }
+        },
+        {
+            "id": "vercel/fireworks/ember-1",
+            "name": "Ember-1",
+            "context": 1048576,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000003",
+            "outputPricing": "0.000015",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high"
                 ]
             }
         },
@@ -12758,30 +12830,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0",
-            "outputPricing": "0",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "low",
-                    "medium",
-                    "high"
-                ]
-            }
-        },
-        {
-            "id": "vercel/inclusionai/ling-3.0-flash-fin-free",
-            "name": "Ling 3.0 Flash Fin (Free)",
-            "context": 256000,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0",
+            "inputPricing": "0.00000006",
+            "outputPricing": "0.00000018",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -12912,6 +12962,29 @@
             ],
             "inputPricing": "0.0000015",
             "outputPricing": "0.0000035",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high"
+                ]
+            }
+        },
+        {
+            "id": "vercel/meituan/longcat-2.5-preview",
+            "name": "LongCat 2.5 Preview",
+            "context": 1048576,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000003",
+            "outputPricing": "0.0000012",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -15675,49 +15748,6 @@
             }
         },
         {
-            "id": "vercel/perplexity/sonar-pro",
-            "name": "Sonar Pro",
-            "context": 200000,
-            "created": 1755815280,
-            "inputModalities": [
-                "text",
-                "image"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0",
-            "reasoning": {
-                "supported": false,
-                "levels": []
-            }
-        },
-        {
-            "id": "vercel/perplexity/sonar-reasoning-pro",
-            "name": "Sonar Reasoning Pro",
-            "context": 127000,
-            "created": 1755815280,
-            "inputModalities": [
-                "text",
-                "image"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "minimal",
-                    "low",
-                    "medium",
-                    "high"
-                ]
-            }
-        },
-        {
             "id": "vercel/poolside/laguna-s-2.1",
             "name": "Laguna S 2.1",
             "context": 1000000,
@@ -15899,6 +15929,30 @@
                     "low",
                     "medium",
                     "high"
+                ]
+            }
+        },
+        {
+            "id": "vercel/stealth/pixel-canary",
+            "name": "Pixel Canary",
+            "context": 262144,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "none",
+                    "low",
+                    "medium",
+                    "xhigh"
                 ]
             }
         },
@@ -16109,7 +16163,7 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000005",
+            "inputPricing": "0.00000045",
             "outputPricing": "0.0000012",
             "reasoning": {
                 "supported": true,
@@ -17108,8 +17162,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000021",
-            "outputPricing": "0.0000066",
+            "inputPricing": "0.0000028",
+            "outputPricing": "0.0000088",
             "reasoning": {
                 "supported": true,
                 "levels": [
