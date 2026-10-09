@@ -1,6 +1,346 @@
 {
     "open-router": [
         {
+            "id": "open-router/stepfun/step-5-preview",
+            "name": "StepFun: Step 5 Preview",
+            "context": 1000000,
+            "created": 1791462849,
+            "inputModalities": [
+                "text",
+                "image",
+                "video"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000001",
+            "outputPricing": "0.0000027",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high"
+                ]
+            }
+        },
+        {
+            "id": "open-router/anthropic/claude-haiku-5.5",
+            "name": "Anthropic: Claude Haiku 5.5",
+            "context": 1000000,
+            "created": 1791397883,
+            "inputModalities": [
+                "text",
+                "image",
+                "file"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000001",
+            "outputPricing": "0.0000005",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh",
+                    "max"
+                ]
+            }
+        },
+        {
+            "id": "open-router/anthropic/claude-haiku-5.5:batch",
+            "name": "Anthropic: Claude Haiku 5.5 (batch)",
+            "context": 1000000,
+            "created": 1791397883,
+            "inputModalities": [
+                "text",
+                "image",
+                "file"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000005",
+            "outputPricing": "0.00000025",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh",
+                    "max"
+                ]
+            }
+        },
+        {
+            "id": "open-router/google/gemini-nano-banana-2.1",
+            "name": "Google: Nano Banana 2.1",
+            "context": 65536,
+            "created": 1791300825,
+            "inputModalities": [
+                "image",
+                "text"
+            ],
+            "outputModalities": [
+                "image",
+                "text"
+            ],
+            "inputPricing": "0.0000015",
+            "outputPricing": "0.0000075",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "minimal",
+                    "high"
+                ]
+            }
+        },
+        {
+            "id": "open-router/mistralai/mistral-large-4-0",
+            "name": "Mistral: Mistral Large 4",
+            "context": 1048576,
+            "created": 1791294122,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000068",
+            "outputPricing": "0.00000209",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "none",
+                    "high"
+                ]
+            }
+        },
+        {
+            "id": "open-router/inclusionai/ling-3.1-flash",
+            "name": "inclusionAI: Ling 3.1 Flash",
+            "context": 262144,
+            "created": 1790950024,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high"
+                ]
+            }
+        },
+        {
+            "id": "open-router/apodex/apodex-1.1-mini:free",
+            "name": "Apodex: Apodex 1.1 Mini (free)",
+            "context": 262144,
+            "created": 1790875335,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high"
+                ]
+            }
+        },
+        {
+            "id": "open-router/unbiased/pareto-26.10-preview",
+            "name": "Pareto 26.10 Preview",
+            "context": 1048576,
+            "created": 1790863623,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000008",
+            "outputPricing": "0.0000032",
+            "reasoning": {
+                "supported": false,
+                "levels": []
+            }
+        },
+        {
+            "id": "open-router/openai/gpt-6.1-sol-pro",
+            "name": "OpenAI: GPT-6.1 Sol Pro",
+            "context": 1050000,
+            "created": 1790702886,
+            "inputModalities": [
+                "file",
+                "image",
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000002",
+            "outputPricing": "0.00001",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh",
+                    "max"
+                ]
+            }
+        },
+        {
+            "id": "open-router/openai/gpt-6.1-sol-pro:batch",
+            "name": "OpenAI: GPT-6.1 Sol Pro (batch)",
+            "context": 1050000,
+            "created": 1790702886,
+            "inputModalities": [
+                "file",
+                "image",
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000001",
+            "outputPricing": "0.000005",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh",
+                    "max"
+                ]
+            }
+        },
+        {
+            "id": "open-router/openai/gpt-6.1-sol",
+            "name": "OpenAI: GPT-6.1 Sol",
+            "context": 1050000,
+            "created": 1790702882,
+            "inputModalities": [
+                "file",
+                "image",
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000002",
+            "outputPricing": "0.00001",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh",
+                    "max"
+                ]
+            }
+        },
+        {
+            "id": "open-router/openai/gpt-6.1-sol:batch",
+            "name": "OpenAI: GPT-6.1 Sol (batch)",
+            "context": 1050000,
+            "created": 1790702882,
+            "inputModalities": [
+                "file",
+                "image",
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000001",
+            "outputPricing": "0.000005",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh",
+                    "max"
+                ]
+            }
+        },
+        {
+            "id": "open-router/anthropic/claude-sonnet-5.5",
+            "name": "Anthropic: Claude Sonnet 5.5",
+            "context": 1000000,
+            "created": 1790618686,
+            "inputModalities": [
+                "text",
+                "image",
+                "file"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000002",
+            "outputPricing": "0.00001",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh",
+                    "max"
+                ]
+            }
+        },
+        {
+            "id": "open-router/anthropic/claude-sonnet-5.5:batch",
+            "name": "Anthropic: Claude Sonnet 5.5 (batch)",
+            "context": 1000000,
+            "created": 1790618686,
+            "inputModalities": [
+                "text",
+                "image",
+                "file"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000001",
+            "outputPricing": "0.000005",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh",
+                    "max"
+                ]
+            }
+        },
+        {
             "id": "open-router/typesafe/jev-router",
             "name": "TypeSafe: Jev Router",
             "context": 1000000,
@@ -18,8 +358,12 @@
             "inputPricing": "-1",
             "outputPricing": "-1",
             "reasoning": {
-                "supported": false,
-                "levels": []
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high"
+                ]
             }
         },
         {
@@ -117,32 +461,6 @@
                     "medium",
                     "high",
                     "xhigh"
-                ]
-            }
-        },
-        {
-            "id": "open-router/stealth/space-bunny-alpha",
-            "name": "Space Bunny Alpha",
-            "context": 1000000,
-            "created": 1790174884,
-            "inputModalities": [
-                "text",
-                "image",
-                "video"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "low",
-                    "medium",
-                    "high",
-                    "xhigh",
-                    "max"
                 ]
             }
         },
@@ -508,6 +826,24 @@
             }
         },
         {
+            "id": "open-router/nvidia/switchyard",
+            "name": "NVIDIA: Switchyard",
+            "context": 1000000,
+            "created": 1790025947,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "-1",
+            "outputPricing": "-1",
+            "reasoning": {
+                "supported": false,
+                "levels": []
+            }
+        },
+        {
             "id": "open-router/xiaomi/mimo-v2.6-pro-ultraspeed",
             "name": "Xiaomi: MiMo-V2.6-Pro-UltraSpeed",
             "context": 1048576,
@@ -535,7 +871,7 @@
         {
             "id": "open-router/xiaomi/mimo-v2.6-flash",
             "name": "Xiaomi: MiMo-V2.6-Flash",
-            "context": 1048576,
+            "context": 1050000,
             "created": 1790021264,
             "inputModalities": [
                 "text",
@@ -595,8 +931,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000016",
-            "outputPricing": "0.0000048",
+            "inputPricing": "0.000002",
+            "outputPricing": "0.000006",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -708,8 +1044,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000022592",
-            "outputPricing": "0.0000019584",
+            "inputPricing": "0.000000198",
+            "outputPricing": "0.000008",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -731,8 +1067,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000014",
-            "outputPricing": "0.0000004",
+            "inputPricing": "0.000000016",
+            "outputPricing": "0.0000012",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -822,7 +1158,6 @@
             "reasoning": {
                 "supported": true,
                 "levels": [
-                    "none",
                     "low",
                     "medium",
                     "high",
@@ -969,8 +1304,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000014",
-            "outputPricing": "0.0000004",
+            "inputPricing": "0.0000003",
+            "outputPricing": "0.0000012",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -1021,6 +1356,52 @@
                 "levels": [
                     "none",
                     "low",
+                    "medium",
+                    "high"
+                ]
+            }
+        },
+        {
+            "id": "open-router/nex-agi/nex-n2.5-mini",
+            "name": "Nex AGI: Nex-N2.5-Mini",
+            "context": 262144,
+            "created": 1788890061,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000000025",
+            "outputPricing": "0.0000001",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "none",
+                    "medium",
+                    "high"
+                ]
+            }
+        },
+        {
+            "id": "open-router/nex-agi/nex-n2.5-pro",
+            "name": "Nex AGI: Nex-N2.5-Pro",
+            "context": 262144,
+            "created": 1788890050,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000000075",
+            "outputPricing": "0.00000025",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "none",
                     "medium",
                     "high"
                 ]
@@ -1131,8 +1512,8 @@
             }
         },
         {
-            "id": "open-router/inclusionai/ling-3.0-flash-sante:free",
-            "name": "inclusionAI: Ling 3.0 Flash Sante (free)",
+            "id": "open-router/inclusionai/ling-3.0-flash-sante",
+            "name": "inclusionAI: Ling 3.0 Flash Sante",
             "context": 262144,
             "created": 1788545946,
             "inputModalities": [
@@ -1141,8 +1522,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0",
-            "outputPricing": "0",
+            "inputPricing": "0.000000042",
+            "outputPricing": "0.0000001232",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -1393,30 +1774,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000006",
-            "outputPricing": "0.00000018",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "low",
-                    "medium",
-                    "high"
-                ]
-            }
-        },
-        {
-            "id": "open-router/inclusionai/ling-3.0-flash-fin:free",
-            "name": "inclusionAI: Ling 3.0 Flash Fin (free)",
-            "context": 262144,
-            "created": 1787846290,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0",
+            "inputPricing": "0.000000042",
+            "outputPricing": "0.0000001232",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -1429,7 +1788,7 @@
         {
             "id": "open-router/~z-ai/glm-flash-latest",
             "name": "Z.ai: GLM Flash Latest",
-            "context": 1310720,
+            "context": 1048576,
             "created": 1787817633,
             "inputModalities": [
                 "text",
@@ -1439,8 +1798,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000045",
-            "outputPricing": "0.00000014",
+            "inputPricing": "0.000000032",
+            "outputPricing": "0.000000614956",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -1477,7 +1836,7 @@
         {
             "id": "open-router/z-ai/glm-5.3-flash",
             "name": "Z.ai: GLM 5.3 Flash",
-            "context": 1310720,
+            "context": 1048576,
             "created": 1787752741,
             "inputModalities": [
                 "text",
@@ -1561,8 +1920,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000044",
-            "outputPricing": "0.00000132",
+            "inputPricing": "0.0000002156",
+            "outputPricing": "0.0000006468",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -1611,7 +1970,7 @@
         {
             "id": "open-router/~z-ai/glm-latest",
             "name": "Z.ai: GLM Latest",
-            "context": 1310720,
+            "context": 1048576,
             "created": 1787151053,
             "inputModalities": [
                 "text"
@@ -1619,8 +1978,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000001785",
-            "outputPricing": "0.000002805",
+            "inputPricing": "0.0000000312",
+            "outputPricing": "0.0000044",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -1651,7 +2010,7 @@
         {
             "id": "open-router/z-ai/glm-5.3",
             "name": "Z.ai: GLM 5.3",
-            "context": 1310720,
+            "context": 1048576,
             "created": 1787086655,
             "inputModalities": [
                 "text"
@@ -1659,8 +2018,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000014",
-            "outputPricing": "0.0000044",
+            "inputPricing": "0.000000039",
+            "outputPricing": "0.0000048",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -1705,32 +2064,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000042",
-            "outputPricing": "0.000003",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "low",
-                    "medium",
-                    "xhigh"
-                ]
-            }
-        },
-        {
-            "id": "open-router/qwen/qwen3.8-27b:free",
-            "name": "Qwen: Qwen3.8 27B (free)",
-            "context": 262144,
-            "created": 1786722910,
-            "inputModalities": [
-                "text",
-                "image",
-                "video"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0",
+            "inputPricing": "0.000000425",
+            "outputPricing": "0.00000255",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -1896,8 +2231,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000003995",
-            "outputPricing": "0.0000042",
+            "inputPricing": "0.00000066",
+            "outputPricing": "0.00000198",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -1957,7 +2292,7 @@
         {
             "id": "open-router/nvidia/nemotron-3.5-lightning",
             "name": "NVIDIA: Nemotron 3.5 Lightning",
-            "context": 1000000,
+            "context": 262144,
             "created": 1786452751,
             "inputModalities": [
                 "text"
@@ -1965,8 +2300,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000008",
-            "outputPricing": "0.0000002",
+            "inputPricing": "0.0000000469",
+            "outputPricing": "0.000000134",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -2101,7 +2436,7 @@
         {
             "id": "open-router/~deepseek/deepseek-v4-flash-latest",
             "name": "DeepSeek: DeepSeek V4 Flash Latest",
-            "context": 1310720,
+            "context": 1048576,
             "created": 1785606009,
             "inputModalities": [
                 "text"
@@ -2109,8 +2444,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000021",
-            "outputPricing": "0.00000032",
+            "inputPricing": "0.00000001096",
+            "outputPricing": "0.000000064127",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -2123,7 +2458,7 @@
         {
             "id": "open-router/deepseek/deepseek-v4-flash-0731",
             "name": "DeepSeek: DeepSeek V4 Flash 0731",
-            "context": 1310720,
+            "context": 1048576,
             "created": 1785478908,
             "inputModalities": [
                 "text"
@@ -2131,8 +2466,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000021",
-            "outputPricing": "0.00000032",
+            "inputPricing": "0.0000000137",
+            "outputPricing": "0.00000128",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -2562,8 +2897,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000003",
-            "outputPricing": "0.000015",
+            "inputPricing": "0.0000005",
+            "outputPricing": "0.000012",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -2622,24 +2957,6 @@
                     "high",
                     "xhigh"
                 ]
-            }
-        },
-        {
-            "id": "open-router/kwaipilot/kat-coder-pro-v2.5",
-            "name": "Kwaipilot: KAT-Coder-Pro V2.5",
-            "context": 262144,
-            "created": 1783714589,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000074",
-            "outputPricing": "0.00000296",
-            "reasoning": {
-                "supported": false,
-                "levels": []
             }
         },
         {
@@ -3003,8 +3320,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000016",
-            "outputPricing": "0.0000048",
+            "inputPricing": "0.000002",
+            "outputPricing": "0.000006",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -3303,8 +3620,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000006496",
-            "outputPricing": "0.0000020416",
+            "inputPricing": "0.00000006",
+            "outputPricing": "0.000006",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -3343,8 +3660,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000006562",
-            "outputPricing": "0.0000033",
+            "inputPricing": "0.0000006712",
+            "outputPricing": "0.00000335",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -3489,8 +3806,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000006",
-            "outputPricing": "0.0000024",
+            "inputPricing": "0.0000005",
+            "outputPricing": "0.0000022",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -3965,7 +4282,7 @@
         {
             "id": "open-router/~anthropic/claude-haiku-latest",
             "name": "Anthropic: Claude Haiku Latest",
-            "context": 200000,
+            "context": 1000000,
             "created": 1777318492,
             "inputModalities": [
                 "text",
@@ -3975,14 +4292,16 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000001",
-            "outputPricing": "0.000005",
+            "inputPricing": "0.0000001",
+            "outputPricing": "0.0000005",
             "reasoning": {
                 "supported": true,
                 "levels": [
                     "low",
                     "medium",
-                    "high"
+                    "high",
+                    "xhigh",
+                    "max"
                 ]
             }
         },
@@ -4051,8 +4370,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000001",
-            "outputPricing": "0.000009",
+            "inputPricing": "0.00000049",
+            "outputPricing": "0.000013",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -4221,8 +4540,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000032",
-            "outputPricing": "0.0000032",
+            "inputPricing": "0.00000045",
+            "outputPricing": "0.0000027",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -4343,8 +4662,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000948126",
-            "outputPricing": "0.000001896252",
+            "inputPricing": "0.00000095526",
+            "outputPricing": "0.00000191052",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -4364,8 +4683,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000008386",
-            "outputPricing": "0.00000016772",
+            "inputPricing": "0.00000003",
+            "outputPricing": "0.00000128",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -4526,8 +4845,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000065",
-            "outputPricing": "0.00000341",
+            "inputPricing": "0.000000465",
+            "outputPricing": "0.00000245",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -4600,8 +4919,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000009646",
-            "outputPricing": "0.0000030316",
+            "inputPricing": "0.000000966",
+            "outputPricing": "0.000003036",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -4897,8 +5216,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000003",
-            "outputPricing": "0.0000012",
+            "inputPricing": "0.00000021",
+            "outputPricing": "0.00000084",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -5380,8 +5699,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000001625",
-            "outputPricing": "0.0000013",
+            "inputPricing": "0.00000008",
+            "outputPricing": "0.00000075",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -5404,8 +5723,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000195",
-            "outputPricing": "0.00000156",
+            "inputPricing": "0.00000026",
+            "outputPricing": "0.0000026",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -6192,8 +6511,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000005",
-            "outputPricing": "0.0000002",
+            "inputPricing": "0.00000006",
+            "outputPricing": "0.00000024",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -6578,7 +6897,7 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000028",
+            "inputPricing": "0.000000259",
             "outputPricing": "0.00000042",
             "reasoning": {
                 "supported": true,
@@ -7780,8 +8099,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000015",
-            "outputPricing": "0.0000006",
+            "inputPricing": "0.000000037",
+            "outputPricing": "0.00000017",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -8145,8 +8464,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000000875",
-            "outputPricing": "0.00000035",
+            "inputPricing": "0.00000009",
+            "outputPricing": "0.00000055",
             "reasoning": {
                 "supported": false,
                 "levels": []
@@ -8247,29 +8566,6 @@
             }
         },
         {
-            "id": "open-router/baidu/ernie-4.5-vl-424b-a47b",
-            "name": "Baidu: ERNIE 4.5 VL 424B A47B ",
-            "context": 123000,
-            "created": 1751300903,
-            "inputModalities": [
-                "image",
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000042",
-            "outputPricing": "0.00000125",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "low",
-                    "medium",
-                    "high"
-                ]
-            }
-        },
-        {
             "id": "open-router/mistralai/mistral-small-3.2-24b-instruct",
             "name": "Mistral: Mistral Small 3.2 24B",
             "context": 256000,
@@ -8299,7 +8595,7 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000004",
+            "inputPricing": "0.00000055",
             "outputPricing": "0.0000022",
             "reasoning": {
                 "supported": true,
@@ -9353,28 +9649,6 @@
             }
         },
         {
-            "id": "open-router/deepseek/deepseek-r1-distill-llama-70b",
-            "name": "DeepSeek: R1 Distill Llama 70B",
-            "context": 8192,
-            "created": 1737663169,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.0000008",
-            "outputPricing": "0.0000008",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "low",
-                    "medium",
-                    "high"
-                ]
-            }
-        },
-        {
             "id": "open-router/deepseek/deepseek-r1",
             "name": "DeepSeek: R1",
             "context": 64000,
@@ -9444,8 +9718,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000002574",
-            "outputPricing": "0.0000010287",
+            "inputPricing": "0.00000032",
+            "outputPricing": "0.00000089",
             "reasoning": {
                 "supported": false,
                 "levels": []
@@ -9522,8 +9796,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000001",
-            "outputPricing": "0.00000032",
+            "inputPricing": "0.00000022",
+            "outputPricing": "0.0000005",
             "reasoning": {
                 "supported": false,
                 "levels": []
@@ -9925,7 +10199,7 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.000000019",
+            "inputPricing": "0.000000029",
             "outputPricing": "0.00000003",
             "reasoning": {
                 "supported": false,
@@ -10391,13 +10665,8 @@
             "inputPricing": "0.00000022",
             "outputPricing": "0.00000088",
             "reasoning": {
-                "supported": true,
-                "levels": [
-                    "none",
-                    "low",
-                    "medium",
-                    "high"
-                ]
+                "supported": false,
+                "levels": []
             }
         },
         {
@@ -11339,6 +11608,33 @@
             }
         },
         {
+            "id": "vercel/anthropic/claude-haiku-5.5",
+            "name": "Claude Haiku 5.5",
+            "context": 1000000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image",
+                "pdf"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000001",
+            "outputPricing": "0.0000005",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "none",
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh",
+                    "max"
+                ]
+            }
+        },
+        {
             "id": "vercel/anthropic/claude-opus-4",
             "name": "Claude Opus 4",
             "context": 200000,
@@ -11702,6 +11998,32 @@
             }
         },
         {
+            "id": "vercel/anthropic/claude-sonnet-5.5",
+            "name": "Claude Sonnet 5.5",
+            "context": 1000000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image",
+                "pdf"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000002",
+            "outputPricing": "0.00001",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh",
+                    "max"
+                ]
+            }
+        },
+        {
             "id": "vercel/arcee-ai/trinity-large-thinking",
             "name": "Trinity Large Thinking",
             "context": 262100,
@@ -11713,7 +12035,7 @@
                 "text"
             ],
             "inputPricing": "0.00000025",
-            "outputPricing": "0.0000009",
+            "outputPricing": "0.0000008",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -11797,6 +12119,30 @@
             }
         },
         {
+            "id": "vercel/callstack/apex",
+            "name": "Apex",
+            "context": 262144,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000005",
+            "outputPricing": "0.000003",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "none",
+                    "low",
+                    "medium",
+                    "xhigh"
+                ]
+            }
+        },
+        {
             "id": "vercel/cohere/command-a",
             "name": "Command A",
             "context": 256000,
@@ -11817,6 +12163,42 @@
         {
             "id": "vercel/cohere/embed-v4.0",
             "name": "Embed v4.0",
+            "context": 128000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000012",
+            "outputPricing": "0",
+            "reasoning": {
+                "supported": false,
+                "levels": []
+            }
+        },
+        {
+            "id": "vercel/cohere/embed-v5.0-fast",
+            "name": "Embed 5 Fast",
+            "context": 128000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000008",
+            "outputPricing": "0",
+            "reasoning": {
+                "supported": false,
+                "levels": []
+            }
+        },
+        {
+            "id": "vercel/cohere/embed-v5.0-pro",
+            "name": "Embed 5 Pro",
             "context": 128000,
             "created": 1755815280,
             "inputModalities": [
@@ -11887,6 +12269,42 @@
             }
         },
         {
+            "id": "vercel/convaiinnovations/laya",
+            "name": "Laya",
+            "context": 8192,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0",
+            "reasoning": {
+                "supported": false,
+                "levels": []
+            }
+        },
+        {
+            "id": "vercel/convaiinnovations/laya-free",
+            "name": "Laya (Free)",
+            "context": 8192,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0",
+            "reasoning": {
+                "supported": false,
+                "levels": []
+            }
+        },
+        {
             "id": "vercel/deepseek/deepseek-r1",
             "name": "DeepSeek-R1",
             "context": 128000,
@@ -11922,29 +12340,6 @@
             ],
             "inputPricing": "0.00000025",
             "outputPricing": "0.00000095",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "none",
-                    "low",
-                    "medium",
-                    "high"
-                ]
-            }
-        },
-        {
-            "id": "vercel/deepseek/deepseek-v3.1-terminus",
-            "name": "DeepSeek V3.1 Terminus",
-            "context": 131072,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000027",
-            "outputPricing": "0.000001",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -12088,6 +12483,7 @@
                 "supported": true,
                 "levels": [
                     "none",
+                    "low",
                     "high",
                     "max"
                 ]
@@ -12110,6 +12506,7 @@
                 "supported": true,
                 "levels": [
                     "none",
+                    "low",
                     "high",
                     "max"
                 ]
@@ -12133,6 +12530,7 @@
                 "supported": true,
                 "levels": [
                     "none",
+                    "low",
                     "high",
                     "max"
                 ]
@@ -12625,6 +13023,30 @@
             }
         },
         {
+            "id": "vercel/google/gemini-nano-banana-2.1",
+            "name": "Gemini Nano Banana 2.1",
+            "context": 131072,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text",
+                "image"
+            ],
+            "inputPricing": "0.0000015",
+            "outputPricing": "0.0000075",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "minimal",
+                    "medium",
+                    "high"
+                ]
+            }
+        },
+        {
             "id": "vercel/google/gemini-omni-flash-preview",
             "name": "Gemini Omni Flash Preview",
             "context": 1000000,
@@ -12830,8 +13252,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000006",
-            "outputPricing": "0.00000018",
+            "inputPricing": "0.000000075",
+            "outputPricing": "0.00000022",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -12852,31 +13274,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0",
-            "outputPricing": "0",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "none",
-                    "low",
-                    "medium",
-                    "high"
-                ]
-            }
-        },
-        {
-            "id": "vercel/inclusionai/ling-3.0-flash-sante-free",
-            "name": "Ling 3.0 Flash Sante (Free)",
-            "context": 256000,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0",
-            "outputPricing": "0",
+            "inputPricing": "0.000000075",
+            "outputPricing": "0.00000022",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -12905,6 +13304,52 @@
             "reasoning": {
                 "supported": true,
                 "levels": [
+                    "low",
+                    "medium",
+                    "high"
+                ]
+            }
+        },
+        {
+            "id": "vercel/inclusionai/ling-3.1-flash",
+            "name": "Ling 3.1 Flash",
+            "context": 262144,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "none",
+                    "low",
+                    "medium",
+                    "high"
+                ]
+            }
+        },
+        {
+            "id": "vercel/inclusionai/ling-3.1-flash-free",
+            "name": "Ling 3.1 Flash (Free)",
+            "context": 262144,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0",
+            "outputPricing": "0",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "none",
                     "low",
                     "medium",
                     "high"
@@ -12969,6 +13414,25 @@
                     "medium",
                     "high"
                 ]
+            }
+        },
+        {
+            "id": "vercel/liquid/d1",
+            "name": "Liquid d1",
+            "context": 65536,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000004",
+            "outputPricing": "0",
+            "reasoning": {
+                "supported": false,
+                "levels": []
             }
         },
         {
@@ -13575,6 +14039,28 @@
             }
         },
         {
+            "id": "vercel/mistral/mistral-large-4",
+            "name": "Mistral Large 4",
+            "context": 524288,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000068",
+            "outputPricing": "0.00000209",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "none",
+                    "high"
+                ]
+            }
+        },
+        {
             "id": "vercel/mistral/mistral-medium-3.5",
             "name": "Mistral Medium Latest",
             "context": 262144,
@@ -13599,7 +14085,7 @@
         {
             "id": "vercel/mistral/mistral-nemo",
             "name": "Mistral Nemo 12B",
-            "context": 60288,
+            "context": 131072,
             "created": 1755815280,
             "inputModalities": [
                 "text"
@@ -13607,8 +14093,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.00000004",
-            "outputPricing": "0.00000017",
+            "inputPricing": "0.000000019",
+            "outputPricing": "0.00000003",
             "reasoning": {
                 "supported": false,
                 "levels": []
@@ -13667,29 +14153,6 @@
             "reasoning": {
                 "supported": false,
                 "levels": []
-            }
-        },
-        {
-            "id": "vercel/moonshotai/kimi-k2-thinking",
-            "name": "Kimi K2 Thinking",
-            "context": 216144,
-            "created": 1755815280,
-            "inputModalities": [
-                "text"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000047",
-            "outputPricing": "0.000002",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "none",
-                    "low",
-                    "medium",
-                    "high"
-                ]
             }
         },
         {
@@ -15219,6 +15682,31 @@
             }
         },
         {
+            "id": "vercel/openai/gpt-6-luna-decisions",
+            "name": "GPT-6 Luna Decisions",
+            "context": 1050000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.0000001",
+            "outputPricing": "0",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "none",
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh",
+                    "max"
+                ]
+            }
+        },
+        {
             "id": "vercel/openai/gpt-6-sol",
             "name": "GPT-6 Sol",
             "context": 1050000,
@@ -15264,6 +15752,58 @@
                 "supported": true,
                 "levels": [
                     "none",
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh",
+                    "max"
+                ]
+            }
+        },
+        {
+            "id": "vercel/openai/gpt-6.1-sol",
+            "name": "GPT-6.1 Sol",
+            "context": 1050000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image",
+                "pdf"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000002",
+            "outputPricing": "0.00001",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh",
+                    "max"
+                ]
+            }
+        },
+        {
+            "id": "vercel/openai/gpt-6.1-sol-fast",
+            "name": "GPT-6.1 Sol (Fast)",
+            "context": 1050000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text",
+                "image",
+                "pdf"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.000004",
+            "outputPricing": "0.00002",
+            "reasoning": {
+                "supported": true,
+                "levels": [
                     "low",
                     "medium",
                     "high",
@@ -15740,11 +16280,18 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0",
-            "outputPricing": "0",
+            "inputPricing": "0.00000025",
+            "outputPricing": "0.0000025",
             "reasoning": {
-                "supported": false,
-                "levels": []
+                "supported": true,
+                "levels": [
+                    "none",
+                    "minimal",
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh"
+                ]
             }
         },
         {
@@ -15758,8 +16305,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000001",
-            "outputPricing": "0.0000002",
+            "inputPricing": "0.00000009",
+            "outputPricing": "0.00000018",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -15933,13 +16480,12 @@
             }
         },
         {
-            "id": "vercel/stealth/pixel-canary",
-            "name": "Pixel Canary",
-            "context": 262144,
+            "id": "vercel/stealth/glyph-cluster",
+            "name": "Glyph Cluster",
+            "context": 256000,
             "created": 1755815280,
             "inputModalities": [
-                "text",
-                "image"
+                "text"
             ],
             "outputModalities": [
                 "text"
@@ -15949,33 +16495,10 @@
             "reasoning": {
                 "supported": true,
                 "levels": [
-                    "none",
                     "low",
                     "medium",
+                    "high",
                     "xhigh"
-                ]
-            }
-        },
-        {
-            "id": "vercel/stepfun/step-3.5-flash",
-            "name": "StepFun 3.5 Flash",
-            "context": 262114,
-            "created": 1755815280,
-            "inputModalities": [
-                "text",
-                "image"
-            ],
-            "outputModalities": [
-                "text"
-            ],
-            "inputPricing": "0.00000009",
-            "outputPricing": "0.0000003",
-            "reasoning": {
-                "supported": true,
-                "levels": [
-                    "low",
-                    "medium",
-                    "high"
                 ]
             }
         },
@@ -16217,6 +16740,42 @@
         {
             "id": "vercel/voyage/rerank-2.5-lite",
             "name": "Voyage Rerank 2.5 Lite",
+            "context": 32000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000002",
+            "outputPricing": "0",
+            "reasoning": {
+                "supported": false,
+                "levels": []
+            }
+        },
+        {
+            "id": "vercel/voyage/rerank-3",
+            "name": "Voyage Rerank 3",
+            "context": 32000,
+            "created": 1755815280,
+            "inputModalities": [
+                "text"
+            ],
+            "outputModalities": [
+                "text"
+            ],
+            "inputPricing": "0.00000005",
+            "outputPricing": "0",
+            "reasoning": {
+                "supported": false,
+                "levels": []
+            }
+        },
+        {
+            "id": "vercel/voyage/rerank-3-lite",
+            "name": "Voyage Rerank 3 Lite",
             "context": 32000,
             "created": 1755815280,
             "inputModalities": [
@@ -16696,8 +17255,8 @@
             "outputModalities": [
                 "text"
             ],
-            "inputPricing": "0.0000012",
-            "outputPricing": "0.0000036",
+            "inputPricing": "0.000002",
+            "outputPricing": "0.000006",
             "reasoning": {
                 "supported": true,
                 "levels": [
@@ -17291,6 +17850,29 @@
         }
     ],
     "google": [
+        {
+            "id": "google/gemini-nano-banana-2.1",
+            "name": "Nano Banana 2.1",
+            "context": 65536,
+            "created": 1791300825,
+            "inputModalities": [
+                "image",
+                "text"
+            ],
+            "outputModalities": [
+                "image",
+                "text"
+            ],
+            "inputPricing": "0.0000015",
+            "outputPricing": "0.0000075",
+            "reasoning": {
+                "supported": true,
+                "levels": [
+                    "minimal",
+                    "high"
+                ]
+            }
+        },
         {
             "id": "google/gemini-3.8-flash",
             "name": "Gemini 3.8 Flash",
