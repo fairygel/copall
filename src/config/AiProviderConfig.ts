@@ -32,11 +32,11 @@ export const AVAILABLE_PROVIDERS: AiProvider[] = [
 ];
 
 export function getApiKey(provider: AiProvider): string {
-    return localStorage.getItem(provider.id + 'ApiKey') || '';
+    return (localStorage.getItem(provider.id + 'ApiKey') || '').trim();
 }
 
 export function setApiKey(provider: AiProvider, apiKey: string) {
-    localStorage.setItem(provider.id + 'ApiKey', apiKey);
+    localStorage.setItem(provider.id + 'ApiKey', apiKey.trim());
     notifyApiKeysChanged();
 }
 

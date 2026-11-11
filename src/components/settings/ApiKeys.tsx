@@ -28,8 +28,6 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
     };
 
     const [apiKeys, setApiKeys] = useState<Record<string, string>>(readStoredKeys);
-    const [initialApiKeys, setInitialApiKeys] =
-        useState<Record<string, string>>(readStoredKeys);
     const [showOnlyAvailable, setShowOnlyAvailable] = useState(
         getShowOnlyAvailableProviders
     );
@@ -40,47 +38,23 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
         setShowOnlyAvailableProviders(next);
     };
 
-    const handleKeyBlur = (providerId: string) => {
+    const handleKeyChange = (providerId: string, value: string) => {
+        setApiKeys(prev => ({ ...prev, [providerId]: value }));
+
         if (providerId === SEARCH_API_KEY_STORAGE_KEY) {
-            const value = apiKeys[providerId] ?? '';
             setSearchApiKey(value);
-            setInitialApiKeys(prev => ({ ...prev, [providerId]: value }));
             return;
         }
 
         const provider = AVAILABLE_PROVIDERS.find(p => p.id === providerId);
-        if (!provider) return;
-
-        const value = apiKeys[providerId] ?? '';
-        setApiKey(provider, value);
-        setInitialApiKeys(prev => ({ ...prev, [providerId]: value }));
-    };
-
-    const persistApiKeys = () => {
-        for (const provider of AVAILABLE_PROVIDERS) {
-            const newValue = apiKeys[provider.id] ?? '';
-            const oldValue = initialApiKeys[provider.id] ?? '';
-
-            if (newValue !== oldValue) {
-                setApiKey(provider, newValue);
-            }
-        }
-
-        const searchValue = apiKeys[SEARCH_API_KEY_STORAGE_KEY] ?? '';
-        const searchOld = initialApiKeys[SEARCH_API_KEY_STORAGE_KEY] ?? '';
-
-        if (searchValue !== searchOld) {
-            setSearchApiKey(searchValue);
-        }
+        if (provider) setApiKey(provider, value);
     };
 
     const handleClose = () => {
-        persistApiKeys();
         onClose();
     };
 
     const handleBack = () => {
-        persistApiKeys();
         onBack();
     };
 
@@ -136,14 +110,9 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
                                 <input
                                     type="password"
                                     placeholder={`Enter ${provider.name} API Key`}
+                                    autoComplete="off"
                                     value={apiKeys[provider.id] ?? ''}
-                                    onChange={e =>
-                                        setApiKeys(prev => ({
-                                            ...prev,
-                                            [provider.id]: e.target.value,
-                                        }))
-                                    }
-                                    onBlur={() => handleKeyBlur(provider.id)}
+                                    onChange={e => handleKeyChange(provider.id, e.target.value)}
                                 />
                             </div>
                         ))}
@@ -163,14 +132,11 @@ function ApiKeys({ onBack, onClose }: { onBack: () => void; onClose: () => void 
                             <input
                                 type="password"
                                 placeholder={SEARCH_API_KEY_PLACEHOLDER}
+                                autoComplete="off"
                                 value={apiKeys[SEARCH_API_KEY_STORAGE_KEY] ?? ''}
                                 onChange={e =>
-                                    setApiKeys(prev => ({
-                                        ...prev,
-                                        [SEARCH_API_KEY_STORAGE_KEY]: e.target.value,
-                                    }))
+                                    handleKeyChange(SEARCH_API_KEY_STORAGE_KEY, e.target.value)
                                 }
-                                onBlur={() => handleKeyBlur(SEARCH_API_KEY_STORAGE_KEY)}
                             />
                         </div>
                     </div>
